@@ -1,22 +1,52 @@
 package com.storeii.nciproject;
 
+
+//unused for now...
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.RestController;
+
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-//@SpringBootApplication
+//mysql and jdbc
+import org.springframework.boot.CommandLineRunner;// CommandLineRunner is part of the mysql connection tutorial, not sure if needed
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+
+
+
+
 @SpringBootApplication
-@RestController
-public class NciprojectApplication {
+public class NciprojectApplication implements CommandLineRunner { //  { //is part of the mysql connection tutorial, not sure if needed
 
+        // for jdbc
+        @Autowired
+        JdbcTemplate jdbcTemplate;
+        
+        
 	public static void main(String[] args) {
 		SpringApplication.run(NciprojectApplication.class, args);
 	}
         
+        /*
         @GetMapping("/hello")
             public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
             return String.format("Hello %s!", name);
+        }
+         */
+        
+        
+        // for CommandLineRunner
+        @Override
+        public void run(String... args) throws Exception {
+            String sql = "INSERT INTO Customers (firstName, lastName, userPass) VALUES (?, ?, ?)";
+            int result = jdbcTemplate.update(sql, "Darren", "Lowe", "myPa$$w0rd"); // returns the row number I think?
+            
+            if (result > 0) {
+                System.out.println("A new row has been inserted.");
+            }
         }
 }
