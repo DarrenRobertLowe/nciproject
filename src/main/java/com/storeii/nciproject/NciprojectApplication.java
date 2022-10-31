@@ -39,11 +39,11 @@ public class NciprojectApplication implements CommandLineRunner { //  { //is par
          */
         
         
-        // for CommandLineRunner
+        // required for CommandLineRunner
         @Override
         public void run(String... args) throws Exception {
             String sql = "INSERT INTO Customers (firstName, lastName, userPass) VALUES (?, ?, ?)";
-            int result = jdbcTemplate.update(sql, "Darren", "Lowe", "myPa$$w0rd"); // returns the row number I think?
+            int result = jdbcTemplate.update(sql, "Brian", "May", "an0th3rPa$$w0rd");   // returns 0 or 1 depending on success or not.
             
             if (result > 0) {
                 System.out.println("A new row has been inserted.");
