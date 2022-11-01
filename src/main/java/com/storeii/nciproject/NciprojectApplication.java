@@ -6,6 +6,7 @@ package com.storeii.nciproject;
 //import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.RestController;
 
+
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 
-@SpringBootApplication
+@SpringBootApplication // this is for convenience and adds @Configuration, @EnableAutoConfiguration, @ComponentScan so we don't have to.
 public class NciprojectApplication implements CommandLineRunner { //  { //is part of the mysql connection tutorial, not sure if needed
 
         // for jdbc
@@ -42,11 +43,14 @@ public class NciprojectApplication implements CommandLineRunner { //  { //is par
         // required for CommandLineRunner
         @Override
         public void run(String... args) throws Exception {
+            /*
             String sql = "INSERT INTO Customers (firstName, lastName, userPass) VALUES (?, ?, ?)";
             int result = jdbcTemplate.update(sql, "Brian", "May", "an0th3rPa$$w0rd");   // returns 0 or 1 depending on success or not.
             
             if (result > 0) {
                 System.out.println("A new row has been inserted.");
             }
+            */
         }
+        
 }
