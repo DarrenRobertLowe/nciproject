@@ -14,20 +14,20 @@ import javax.persistence.Id;
  * @author Main
  */
 @Entity // This tells Hibernate to make a table out of this class
-public class Customer {
+public class Driver {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
-  private Long id;
+  private Short id;
   private String firstName;
   private String surname;
-  private String userName;
-  private String userPass;
+  private String username;
+  private String userpass;
 
-    public Long getId() {
+    public Short getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Short id) {
         this.id = id;
     }
 
@@ -48,19 +48,19 @@ public class Customer {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) {
+        this.username = username;
     }
 
     public String getUserPass() {
-        return userPass;
+        return userpass;
     }
 
-    public void setUserPass(String userPass) {
-        this.userPass = userPass;
+    public void setUserPass(String userpass) {
+        this.userpass = userpass;
     }
     
 }

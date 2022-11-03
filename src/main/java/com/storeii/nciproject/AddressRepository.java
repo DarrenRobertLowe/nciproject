@@ -10,11 +10,11 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author Main
  */
-import com.storeii.nciproject.Customer;
+import com.storeii.nciproject.Address;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called customerRepository
+// This will be AUTO IMPLEMENTED by Spring into a Bean of the same name with a lowercase first letter
 // CRUD refers Create, Read, Update, Delete
-public interface CustomerRepository extends CrudRepository<Customer, Integer> {
+public interface AddressRepository extends CrudRepository<Address, Integer> {
     // Spring automatically implements this repository interface in a bean that has the same name
-    // (with a change in the case — it is called customerRepository), with a lowercase first letter.
+    // but with a lowercase first letter.
 }

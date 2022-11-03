@@ -12,7 +12,7 @@
 
 CREATE DATABASE IF NOT EXISTS webstoredb;
 USE webstoredb;
-
+SET GLOBAL read_only=0;
 
 CREATE TABLE Address (
 	id int UNSIGNED auto_increment PRIMARY KEY,
@@ -32,12 +32,13 @@ CREATE TABLE Customer (
     userPass varchar(512) NOT NULL
 );
 
+
 CREATE TABLE Driver (
 	id smallint UNSIGNED auto_increment PRIMARY KEY,
     firstName varchar(50) NOT NULL,
     surname varchar(50) NOT NULL,
-    username varchar(50) NOT NULL,
-    userpass varchar(512) NOT NULL
+    userName varchar(50) NOT NULL,
+    userPass varchar(512) NOT NULL
 );
 
 CREATE TABLE Location (
@@ -55,9 +56,10 @@ CREATE TABLE Supplier (
     FOREIGN KEY (location_ID) REFERENCES Location(id)
 );
 
+-- SET FOREIGN_KEY_CHECKS=1;
+-- drop table Orders;
 CREATE TABLE Orders (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    orderDateTime DATETIME NOT NULL,
     orderStatus TINYINT UNSIGNED NOT NULL, -- this is a TINYINT to effectively be an enum, but maybe a varchar could be better?
     customer_ID int UNSIGNED NOT NULL,
     address_ID int UNSIGNED NOT NULL,
@@ -67,20 +69,23 @@ CREATE TABLE Orders (
     FOREIGN KEY (driver_ID) REFERENCES Driver(id)
 );
 
-
+-- SET FOREIGN_KEY_CHECKS=1;
+-- drop table SubOrder;
 CREATE TABLE SubOrder (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    status TINYINT UNSIGNED NOT NULL,
+    orderStatus TINYINT UNSIGNED NOT NULL,
     order_ID int UNSIGNED NOT NULL,
     supplier_ID smallint UNSIGNED NOT NULL,
     FOREIGN KEY (order_ID) REFERENCES Orders(id),
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
+-- SET FOREIGN_KEY_CHECKS=1;
+-- drop table Product;
 CREATE TABLE Product (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    name varchar(50) NOT NULL,
-    description varchar(250) NOT NULL,
+    productName varchar(50) NOT NULL,
+    productDescription varchar(250) NOT NULL,
     image varchar(250),
     price decimal(10,2) NOT NULL, -- UNSIGNED to avoid having negative values
     stock int UNSIGNED,
@@ -94,6 +99,7 @@ CREATE TABLE Supplier_SubOrder_Items (
     subOrder_ID int UNSIGNED,
     product_ID int UNSIGNED,
     quantity tinyint UNSIGNED	-- 255 is probably enough for any 1 item in an order
+    -- where are the foreign keys... \(>.<)/ <- rrrarrrrgggghhh
 );
 
 CREATE TABLE OrderItems (
@@ -104,4 +110,25 @@ CREATE TABLE OrderItems (
     unitPrice decimal NOT NULL
 );
 
-select * from Customer;
+
+-- INSERT INTO Customer(firstName, surname, userName, userPass)
+-- VALUES ("Darren", "Lowe", "dlowe", "password");
+
+-- INSERT INTO Address(addressLine1, addressLine2, city, district, postcode, country)
+-- VALUES ("Apt 1", "John Street", "Wexford", "County Wexford", "E440393", "Ireland");
+
+
+-- INSERT INTO Location(driver_ID)
+-- VALUES(2);
+
+
+INSERT INTO Supplier(storeName, location_ID, address_ID)
+VALUES("Shoes R Us", 2, 1);
+
+select * from Driver;
+select * from Location;
+select * from Supplier;
+
+select Location.id, Location.driver_ID, Driver.firstName, Driver.surname
+from Location
+inner join Driver ON Driver.id;
