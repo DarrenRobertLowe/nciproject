@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.storeii.nciproject;
+package com.storeii.nciproject.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -15,14 +17,22 @@ import javax.persistence.Id;
  */
 @Entity // This tells Hibernate to make a table out of this class
 public class Customer {
-  @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  private Long id;
-  private String firstName;
-  private String surname;
-  private String userName;
-  private String userPass;
-
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    private String firstName;
+    private String surname;
+    private String userName;
+    private String userPass;
+    
+    
+    // FOREIGN KEYS
+    @OneToOne()
+    @JoinColumn(name = "address", referencedColumnName = "id")
+    private Address address;
+    
+    
+    // GETTERS and SETTERS
     public Long getId() {
         return id;
     }
@@ -62,5 +72,15 @@ public class Customer {
     public void setUserPass(String userPass) {
         this.userPass = userPass;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    
+    
     
 }

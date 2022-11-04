@@ -12,7 +12,7 @@
 
 CREATE DATABASE IF NOT EXISTS webstoredb;
 USE webstoredb;
-SET GLOBAL read_only=0;
+-- SET GLOBAL read_only=0;
 
 CREATE TABLE Address (
 	id int UNSIGNED auto_increment PRIMARY KEY,
@@ -24,12 +24,16 @@ CREATE TABLE Address (
     country varchar(100)
 );
 
+-- SET FOREIGN_KEY_CHECKS=0;
+-- drop table Customer;
 CREATE TABLE Customer (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     firstName varchar(50) NOT NULL,
     surname varchar(50) NOT NULL,
     userName varchar(50) NOT NULL,
-    userPass varchar(512) NOT NULL
+    userPass varchar(512) NOT NULL,
+    address int UNSIGNED,
+    FOREIGN KEY (address) REFERENCES Address(id)
 );
 
 
@@ -94,12 +98,15 @@ CREATE TABLE Product (
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
-CREATE TABLE Supplier_SubOrder_Items (
+-- SET FOREIGN_KEY_CHECKS=1;
+-- drop table SubOrder_Items;
+CREATE TABLE SubOrder_Items (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     subOrder_ID int UNSIGNED,
     product_ID int UNSIGNED,
-    quantity tinyint UNSIGNED	-- 255 is probably enough for any 1 item in an order
-    -- where are the foreign keys... \(>.<)/ <- rrrarrrrgggghhh
+    quantity tinyint UNSIGNED,	-- 255 is probably enough for any 1 item in an order
+    FOREIGN KEY (subOrder_ID) REFERENCES SubOrder(id),
+    FOREIGN KEY (product_ID) REFERENCES Product(id)
 );
 
 CREATE TABLE OrderItems (
@@ -111,19 +118,19 @@ CREATE TABLE OrderItems (
 );
 
 
--- INSERT INTO Customer(firstName, surname, userName, userPass)
--- VALUES ("Darren", "Lowe", "dlowe", "password");
+-- INSERT INTO Customer(firstName, surname, userName, userPass, address)
+-- VALUES ("Darren", "Lowe", "dlowe", "password", 1);
 
 -- INSERT INTO Address(addressLine1, addressLine2, city, district, postcode, country)
--- VALUES ("Apt 1", "John Street", "Wexford", "County Wexford", "E440393", "Ireland");
+-- VALUES ("41", "Wicker Row", "Greystones", "County Wicklow", "W2212345", "Ireland");
 
 
 -- INSERT INTO Location(driver_ID)
 -- VALUES(2);
 
 
-INSERT INTO Supplier(storeName, location_ID, address_ID)
-VALUES("Shoes R Us", 2, 1);
+-- INSERT INTO Supplier(storeName, location_ID, address_ID)
+-- VALUES("Shoes R Us", 2, 1);
 
 select * from Driver;
 select * from Location;

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.storeii.nciproject;
+package com.storeii.nciproject.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,20 +17,27 @@ import javax.persistence.OneToOne;
  */
 @Entity // This tells Hibernate to make a table out of this class
 public class SubOrder {
+    /*
+    id int UNSIGNED auto_increment PRIMARY KEY,
+    orderStatus TINYINT UNSIGNED NOT NULL,
+    order_ID int UNSIGNED NOT NULL,
+    supplier_ID smallint UNSIGNED NOT NULL,
+    FOREIGN KEY (order_ID) REFERENCES Orders(id),
+    FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
+    */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private int orderStatus;
     
-    
     // FOREIGN KEYS
     @OneToOne()
     @JoinColumn(name = "order_ID", referencedColumnName = "id")
-    private Address order;
+    private Order order;
     
     @OneToOne()
     @JoinColumn(name = "supplier_ID", referencedColumnName = "id")
-    private Customer supplier;
+    private Supplier supplier;
     
     
     // GETTERS and SETTERS
@@ -50,19 +57,19 @@ public class SubOrder {
         this.orderStatus = orderStatus;
     }
 
-    public Address getOrder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrder(Address order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 
-    public Customer getSupplier() {
+    public Supplier getSupplier() {
         return supplier;
     }
 
-    public void setSupplier(Customer supplier) {
+    public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
     

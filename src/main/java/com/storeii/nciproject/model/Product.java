@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.storeii.nciproject;
+package com.storeii.nciproject.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +17,20 @@ import javax.persistence.OneToOne;
  */
 @Entity // This tells Hibernate to make a table out of this class
 public class Product {
+    /*
+    id int UNSIGNED auto_increment PRIMARY KEY,
+    
+    productName varchar(50) NOT NULL,
+    productDescription varchar(250) NOT NULL,
+    image varchar(250),
+    price decimal(10,2) NOT NULL, -- UNSIGNED to avoid having negative values
+    stock int UNSIGNED,
+    category varchar(30),
+    
+    supplier_ID smallint UNSIGNED,
+    FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
+    */
+    
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long    id;
@@ -26,12 +40,12 @@ public class Product {
     private double  price;
     private int     stock;
     private String  category;
-  
+    
     
     // FOREIGN KEYS
     @OneToOne()
     @JoinColumn(name = "supplier_ID", referencedColumnName = "id")
-    private Address address;
+    private Supplier supplier;
     
     
     // GETTERS and SETTERS
@@ -91,12 +105,13 @@ public class Product {
         this.category = category;
     }
 
-    public Address getAddress() {
-        return address;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }  
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+    
     
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.storeii.nciproject;
+package com.storeii.nciproject.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +19,17 @@ import javax.persistence.Table;
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "Orders") // the table name differs to this object name so we need to tell JPA that.
 public class Order {
+    /*
+    id int UNSIGNED auto_increment PRIMARY KEY,
+    orderStatus TINYINT UNSIGNED NOT NULL, -- this is a TINYINT to effectively be an enum, but maybe a varchar could be better?
+    
+    customer_ID int UNSIGNED NOT NULL,
+    address_ID int UNSIGNED NOT NULL,
+    driver_ID smallint UNSIGNED,
+    FOREIGN KEY (customer_ID) REFERENCES Customer(id),
+    FOREIGN KEY (address_ID) REFERENCES Address(id),
+    FOREIGN KEY (driver_ID) REFERENCES Driver(id)
+    */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -34,10 +45,9 @@ public class Order {
     @JoinColumn(name = "customer_ID", referencedColumnName = "id")
     private Customer customer;
     
-    // note driver can be null
     @OneToOne()
     @JoinColumn(name = "driver_ID", referencedColumnName = "id")
-    private Driver driver;
+    private Driver driver; // note driver can be null
     
     
     // GETTERS and SETTERS
