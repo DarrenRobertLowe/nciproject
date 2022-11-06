@@ -27,29 +27,10 @@ public class SubOrderController {
     
     
     
-    // CUSTOMER
-    // Adding a new Customer
-    // Note: try catch wrapping here will break the server
-    /*
-    @PostMapping(path="/addOrder") // Map ONLY POST Requests
-    public String addOrder (
-        @RequestParam int orderStatus,
-        @RequestParam String surname,
-        @RequestParam String userName,
-        @RequestParam String userPass)
-    {
-      Order n = new Order();
-      n.setFirstName(firstName);
-      n.setSurname(surname);
-      n.setUserName(userName);
-      n.setUserPass(userPass);
-
-      customerRepository.save(n);
-      return "Saved";
-    }
-    */
+    // Add new
     
-    // find all customers
+    
+    // find all
     @GetMapping(path="/getSubOrders")
     public Iterable<SubOrder> getSubOrders() {
       return subOrderRepository.findAll();  // This returns a JSON or XML with the users

@@ -24,17 +24,17 @@ public class Driver {
     */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Short id;
+    private int id;
     private String firstName;
     private String surname;
     private String userName;
     private String userPass;
     
-    public Short getId() {
+    public int getId() {
         return id;
     }
     
-    public void setId(Short id) {
+    public void setId(int id) {
         this.id = id;
     }
     

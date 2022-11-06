@@ -28,6 +28,8 @@ public class CustomerController {
     @Autowired
     private AddressRepository addressRepository;
     
+    @Autowired
+    private LocationRepository locationRepository;
     
     
     // CUSTOMER
@@ -39,7 +41,8 @@ public class CustomerController {
         @RequestParam String surname,
         @RequestParam String userName,
         @RequestParam String userPass,
-        @RequestParam String address
+        @RequestParam String address,
+        @RequestParam String location
         )
     {
         Customer n = new Customer();
@@ -49,14 +52,19 @@ public class CustomerController {
         n.setUserPass(userPass);
         
         
-        Long num = Long.parseLong(address);
+        
+        
+        int i = Integer.parseInt(address);
+        int i2 = Integer.parseInt(location);
         /*
         AddressController ac = new AddressController();
         
         Address obj = ac.getById(num);
         */
         
-        n.setAddress(addressRepository.getById(num));
+        
+        n.setAddress(addressRepository.getById(i));
+        n.setLocation(locationRepository.getById(i2));
         
         customerRepository.save(n);
         return "Saved";

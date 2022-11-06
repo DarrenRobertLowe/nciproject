@@ -5,7 +5,7 @@
 package com.storeii.nciproject.model;
 
 
-import com.storeii.nciproject.model.Customer;
+import com.storeii.nciproject.model.OrderItems;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,8 +13,9 @@ import org.springframework.data.repository.CrudRepository;
  * @author Main
  */
 
+
 // Spring automatically implements this repository interface in 
 // a bean of the same name (lowecase first letter)
-public interface CustomerRepository extends CrudRepository<Customer, Integer> {
-    Customer getById(int id);
+public interface OrderItemsRepository extends CrudRepository<OrderItems, Integer> {
+    OrderItems getById(int id);
 }

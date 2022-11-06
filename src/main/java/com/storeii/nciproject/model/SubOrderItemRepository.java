@@ -4,17 +4,17 @@
  */
 package com.storeii.nciproject.model;
 
+
+import com.storeii.nciproject.model.SubOrderItem;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author Main
  */
-import com.storeii.nciproject.model.SubOrderItem;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called customerRepository
-// CRUD refers Create, Read, Update, Delete
+// Spring automatically implements this repository interface in 
+// a bean of the same name (lowecase first letter)
 public interface SubOrderItemRepository extends CrudRepository<SubOrderItem, Integer> {
-    // Spring automatically implements this repository interface in a bean that has the same name
-    // (with a change in the case — it is called customerRepository), with a lowercase first letter.
+    SubOrderItem getById(int id);
 }

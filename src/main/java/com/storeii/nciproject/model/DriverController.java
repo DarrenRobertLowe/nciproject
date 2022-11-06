@@ -26,9 +26,8 @@ public class DriverController {
     private DriverRepository driverRepository;
     
     
-    
-    // CUSTOMER
-    // Adding a new Customer
+
+    // Add new
     // Note: try catch wrapping here will break the server
     @PostMapping(path="/addDriver") // Map ONLY POST Requests
     public String addDriver (
@@ -48,7 +47,7 @@ public class DriverController {
     }
     
     
-    // find all customers
+    // find all
     @GetMapping(path="/getDrivers")
     public Iterable<Driver> getDrivers() {
       return driverRepository.findAll();  // This returns a JSON or XML with the users

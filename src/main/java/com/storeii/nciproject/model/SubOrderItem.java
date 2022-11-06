@@ -30,7 +30,7 @@ public class SubOrderItem {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long    id;
+    private int    id;
     private int     quantity;
 
     // FOREIGN KEYS
@@ -46,11 +46,11 @@ public class SubOrderItem {
     
     
     // GETTERS and SETTERS
-    public Long getId() {
+    public int getId() {
         return id;
     }
     
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
     

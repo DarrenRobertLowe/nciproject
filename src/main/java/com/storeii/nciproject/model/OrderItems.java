@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="OrderItems")
-public class OrderItem {
+public class OrderItems {
     /*
     id int UNSIGNED auto_increment PRIMARY KEY,
     order_ID int UNSIGNED NOT NULL,
@@ -29,9 +29,9 @@ public class OrderItem {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long    id;
-    private int     quantity;
-    
+    private int    id;
+    private int    quantity;
+    private double unitPrice;
     
     // FOREIGN KEYS
     @OneToOne()
@@ -44,11 +44,11 @@ public class OrderItem {
     
     
     // GETTERS and SETTERS
-    public Long getId() {
+    public int getId() {
         return id;
     }
     
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
     
@@ -74,6 +74,14 @@ public class OrderItem {
     
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
     
     

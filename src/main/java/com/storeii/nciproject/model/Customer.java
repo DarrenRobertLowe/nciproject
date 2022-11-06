@@ -19,25 +19,29 @@ import javax.persistence.OneToOne;
 public class Customer {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String firstName;
     private String surname;
     private String userName;
     private String userPass;
-    
+   
     
     // FOREIGN KEYS
     @OneToOne()
     @JoinColumn(name = "address", referencedColumnName = "id")
     private Address address;
+      
+    @OneToOne()
+    @JoinColumn(name = "location", referencedColumnName = "id")
+    private Location location;
     
     
     // GETTERS and SETTERS
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -80,7 +84,13 @@ public class Customer {
     public void setAddress(Address address) {
         this.address = address;
     }
-    
-    
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
     
 }

@@ -33,7 +33,7 @@ public class AddressController {
     private AddressRepository addressRepository;
     
     
-    // Adding new
+    // Add new
     @PostMapping(path="/addAddress")
     public String addAddress (
         @RequestParam String addressLine1,
@@ -65,7 +65,7 @@ public class AddressController {
     
     // find by id
     @GetMapping(path="/getAddressesById")
-    public Address getById(Long l) {
+    public Address getById(int l) {
       return addressRepository.getById(l);
     }
 }

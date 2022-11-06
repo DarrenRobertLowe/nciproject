@@ -33,7 +33,7 @@ public class Product {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long    id;
+    private int     id;
     private String  productName;
     private String  productDescription;
     private String  image;
@@ -49,11 +49,11 @@ public class Product {
     
     
     // GETTERS and SETTERS
-    public Long getId() {
+    public int getId() {
         return id;
     }
     
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

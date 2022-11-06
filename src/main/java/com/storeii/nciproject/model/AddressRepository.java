@@ -4,20 +4,17 @@
  */
 package com.storeii.nciproject.model;
 
+
+import com.storeii.nciproject.model.Address;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Main
  */
-import com.storeii.nciproject.model.Address;
 
-
-// This will be AUTO IMPLEMENTED by Spring into a Bean of the same name with a lowercase first letter
-// CRUD refers Create, Read, Update, Delete
+// Spring automatically implements this repository interface in 
+// a bean of the same name (lowecase first letter)
 public interface AddressRepository extends CrudRepository<Address, Integer> {
-    // Spring automatically implements this repository interface in a bean that has the same name
-    // but with a lowercase first letter.
-    Address getById(Long id);
+    Address getById(int id);
 }

@@ -25,7 +25,8 @@ public class Location {
     */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    private int id;
+    private String locationName;
     
     // FOREIGN KEYS
     @ManyToOne() // this should probably have a (CascadeType.REMOVE) but I'm not certain, since if we have "NOT NULL" set, the database will delete the row.
@@ -35,13 +36,24 @@ public class Location {
     
     
     // GETTERS and SETTERS
-    public long getId() {
+    public int getId() {
         return id;
     }
     
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
+    
+    
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+    
     
     public Driver getDriver() {
         return driver;

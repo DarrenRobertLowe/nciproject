@@ -27,7 +27,7 @@ public class Supplier {
     */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String storeName;
     
     
@@ -42,11 +42,11 @@ public class Supplier {
     
     
     // GETTERS AND SETTERS
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,12 +57,22 @@ public class Supplier {
     public void setStoreName(String storeName) {
         this.storeName = storeName;
     }
-    
+
     public Address getAddress() {
         return address;
     }
-    
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public Location getLocation() {
         return location;
     }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    
 }

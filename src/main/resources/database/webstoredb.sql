@@ -7,7 +7,7 @@
 -- DROP TABLE IF EXISTS Orders;
 -- DROP TABLE IF EXISTS SubOrder;
 -- DROP TABLE IF EXISTS Product;
--- DROP TABLE IF EXISTS Supplier_SubOrder_Items;
+-- DROP TABLE IF EXISTS SubOrder_Items;
 -- DROP TABLE IF EXISTS OrderItems;
 
 CREATE DATABASE IF NOT EXISTS webstoredb;
@@ -33,53 +33,65 @@ CREATE TABLE Customer (
     userName varchar(50) NOT NULL,
     userPass varchar(512) NOT NULL,
     address int UNSIGNED,
-    FOREIGN KEY (address) REFERENCES Address(id)
+    location int UNSIGNED,
+    FOREIGN KEY (address) REFERENCES Address(id),
+    FOREIGN KEY (location) REFERENCES Location(id)
 );
 
 
 CREATE TABLE Driver (
-	id smallint UNSIGNED auto_increment PRIMARY KEY,
+	id int UNSIGNED auto_increment PRIMARY KEY,
     firstName varchar(50) NOT NULL,
     surname varchar(50) NOT NULL,
     userName varchar(50) NOT NULL,
     userPass varchar(512) NOT NULL
+    -- should there be a one to many relationship with the locations here?
 );
 
+-- SET FOREIGN_KEY_CHECKS=0;
+-- drop table Location;
 CREATE TABLE Location (
-	id smallint UNSIGNED auto_increment PRIMARY KEY,
-    driver_ID smallint UNSIGNED,
+	id int UNSIGNED auto_increment PRIMARY KEY,
+    locationName varchar(50),
+    driver_ID int UNSIGNED,
     FOREIGN KEY (driver_ID) REFERENCES Driver(id)
+    -- should there be a one to many relationship with the suppliers here?
 );
 
 CREATE TABLE Supplier (
-	id smallint UNSIGNED auto_increment PRIMARY KEY,
+	id int UNSIGNED auto_increment PRIMARY KEY,
     storeName varchar(100) NOT NULL,
     address_ID int UNSIGNED,
-    location_ID smallint UNSIGNED,
+    location_ID int UNSIGNED,
     FOREIGN KEY (address_ID) REFERENCES Address(id),
     FOREIGN KEY (location_ID) REFERENCES Location(id)
+    -- should there be a one to many relationship with the products here?
 );
 
--- SET FOREIGN_KEY_CHECKS=1;
+-- SET FOREIGN_KEY_CHECKS=0;
 -- drop table Orders;
 CREATE TABLE Orders (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    orderStatus TINYINT UNSIGNED NOT NULL, -- this is a TINYINT to effectively be an enum, but maybe a varchar could be better?
-    customer_ID int UNSIGNED NOT NULL,
-    address_ID int UNSIGNED NOT NULL,
-    driver_ID smallint UNSIGNED,
+    orderStatus int UNSIGNED,
+    customer_ID int UNSIGNED,
+    address_ID int UNSIGNED,
+    driver_ID int UNSIGNED,
+    location_ID int UNSIGNED,
+    OrderItems_ID int UNSIGNED,
     FOREIGN KEY (customer_ID) REFERENCES Customer(id),
     FOREIGN KEY (address_ID) REFERENCES Address(id),
-    FOREIGN KEY (driver_ID) REFERENCES Driver(id)
+    FOREIGN KEY (driver_ID) REFERENCES Driver(id),
+    FOREIGN KEY (location_ID) REFERENCES Location(id),
+    FOREIGN KEY (OrderItems_ID) REFERENCES OrderItems(id)
 );
 
 -- SET FOREIGN_KEY_CHECKS=1;
 -- drop table SubOrder;
 CREATE TABLE SubOrder (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    orderStatus TINYINT UNSIGNED NOT NULL,
-    order_ID int UNSIGNED NOT NULL,
-    supplier_ID smallint UNSIGNED NOT NULL,
+    orderStatus int UNSIGNED,
+    order_ID int UNSIGNED,
+    supplier_ID int UNSIGNED,
     FOREIGN KEY (order_ID) REFERENCES Orders(id),
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
@@ -88,13 +100,13 @@ CREATE TABLE SubOrder (
 -- drop table Product;
 CREATE TABLE Product (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    productName varchar(50) NOT NULL,
-    productDescription varchar(250) NOT NULL,
-    image varchar(250),
-    price decimal(10,2) NOT NULL, -- UNSIGNED to avoid having negative values
+    productName varchar(100),
+    productDescription text,
+    image varchar(2048),
+    price decimal(10,2),
     stock int UNSIGNED,
     category varchar(30),
-    supplier_ID smallint UNSIGNED,
+    supplier_ID int UNSIGNED,
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
@@ -104,17 +116,18 @@ CREATE TABLE SubOrder_Items (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     subOrder_ID int UNSIGNED,
     product_ID int UNSIGNED,
-    quantity tinyint UNSIGNED,	-- 255 is probably enough for any 1 item in an order
+    quantity int UNSIGNED,
     FOREIGN KEY (subOrder_ID) REFERENCES SubOrder(id),
     FOREIGN KEY (product_ID) REFERENCES Product(id)
 );
 
+-- drop table OrderItems;
 CREATE TABLE OrderItems (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    order_ID int UNSIGNED NOT NULL,
-    product_ID int UNSIGNED NOT NULL,
-    quantity tinyint UNSIGNED NOT NULL,	-- 255 is probably enough for any 1 item in an order
-    unitPrice decimal NOT NULL
+    order_ID int UNSIGNED,
+    product_ID int UNSIGNED,
+    quantity int UNSIGNED,
+    unitPrice decimal
 );
 
 
@@ -131,6 +144,18 @@ CREATE TABLE OrderItems (
 
 -- INSERT INTO Supplier(storeName, location_ID, address_ID)
 -- VALUES("Shoes R Us", 2, 1);
+
+
+/*
+	id int UNSIGNED auto_increment PRIMARY KEY,
+    orderStatus TINYINT UNSIGNED NOT NULL, -- this is a TINYINT to effectively be an enum, but maybe a varchar could be better?
+    customer_ID int UNSIGNED NOT NULL,
+    address_ID int UNSIGNED NOT NULL,
+    driver_ID smallint UNSIGNED,
+    location_ID smallint UNSIGNED NOT NULL,
+*/
+INSERT INTO Orders(orderStatus, customer_ID, address_ID, driver_ID, location_ID)
+VALUES(1, 1, 1, 1, 1);
 
 select * from Driver;
 select * from Location;

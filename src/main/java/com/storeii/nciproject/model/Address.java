@@ -18,7 +18,7 @@ import javax.persistence.Id;
 public class Address implements Serializable {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
-  private Long id;
+  private int id;
   private String addressLine1;
   private String addressLine2;
   private String city;
@@ -26,11 +26,11 @@ public class Address implements Serializable {
   private String postcode;
   private String country;
   
-    public Long getId() {
+    public int getId() {
         return id;
     }
     
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
