@@ -37,8 +37,8 @@ public class OrderController {
     @Autowired
     private LocationRepository locationRepository;
     
-    @Autowired
-    private OrderItemsRepository orderItemsRepository;
+    //@Autowired
+    //private OrderItemsRepository orderItemsRepository;
     
     
     
@@ -50,8 +50,8 @@ public class OrderController {
         @RequestParam String customer_ID,
         @RequestParam String address_ID,
         @RequestParam String driver_ID,
-        @RequestParam String location_ID,
-        @RequestParam String OrderItems_ID
+        @RequestParam String location_ID
+        // @RequestParam String OrderItems_ID
     )
     {
       Order order = new Order();
@@ -63,14 +63,14 @@ public class OrderController {
       int ad = Integer.parseInt(address_ID);
       int dr = Integer.parseInt(driver_ID);
       int lo = Integer.parseInt(location_ID);
-      int oi = Integer.parseInt(OrderItems_ID);
+      //int oi = Integer.parseInt(OrderItems_ID);
       
       order.setOrderStatus(st);// st);
       order.setCustomer(customerRepository.getById(cu));
       order.setAddress(addressRepository.getById(ad));
       order.setDriver(driverRepository.getById(dr));
       order.setLocation(locationRepository.getById(lo));
-      order.setOrderItems(orderItemsRepository.getById(oi));
+      //order.setOrderItems(orderItemsRepository.getById(oi));
       
       orderRepository.save(order);
       return "Saved";

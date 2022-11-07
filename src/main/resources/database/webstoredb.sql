@@ -68,6 +68,7 @@ CREATE TABLE Supplier (
     -- should there be a one to many relationship with the products here?
 );
 
+
 -- SET FOREIGN_KEY_CHECKS=0;
 -- drop table Orders;
 CREATE TABLE Orders (
@@ -77,12 +78,12 @@ CREATE TABLE Orders (
     address_ID int UNSIGNED,
     driver_ID int UNSIGNED,
     location_ID int UNSIGNED,
-    OrderItems_ID int UNSIGNED,
+    -- OrderItems_ID int UNSIGNED,
     FOREIGN KEY (customer_ID) REFERENCES Customer(id),
     FOREIGN KEY (address_ID) REFERENCES Address(id),
     FOREIGN KEY (driver_ID) REFERENCES Driver(id),
-    FOREIGN KEY (location_ID) REFERENCES Location(id),
-    FOREIGN KEY (OrderItems_ID) REFERENCES OrderItems(id)
+    FOREIGN KEY (location_ID) REFERENCES Location(id)
+    -- FOREIGN KEY (OrderItems_ID) REFERENCES OrderItems(id)
 );
 
 -- SET FOREIGN_KEY_CHECKS=1;

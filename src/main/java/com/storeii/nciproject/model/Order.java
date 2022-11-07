@@ -4,7 +4,9 @@
  */
 package com.storeii.nciproject.model;
 
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,16 +30,15 @@ public class Order {
     address_ID int UNSIGNED NOT NULL,
     driver_ID int UNSIGNED,                        // driver must be null because they won't be assigned until later
     location_ID int UNSIGNED,
-    OrderItems_ID int UNSIGNED
     FOREIGN KEY (customer_ID) REFERENCES Customer(id),
     FOREIGN KEY (address_ID) REFERENCES Address(id),
     FOREIGN KEY (driver_ID) REFERENCES Driver(id),
     FOREIGN KEY (location_ID) REFERENCES Location(id),
-    FOREIGN KEY (orderItems_ID) REFERENCES OrderItems(id)
     */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
+    
     
     // order status
     // 0: cancelled
@@ -66,10 +67,11 @@ public class Order {
     @JoinColumn(name = "location_ID", referencedColumnName = "id")
     private Location location;
     
+    /*
     @OneToOne()
     @JoinColumn(name = "orderItems_ID", referencedColumnName = "id")
     private OrderItems orderItems;
-    
+    */
     
     // GETTERS and SETTERS
     public int getId() {
@@ -121,6 +123,7 @@ public class Order {
         this.location = location;
     }
 
+    /*
     public OrderItems getOrderItems() {
         return orderItems;
     }
@@ -128,8 +131,5 @@ public class Order {
     public void setOrderItems(OrderItems orderItems) {
         this.orderItems = orderItems;
     }
-    
-    
-    
-    
+    */
 }

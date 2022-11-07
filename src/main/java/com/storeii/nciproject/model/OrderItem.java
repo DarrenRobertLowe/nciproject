@@ -4,11 +4,15 @@
  */
 package com.storeii.nciproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,11 +22,11 @@ import javax.persistence.Table;
  */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="OrderItems")
-public class OrderItems {
+public class OrderItem {
     /*
     id int UNSIGNED auto_increment PRIMARY KEY,
-    order_ID int UNSIGNED NOT NULL,
-    product_ID int UNSIGNED NOT NULL,
+    orderId int UNSIGNED NOT NULL,
+    productId int UNSIGNED NOT NULL,
     quantity tinyint UNSIGNED NOT NULL,	-- 255 is probably enough for any 1 item in an order
     unitPrice decimal NOT NULL
     */
@@ -34,7 +38,7 @@ public class OrderItems {
     private double unitPrice;
     
     // FOREIGN KEYS
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name = "Order_ID", referencedColumnName = "id")
     private Order order;
     
@@ -64,8 +68,8 @@ public class OrderItems {
         return order;
     }
     
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(Order orderId) {
+        this.order = orderId;
     }
     
     public Product getProduct() {
