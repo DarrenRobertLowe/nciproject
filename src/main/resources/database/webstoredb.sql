@@ -97,7 +97,7 @@ CREATE TABLE SubOrder (
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
--- SET FOREIGN_KEY_CHECKS=1;
+-- SET FOREIGN_KEY_CHECKS=0;
 -- drop table Product;
 CREATE TABLE Product (
 	id int UNSIGNED auto_increment PRIMARY KEY,
@@ -122,6 +122,8 @@ CREATE TABLE SubOrder_Items (
     FOREIGN KEY (product_ID) REFERENCES Product(id)
 );
 
+
+-- use webstoredb;
 -- drop table OrderItems;
 CREATE TABLE OrderItems (
 	id int UNSIGNED auto_increment PRIMARY KEY,
@@ -155,8 +157,8 @@ CREATE TABLE OrderItems (
     driver_ID smallint UNSIGNED,
     location_ID smallint UNSIGNED NOT NULL,
 */
-INSERT INTO Orders(orderStatus, customer_ID, address_ID, driver_ID, location_ID)
-VALUES(1, 1, 1, 1, 1);
+-- use webstoredb;
+select * from SubOrder where supplier_ID = 3;
 
 select * from Driver;
 select * from Location;

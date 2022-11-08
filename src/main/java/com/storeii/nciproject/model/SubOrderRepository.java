@@ -5,6 +5,7 @@
 package com.storeii.nciproject.model;
 
 import com.storeii.nciproject.model.SubOrder;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -16,4 +17,6 @@ import org.springframework.data.repository.CrudRepository;
 // a bean of the same name (lowecase first letter)
 public interface SubOrderRepository extends CrudRepository<SubOrder, Integer> {
     SubOrder getById(int id);
+    
+    public List<SubOrder> findBySupplier(Supplier supplier);
 }

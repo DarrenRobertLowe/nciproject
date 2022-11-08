@@ -68,7 +68,7 @@ public class Order {
     private Location location;
     
     /*
-    @OneToOne()
+    @OneToMany()
     @JoinColumn(name = "orderItems_ID", referencedColumnName = "id")
     private OrderItems orderItems;
     */

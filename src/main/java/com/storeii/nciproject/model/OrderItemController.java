@@ -78,6 +78,7 @@ public class OrderItemController {
     }
     
    
+    // for testing purposes
     @GetMapping(path="/findOrderItemsByQuantity")
     public Iterable<OrderItem> findByQuantity(@RequestParam String quantity) {
       return orderItemRepository.findByQuantity(Integer.parseInt(quantity));  // This returns a JSON or XML with the users
@@ -85,7 +86,7 @@ public class OrderItemController {
     
     
     
-    
+    // GET ITEMS BELONGING TO A SPECIFC ORDER
     @GetMapping(path="/getItemsFromOrder")
     //@Query("select * from OrderItems where orderID = ?")
     public List<OrderItem> getItemsFromOrder(
