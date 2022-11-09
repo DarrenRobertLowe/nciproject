@@ -9,6 +9,9 @@ package com.storeii.nciproject.model;
  * @author Main
  */
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +40,18 @@ public class OrderController {
     @Autowired
     private LocationRepository locationRepository;
     
-    //@Autowired
-    //private OrderItemsRepository orderItemsRepository;
+    
+    
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    
+    @Autowired
+    private ProductRepository productRepository;
+    
+    
+    @Autowired
+    private SubOrderItemRepository subOrderItemRepository;
+    
     
     
     
@@ -72,6 +85,134 @@ public class OrderController {
       order.setLocation(locationRepository.getById(lo));
       //order.setOrderItems(orderItemsRepository.getById(oi));
       
+      
+      ////// CREATE ORDER AND SUBORDERS //////
+      // create the order items
+      // while doing that, compile a list of categories/suppliers
+      // iterate through that list creating the sub orders for each supplier
+      
+      
+      // Create a map for the Suppliers -> SubOrders
+      Map <Supplier, SubOrder> suppliers = new HashMap<>();
+
+      int productId;     //= 2;
+      Product product;   //= productRepository.getById(productId);
+      int quantity;      //= 7;
+      double unitPrice;  //= 26.32;
+      
+      
+      
+      // Create the OrderItems
+      // NOTE: THIS NEEDS TO LOOP THROUGH THE CART ITEMS
+      // THE BELOW ITEM IS ONLY FOR TESTING
+      
+      System.out.println("adding Order item...");
+      
+      productId     = 2;
+      product       = productRepository.getById(productId);
+      quantity      = 7;
+      unitPrice     = 26.32;
+      
+      OrderItem item1 = new OrderItem(order, product, quantity, unitPrice);
+      orderItemRepository.save(item1);
+      
+      
+      // Now we need to get this item to the relevant Supplier. To do that,
+      // we will create a SubOrder for the Supplier (if it doesn't already
+      // exist) and a SubOrderItem for the item, which will be associated
+      // with that SubOrder.
+      
+      // Create the SubOrderItems
+      System.out.println("adding SubOrderItem...");
+      Product   prod     = item1.getProduct();
+      Supplier  supplier = prod.getSupplier();
+      SubOrder  subOrder = null;
+      
+      // ASSOCIATE SUBORDER WITH SUPPLIER
+      // add a new SubOrder for supplier if supplier is not yet
+      // used or just grab the existing suborder if it exists.
+      if (!suppliers.containsKey(supplier)) {
+          System.out.println("adding new SubOrder...");
+          
+          // int orderStatus, Order order_ID, Supplier supplier_ID) {
+          subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
+          suppliers.put(supplier, subOrder);
+          System.out.println("Added " + supplier.getStoreName() + " - " + subOrder.getId());
+      } else {
+          suppliers.get(supplier);
+      }
+      
+      
+      // Create the SubOrderItem
+      if (subOrder != null) {
+        SubOrderItem subItem = new SubOrderItem(subOrder, product, quantity);
+        subOrderItemRepository.save(subItem);
+      } else {
+          System.out.println("Error: SubOrder is null, cannot add SubOrderItems");
+      }
+      
+      
+      
+      
+      
+      ////// ADD A SECOND ITEM FOR TESTING //////
+      System.out.println("adding Order item...");
+      
+      productId     = 4;
+      product       = productRepository.getById(productId);
+      quantity      = 2;
+      unitPrice     = product.getPrice();
+      
+      OrderItem item2 = new OrderItem(order, product, quantity, unitPrice);
+      orderItemRepository.save(item2);
+      
+      
+      // Now we need to get this item to the relevant Supplier. To do that,
+      // we will create a SubOrder for the Supplier (if it doesn't already
+      // exist) and a SubOrderItem for the item, which will be associated
+      // with that SubOrder.
+      
+      // Create the SubOrderItems
+      System.out.println("adding SubOrderItem...");
+      prod     = item2.getProduct();
+      supplier = prod.getSupplier();
+      subOrder = null;
+      
+      // ASSOCIATE SUBORDER WITH SUPPLIER
+      // add a new SubOrder for supplier if supplier is not yet
+      // used or just grab the existing suborder if it exists.
+      if (!suppliers.containsKey(supplier)) {
+          System.out.println("adding new SubOrder...");
+          
+          // int orderStatus, Order order_ID, Supplier supplier_ID) {
+          subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
+          suppliers.put(supplier, subOrder);
+          System.out.println("Added " + supplier.getStoreName() + " - " + subOrder.getId());
+      } else {
+          suppliers.get(supplier);
+      }
+      
+      
+      // Create the SubOrderItem
+      if (subOrder != null) {
+        SubOrderItem subItem = new SubOrderItem(subOrder, product, quantity);
+        subOrderItemRepository.save(subItem);
+      } else {
+          System.out.println("Error: SubOrder is null, cannot add SubOrderItems");
+      }
+      
+      /*
+      System.out.println("adding Order item 2...");
+      productId = 2;
+      product = productRepository.getById(productId);
+      quantity = 3;
+      unitPrice = 22.00;
+      OrderItem item2 = new OrderItem(order, product, quantity, unitPrice);
+      orderItemRepository.save(item2);
+      */
+      
+      
+      // SAVE THE NEW ORDER AND FINISH
       orderRepository.save(order);
       return "Saved";
     }

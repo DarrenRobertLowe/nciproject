@@ -4,6 +4,7 @@
  */
 package com.storeii.nciproject.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,11 +35,11 @@ public class SubOrderItem {
     private int     quantity;
 
     // FOREIGN KEYS
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subOrder_ID", referencedColumnName = "id")
     private SubOrder subOrder;
     
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_ID", referencedColumnName = "id")
     private Product product;
     
@@ -79,5 +80,13 @@ public class SubOrderItem {
     }
     
     
+    /// CONSTRUCTORS
+    public SubOrderItem(){
+    }
     
+    public SubOrderItem(SubOrder subOrder, Product productID, int quantity) {
+        this.subOrder   = subOrder;
+        this.product    = productID;
+        this.quantity   = quantity;
+    }
 }

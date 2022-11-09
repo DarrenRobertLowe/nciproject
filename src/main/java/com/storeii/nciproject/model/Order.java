@@ -5,6 +5,7 @@
 package com.storeii.nciproject.model;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -51,19 +52,19 @@ public class Order {
     
     
     // FOREIGN KEYS
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_ID", referencedColumnName = "id")
     private Customer customer;
     
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_ID", referencedColumnName = "id")
     private Address address;
     
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "driver_ID", referencedColumnName = "id")
     private Driver driver; // note driver can be null
     
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_ID", referencedColumnName = "id")
     private Location location;
     

@@ -5,6 +5,7 @@
 package com.storeii.nciproject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -38,11 +39,11 @@ public class OrderItem {
     private double unitPrice;
     
     // FOREIGN KEYS
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Order_ID", referencedColumnName = "id")
     private Order order;
     
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_ID", referencedColumnName = "id")
     private Product product;
     
@@ -89,4 +90,14 @@ public class OrderItem {
     }
     
     
+    /// CONSTRUCTORS
+    public OrderItem(){
+    }
+    
+    public OrderItem(Order orderId, Product productID, int quantity, double unitPrice) {
+        this.order      = orderId;
+        this.product    = productID;
+        this.quantity   = quantity;
+        this.unitPrice  = unitPrice;
+    }
 }

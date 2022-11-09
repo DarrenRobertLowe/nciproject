@@ -74,5 +74,13 @@ public class SubOrder {
     }
     
     
+     /// CONSTRUCTORS
+    public SubOrder(){
+    }
     
+    public SubOrder(int orderStatus, Order order_ID, Supplier supplier_ID) {
+        this.orderStatus = orderStatus;
+        this.order       = order_ID;
+        this.supplier    = supplier_ID;
+    }
 }

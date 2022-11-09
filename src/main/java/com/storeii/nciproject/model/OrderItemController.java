@@ -40,7 +40,7 @@ public class OrderItemController {
     // Add new
     // Note: try catch wrapping here will break the server
     @PostMapping(path="/addOrderItem") // Map ONLY POST Requests
-    public String addOrderItem (
+    public OrderItem addOrderItem (
         @RequestParam String orderId,
         @RequestParam String productID,
         @RequestParam String quantity,
@@ -65,7 +65,10 @@ public class OrderItemController {
       
       
       orderItemRepository.save(orderItem);
-      return "Saved";
+      
+      System.out.println("added new order item!");
+      
+      return orderItem;
     }
     
     
