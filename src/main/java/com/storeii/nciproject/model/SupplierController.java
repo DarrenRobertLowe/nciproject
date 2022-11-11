@@ -53,7 +53,6 @@ public class SupplierController {
     }
     
     
-    
     // find all
     @GetMapping(path="/getSuppliers")
     public Iterable<Supplier> getSuppliers() {

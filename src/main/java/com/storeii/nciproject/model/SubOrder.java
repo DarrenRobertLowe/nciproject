@@ -9,13 +9,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Main
  */
 @Entity // This tells Hibernate to make a table out of this class
+@Table(name="SubOrder")
 public class SubOrder {
     /*
     id int UNSIGNED auto_increment PRIMARY KEY,
@@ -31,11 +34,11 @@ public class SubOrder {
     private int orderStatus;
     
     // FOREIGN KEYS
-    @OneToOne()
+    @ManyToOne // we are the owning side of the relationship
     @JoinColumn(name = "order_ID", referencedColumnName = "id")
     private Order order;
     
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name = "supplier_ID", referencedColumnName = "id")
     private Supplier supplier;
     

@@ -9,7 +9,11 @@ package com.storeii.nciproject.model;
  * @author Main
  */
 
+
+import com.storeii.nciproject.Enums.OrderStatus;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,4 +79,66 @@ public class SubOrderController {
         return subOrderRepository.findBySupplier(supplier);
     }
     
+    
+    // MARK A SUBORDER AS READY FOR COLLECTION
+    @PostMapping(path="/markSubOrderAsReady")
+    public String markSubOrderAsReady(
+        @RequestParam String subOrderId
+    ){
+        SubOrder subOrder = subOrderRepository.findById(Integer.parseInt(subOrderId)).get();
+        
+        int i = OrderStatus.READY.ordinal();  // set the status as READY, see the "Enums" class
+        
+        subOrder.setOrderStatus(i);
+        
+        subOrderRepository.save(subOrder);
+        
+        
+        /// We now need to check if all the SubOrders in Order are complete.
+        
+        // NOTE We should be able to simply run Set orders = order.getSubOrders();
+        // but attempting to add that functionality caused things to break.
+        // For now we're doing it in a unidirectional way...
+        
+        // first we get the parent Order
+        Order order = subOrder.getOrder();
+        //Set orders = order.getSubOrders();    // uncomment when we have bidirectionality working
+        
+        
+        /// Uni-Directional
+        // get a list of all the sub orders
+        SubOrderController subOrderController = new SubOrderController();
+        //Iterable<SubOrder> subOrders = subOrderController.getSubOrders();   
+        Iterable<SubOrder> subOrders = subOrderRepository.findAll();
+        
+        
+        // compile a list of all the SubOrders that point to our parent order
+        List<SubOrder> relevantSubOrders = new ArrayList<>();
+        for (SubOrder s : subOrders) {
+            if (s.getOrder() == order) {
+                System.out.println("***** SUBORDER POINTS TO ORDER *****");
+                relevantSubOrders.add(s);
+            }
+        }
+        
+        // Check the status of each SubOrder
+        boolean failed = false;
+        for (SubOrder s : relevantSubOrders) {
+            if (s.getOrderStatus() != OrderStatus.READY.ordinal()) {
+                failed = true;
+                break;          // exit the loop early as we know the Order isn't complete yet
+            }
+        }
+        
+        // if all the SubOrders have been marked as ready, we mark
+        // the parent Order as ready for collection. Drivers need
+        // to update their request to see the new delivery.
+        if (!failed) {
+            System.out.println("****** SUCCESS!! ALL PARTS OF ORDER ARE READY! ******* ");
+            order.setOrderStatus(OrderStatus.READY.ordinal());
+            orderRepository.save(order);
+        }
+        
+        return "\n\n\nSubOrder: " + subOrderId + " status is now " + subOrder.getOrderStatus() +"\n\n\n";
+    }
 }

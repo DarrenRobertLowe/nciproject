@@ -11,6 +11,7 @@ package com.storeii.nciproject.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +53,8 @@ public class OrderController {
     @Autowired
     private SubOrderItemRepository subOrderItemRepository;
     
-    
+    @Autowired
+    private SupplierRepository supplierRepository;
     
     
     // Add new
@@ -131,13 +133,26 @@ public class OrderController {
       // ASSOCIATE SUBORDER WITH SUPPLIER
       // add a new SubOrder for supplier if supplier is not yet
       // used or just grab the existing suborder if it exists.
-      if (!suppliers.containsKey(supplier)) {
-          System.out.println("adding new SubOrder...");
+    if (!suppliers.containsKey(supplier)) {
+        System.out.println("adding new SubOrder...");
           
-          // int orderStatus, Order order_ID, Supplier supplier_ID) {
-          subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
-          suppliers.put(supplier, subOrder);
-          System.out.println("Added " + supplier.getStoreName() + " - " + subOrder.getId());
+        // int orderStatus, Order order_ID, Supplier supplier_ID) {
+        subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
+        
+        // add to the hashmap of suppliers - suborders
+        suppliers.put(supplier, subOrder);
+        
+        
+        // add the new SubOrder to the Order.subOrders hashset
+        /*
+        if (order != null) {
+            System.out.println("******** subOrder's supplier is :" +subOrder.getSupplier());
+            System.out.println("******** order is " + order);
+            order.addToSubOrders(subOrder);
+            System.out.println("Added " + supplier.getStoreName() + " - " + subOrder.getId());
+        } else {
+            System.out.println("ERROR:  SUBORDER IS NULL !!!!");
+        }*/
       } else {
           suppliers.get(supplier);
       }
@@ -146,6 +161,7 @@ public class OrderController {
       // Create the SubOrderItem
       if (subOrder != null) {
         SubOrderItem subItem = new SubOrderItem(subOrder, product, quantity);
+        // Save
         subOrderItemRepository.save(subItem);
       } else {
           System.out.println("Error: SubOrder is null, cannot add SubOrderItems");
@@ -154,7 +170,7 @@ public class OrderController {
       
       
       
-      
+      /*
       ////// ADD A SECOND ITEM FOR TESTING //////
       System.out.println("adding Order item...");
       
@@ -178,16 +194,21 @@ public class OrderController {
       supplier = prod.getSupplier();
       subOrder = null;
       
-      // ASSOCIATE SUBORDER WITH SUPPLIER
-      // add a new SubOrder for supplier if supplier is not yet
-      // used or just grab the existing suborder if it exists.
-      if (!suppliers.containsKey(supplier)) {
-          System.out.println("adding new SubOrder...");
+    // ASSOCIATE SUBORDER WITH SUPPLIER
+    // add a new SubOrder for supplier if supplier is not yet
+    // used or just grab the existing suborder if it exists.
+    if (!suppliers.containsKey(supplier)) {
+        System.out.println("adding new SubOrder...");
           
-          // int orderStatus, Order order_ID, Supplier supplier_ID) {
-          subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
-          suppliers.put(supplier, subOrder);
-          System.out.println("Added " + supplier.getStoreName() + " - " + subOrder.getId());
+        // int orderStatus, Order order_ID, Supplier supplier_ID) {
+        subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
+        
+        // add the new SubOrder to the Order.subOrders hashset
+        order.addToSubOrders(subOrder);
+        
+        // add to the hashmap of suppliers - suborders
+        suppliers.put(supplier, subOrder);
+        System.out.println("Added " + supplier.getStoreName() + " - " + subOrder.getId());
       } else {
           suppliers.get(supplier);
       }
@@ -201,27 +222,39 @@ public class OrderController {
           System.out.println("Error: SubOrder is null, cannot add SubOrderItems");
       }
       
-      /*
-      System.out.println("adding Order item 2...");
-      productId = 2;
-      product = productRepository.getById(productId);
-      quantity = 3;
-      unitPrice = 22.00;
-      OrderItem item2 = new OrderItem(order, product, quantity, unitPrice);
-      orderItemRepository.save(item2);
       */
-      
-      
       // SAVE THE NEW ORDER AND FINISH
       orderRepository.save(order);
       return "Saved";
     }
     
     
+    
     // find all
     @GetMapping(path="/getOrders")
     public Iterable<Order> getOrders() {
       return orderRepository.findAll();  // This returns a JSON or XML with the users
+    }
+    
+    
+    // GET ORDERS BELONGING TO A SPECIFIC DRIVER
+    @GetMapping(path="/getOrdersForDriver")
+    public List<Order> getOrdersForDriver (
+        @RequestParam String driverID
+    ){
+        Driver driver = driverRepository.findById(Integer.parseInt(driverID)).get(); // .get() is VERY important here as it will return the actual object and not just a reference
+        return orderRepository.findByDriver(driver);
+    }
+    
+    
+    
+    // GET ORDERS BELONGING TO A SPECIFIC DRIVER THAT ARE READY FOR COLLECTION
+    @GetMapping(path="/getOrdersForCollectionByDriver")
+    public List<Order> getOrdersForCollectionByDriver (
+        @RequestParam String driverID
+    ){
+        Driver driver = driverRepository.findById(Integer.parseInt(driverID)).get(); // .get() is VERY important here as it will return the actual object and not just a reference
+        return orderRepository.findOrdersByDriverAndOrderStatus(driver, 2);
     }
     
 }

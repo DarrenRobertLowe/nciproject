@@ -5,6 +5,8 @@
 package com.storeii.nciproject.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -68,11 +71,20 @@ public class Order {
     @JoinColumn(name = "location_ID", referencedColumnName = "id")
     private Location location;
     
+    
     /*
-    @OneToMany()
-    @JoinColumn(name = "orderItems_ID", referencedColumnName = "id")
-    private OrderItems orderItems;
+    @OneToMany(mappedBy="order")
+    @JoinColumn(name = "orderItems", referencedColumnName = "id")
+    private Set<OrderItem> orderItems;   //OrderItems orderItems;
     */
+    
+    /*
+    @OneToMany(mappedBy="order") // this is the inverse side (Order is not the owner of the relationship, SubOrder is).
+    //@JoinColumn(name = "subOrders", referencedColumnName = "id")
+    @JsonIgnore
+    private Set<SubOrder> subOrders;
+    */
+    
     
     // GETTERS and SETTERS
     public int getId() {
@@ -123,14 +135,32 @@ public class Order {
     public void setLocation(Location location) {
         this.location = location;
     }
-
+    
+    
+    
+    
     /*
-    public OrderItems getOrderItems() {
+    public Set getOrderItems() {
         return orderItems;
     }
-
-    public void setOrderItems(OrderItems orderItems) {
+    
+    public void setOrderItems(Set<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+    */
+    
+    /*
+    public void addToSubOrders(SubOrder suborder) {
+        System.out.println("SubOrder is : " + suborder);
+        subOrders.add(suborder);
+    }
+    
+    public Set getSubOrders() {
+        return subOrders;
+    }
+    
+    public void setSubOrders(Set<SubOrder> subOrders) {
+        this.subOrders = subOrders;
     }
     */
 }
