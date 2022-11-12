@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:th="http://www.thymeleaf.org"
+          xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Deliveries</title>
+        <link href="../css/basicstyles.css" th:href="@{../css/basicstyles.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="form">
+            <form name='form' id="form" action="http://localhost:8080/webstoredb/getOrdersForCollectionByDriver?" method='GET'>
+                <h1>Deliveries</h1>
+                <table>
+                    <tr>
+                        <td>DriverID</td>
+                        <!-- instead of this, we really need to get the driverID from the logged in user account.
+                            Honestly we should be using UUIDs
+                        --->
+                        <td><input type='text' name='driverID' /></td>
+                        <td><input type="submit"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        
+        
+        <!-- Custom JS -->
+        <script src="/js/validation.js"></script>
+    </body>
+</html>
