@@ -10,13 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import java.io.Serializable;
 
 /**
  *
  * @author Main
  */
 @Entity // This tells Hibernate to make a table out of this class
-public class Customer {
+public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;

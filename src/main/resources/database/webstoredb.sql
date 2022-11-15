@@ -39,14 +39,15 @@ CREATE TABLE Customer (
 );
 
 
+-- drop table Driver;
 CREATE TABLE Driver (
 	id int UNSIGNED auto_increment PRIMARY KEY,
-    firstName varchar(50) NOT NULL,
-    surname varchar(50) NOT NULL,
-    userName varchar(50) NOT NULL,
-    userPass varchar(512) NOT NULL
-    -- should there be a one to many relationship with the locations here?
+    firstName varchar(50),
+    surname varchar(50),
+    userName varchar(50),
+    userPass varchar(512)
 );
+
 
 -- SET FOREIGN_KEY_CHECKS=0;
 -- drop table Location;
@@ -78,7 +79,7 @@ CREATE TABLE Orders (
     address_ID int UNSIGNED,
     driver_ID int UNSIGNED,
     location_ID int UNSIGNED,
-    -- OrderItems_ID int UNSIGNED,
+    -- OrderItems int UNSIGNED,
     FOREIGN KEY (customer_ID) REFERENCES Customer(id),
     FOREIGN KEY (address_ID) REFERENCES Address(id),
     FOREIGN KEY (driver_ID) REFERENCES Driver(id),
@@ -111,7 +112,7 @@ CREATE TABLE Product (
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
--- SET FOREIGN_KEY_CHECKS=1;
+-- SET FOREIGN_KEY_CHECKS=0;
 -- drop table SubOrder_Items;
 CREATE TABLE SubOrder_Items (
 	id int UNSIGNED auto_increment PRIMARY KEY,
@@ -132,6 +133,20 @@ CREATE TABLE OrderItems (
     quantity int UNSIGNED,
     unitPrice decimal
 );
+
+
+
+
+CREATE TABLE CartItem (
+	id int UNSIGNED auto_increment PRIMARY KEY,
+    customer_ID int UNSIGNED,
+    product_ID int UNSIGNED,
+    quantity int,
+    FOREIGN KEY (customer_ID) REFERENCES Customer(id),
+    FOREIGN KEY (product_ID) REFERENCES Product(id)
+);
+
+
 
 
 -- INSERT INTO Customer(firstName, surname, userName, userPass, address)
