@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,9 @@ public class OrderController {
     
     @Autowired
     private SupplierRepository supplierRepository;
+    
+    @Autowired
+    private EntityManager entityManager;
     
     
     // Add new
@@ -245,6 +249,18 @@ public class OrderController {
         Driver driver = driverRepository.findById(Integer.parseInt(driverID)).get(); // .get() is VERY important here as it will return the actual object and not just a reference
         return orderRepository.findByDriver(driver);
     }
+    
+    
+    @GetMapping(path="/deliveries")
+    public Iterable<Order> getDeliveries(
+        @RequestParam String driverID
+    ){
+        // get the entity
+        Driver driver = entityManager.find(Driver.class, Integer.parseInt(driverID));
+        
+        return orderRepository.findByDriver(driver);
+    }
+    
     
     
     

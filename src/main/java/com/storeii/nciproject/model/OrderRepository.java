@@ -24,11 +24,13 @@ public interface OrderRepository extends CrudRepository<Order, Integer> {
     @Query(value = "FROM Order WHERE orderStatus=3 and driver_ID = :driver_ID")
     List<Order> getOrdersForCollectionByDriver(
             @Param("driver_ID") String driver//List<Driver> drivers
-    );*/
+    );
     
     @Query(value = "FROM Order WHERE orderStatus=2")
     public List<Order> findReadyOrdersByDriver(Driver driver);
-    
+    */
     
     public List<Order> findOrdersByDriverAndOrderStatus(Driver driver, int orderStatus);
+    
+    
 }

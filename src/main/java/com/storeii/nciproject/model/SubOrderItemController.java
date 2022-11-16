@@ -73,6 +73,7 @@ public class SubOrderItemController {
     public List<SubOrderItem> getItemsFromSubOrder (
         @RequestParam String subOrder
     ){
+        // NOTE: we can probably simplify the below line by instead using EntityManager.
         SubOrder realOrder = subOrderRepository.findById(Integer.parseInt(subOrder)).get(); // .get() is VERY important here as it will return the actaul object and not just a reference
         return subOrderItemRepository.findBySubOrder(realOrder);
     }

@@ -89,7 +89,7 @@ public class OrderItemController {
     
     
     
-    // GET ITEMS BELONGING TO A SPECIFC ORDER
+    // GET ITEMS BELONGING TO A SPECIFIC ORDER
     @GetMapping(path="/getItemsFromOrder")
     //@Query("select * from OrderItems where orderID = ?")
     public List<OrderItem> getItemsFromOrder(

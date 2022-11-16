@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head>
-        <title>Your Shopping Cart</title>
+        <title>Cart</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -31,11 +31,12 @@
                         </div>
                         <div class="col">
                             <img th:src="@{${product.image}}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
+                            <p><span th:utext="|${product.price}|"></span>
                         </div>
                         <div class="col">
                             <div>
                                 <a th:href="@{/}" th:title="${{product.productName}}" target="_blank"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
-                                    <b>[[${product.productName)]]</b>
+                                    <b>[[${product.productName}]]</b>
                                 </a>
                             </div>
                             <div><input type="number" th:value="${item.quantity}" class="form-control"></div>
