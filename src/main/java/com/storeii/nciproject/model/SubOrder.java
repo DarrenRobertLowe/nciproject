@@ -4,12 +4,17 @@
  */
 package com.storeii.nciproject.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -43,6 +48,24 @@ public class SubOrder {
     private Supplier supplier;
     
     
+    // SubOrder Items
+    @OneToMany(
+            mappedBy = "subOrder",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    // this will be used to store the list of items
+    private List<SubOrderItem> items = new ArrayList<>();
+    
+    
+    
+    public List<SubOrderItem> getItems(){
+        return items;
+    }
+    
+    
+    
     // GETTERS and SETTERS
     public int getId() {
         return id;
@@ -74,6 +97,18 @@ public class SubOrder {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+    
+    
+    // bidirectionality with SubOrderItem
+    public void addItem(SubOrderItem item){
+        items.add(item);
+        item.setSubOrder(this);
+    }
+    
+    public void removeItem(SubOrderItem item){
+        items.remove(item);
+        item.setSubOrder(null);
     }
     
     

@@ -22,4 +22,5 @@ public interface SubOrderRepository extends CrudRepository<SubOrder, Integer> {
     
     public List<SubOrder> findByOrder(Order order);
     
+    public List<SubOrder> findSubOrdersBySupplierAndOrderStatus(Supplier supplier, int orderStatus);
 }

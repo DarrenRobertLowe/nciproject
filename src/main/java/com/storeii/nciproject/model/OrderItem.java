@@ -4,6 +4,7 @@
  */
 package com.storeii.nciproject.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -38,14 +39,18 @@ public class OrderItem {
     private int    quantity;
     private double unitPrice;
     
-    // FOREIGN KEYS
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Order_ID", referencedColumnName = "id")
+    
+    
+     // FOREIGN KEYS
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_ID", referencedColumnName = "id")
+    @JsonBackReference
     private Order order;
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_ID", referencedColumnName = "id")
     private Product product;
+    
     
     
     // GETTERS and SETTERS

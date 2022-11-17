@@ -4,12 +4,15 @@
  */
 package com.storeii.nciproject.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -34,9 +37,12 @@ public class SubOrderItem {
     private int    id;
     private int     quantity;
 
+    
+    
     // FOREIGN KEYS
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subOrder_ID", referencedColumnName = "id")
+    @JsonBackReference
     private SubOrder subOrder;
     
     @OneToOne(cascade = CascadeType.ALL)

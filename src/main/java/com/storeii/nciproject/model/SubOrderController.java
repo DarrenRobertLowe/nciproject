@@ -37,8 +37,7 @@ public class SubOrderController {
     
     
     // Add new
-    // Note: try catch wrapping here will break the server
-    @PostMapping(path="/addSubOrder") // Map ONLY POST Requests
+    @PostMapping(path="/addSubOrder")
     public String addSubOrder (
         @RequestParam String orderStatus,      // this should be set to 1 for new orders
         @RequestParam String order_ID,
@@ -54,8 +53,13 @@ public class SubOrderController {
       int supplier = Integer.parseInt(supplier_ID);
       
       suborder.setOrderStatus(status);
-      suborder.setOrder(orderRepository.getById(order));
+      
+      Order parentOrder = orderRepository.getById(order);
+      suborder.setOrder(parentOrder);
       suborder.setSupplier(supplierRepository.getById(supplier));
+      
+      // this is so we can look at Order to find the SubOrders.
+      //parentOrder.addSubOrder(suborder);
       
       subOrderRepository.save(suborder);
       return "Saved";

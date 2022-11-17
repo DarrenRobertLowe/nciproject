@@ -45,20 +45,4 @@ public class DeliveriesController {
         
         return mav;
     }
-    
-    /*
-    @GetMapping("/deliveries")
-    public ModelAndView getDeliveries(int driverID) {
-        Driver driver = entityManager.find(Driver.class, driverID);         // get the entity
-        int readyStatus = 2;// Enums.OrderStatus.READY.ordinal();           // get the status value as an int
-        
-        // get a list deliveries for the specific driver
-        List<Order> orders = orderRepository.findOrdersByDriverAndOrderStatus(driver, readyStatus);
-        
-        ModelAndView mav = new ModelAndView("driver-deliveries");
-        
-        mav.addObject("orders", orders);
-        return mav;
-    }
-    */
 }

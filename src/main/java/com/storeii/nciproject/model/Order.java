@@ -5,7 +5,11 @@
 package com.storeii.nciproject.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -72,11 +76,16 @@ public class Order {
     private Location location;
     
     
-    /*
-    @OneToMany(mappedBy="order")
-    @JoinColumn(name = "orderItems", referencedColumnName = "id")
-    private Set<OrderItem> orderItems;   //OrderItems orderItems;
-    */
+    
+    // Order Items
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    // this will be used to store the list of items
+    private List<OrderItem> items = new ArrayList<>();
     
     /*
     @OneToMany(mappedBy="order") // this is the inverse side (Order is not the owner of the relationship, SubOrder is).
@@ -84,6 +93,20 @@ public class Order {
     @JsonIgnore
     private Set<SubOrder> subOrders;
     */
+    
+    /*
+    // this will be used to store the list of subOrders
+    ArrayList<SubOrder> subOrders = new ArrayList();
+    
+    public void addSubOrder(SubOrder subOrder){
+        subOrders.add(subOrder);
+    }
+    
+    public ArrayList<SubOrder> getSubOrders(){
+        return subOrders;
+    }
+    */
+    
     
     
     // GETTERS and SETTERS

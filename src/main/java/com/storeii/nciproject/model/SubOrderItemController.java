@@ -48,7 +48,12 @@ public class SubOrderItemController {
       
       // Foreign Keys
       int i = Integer.parseInt(subOrderId);
-      subOrderItem.setSubOrder(subOrderRepository.getById(i));
+      SubOrder parentSubOrder = subOrderRepository.getById(i);
+      
+      subOrderItem.setSubOrder(parentSubOrder);
+      
+      // this is so we can get a list of SubOrderItems from a given SubOrder.
+      //parentSubOrder.addItem(subOrderItem); 
       
       int p = Integer.parseInt(productId);
       subOrderItem.setProduct(productRepository.getById(p));
@@ -78,4 +83,16 @@ public class SubOrderItemController {
         return subOrderItemRepository.findBySubOrder(realOrder);
     }
     
+    
+    
+    /*
+    // GET SUBORDER BELONGING TO A SPECIFIC SUPPLIER THAT NEED TO BE FULFILLED
+    @GetMapping(path="/getFulfilmentsBySupplier")
+    public List<Order> getFulfilmentsBySupplier (
+        @RequestParam String supplierID
+    ){
+        Supplier supplier = supplierRepository.findById(Integer.parseInt(supplierID)).get(); // .get() is VERY important here as it will return the actual object and not just a reference
+        return orderRepository.findOrdersByDriverAndOrderStatus(driver, 2);
+    }
+    */
 }
