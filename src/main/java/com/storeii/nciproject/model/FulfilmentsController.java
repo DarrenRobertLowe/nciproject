@@ -43,10 +43,8 @@ public class FulfilmentsController {
         int orderStatus = Enums.OrderStatus.PROCESSING.ordinal();           // suppliers only see suborders that haven't yet been fulfilled
         
         
-        //List<ArrayList> listOfLists = new ArrayList<List>();
-        
         // get a list deliveries for the specific driver
-        List<SubOrder> subOrders = subOrderRepository.findSubOrdersBySupplierAndOrderStatus(supplier, 2);
+        List<SubOrder> subOrders = subOrderRepository.findSubOrdersBySupplierAndOrderStatus(supplier, orderStatus);
         ModelAndView mav = new ModelAndView("fulfilments");
         mav.addObject("subOrders", subOrders);
         
@@ -55,17 +53,6 @@ public class FulfilmentsController {
         for (SubOrder s : subOrders) {
             List<SubOrderItem> subOrderItems = s.getItems();
             mav.addObject("subOrderItems", subOrderItems);
-            //listOfLists.add(subOrderItems);
-            
-            /*
-            // hack for the moment
-            SubOrderItem subby;
-            
-            subby = entityManager.find(SubOrderItem.class, 1);
-            s.addItem(subby);
-            
-            subOrderRepository.save(s);
-            */
         }
         
         return mav;

@@ -20,62 +20,41 @@
         <link href="css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
     </head>
     <body>
+        
         <h1> Fulfilments </h1>
         
         <div class="row">
             <div class="col-sm-8">
-                <th:block th:each="subOrder : ${subOrders}",
-                          th:with="subOrderID = ${subOrder.id}">
-                    <div class="row border rounded">
-                        
-                        
+                <th:block th:each="subOrder : ${subOrders}">
+                    <div class="info card">
                         <!-- ORDER INFO -->
                         <div>
-                            <div class="row">
-                                <span>
-                                    <h2 th:text="'For SubOrder id : ' + ${subOrderID}"></h2>
-                                </span>
+                            <!-- Order id column -->
+                            <div class="col">
+                                <h2 th:text="'Order # ' + ${subOrder.order.id}"></h2>
+                            </div>
+                            
+                            <!-- products and quantity rows -->
+                            <div class="col" th:each="subOrderItem : ${subOrder.items}">
+                                <b th:text="${subOrderItem.product.productName}"></b>
+                                <b th:text="x + ${subOrderItem.quantity}"></b>
+                            </div>
+                            
+                            <div class="col">
+                                <button class="btn btn-danger p-3 mt-2" th:attr="onclick=|markAsReady('${subOrder.id}')|">Mark as Ready</button>
                             </div>
                         </div>
-                        
-                            <!--
-                              th:with="customer = ${order.customer}", 
-                              th:with="firstName = ${customer.firstName}", 
-                              th:with="surname = ${customer.surname}",
-                              th:with="address = ${customer.address}",
-                              th:with="addressLine1 = ${address.addressLine1}",
-                              th:with="addressLine2 = ${address.addressLine2}",
-                              th:with="city = ${address.city}",
-                              th:with="county = ${address.district}",
-                              th:with="eircode = ${address.postcode}"
-                                -->
-                            
-                            
-                            <!-- PRODUCTS -->
-                            <div class="row">
-                                <b> Contents: </b>
-                            </div>
-                            <div class="col" th:each="subOrderItem : ${subOrder.items}" >
-                                <div class="row" id="quantity">
-                                    <div class="col">
-                                        <b th:text="${subOrderItem.product.productName}  ?: 'No product'"> Product : </b>
-                                        <b th:text="x + ${subOrderItem.quantity}"></b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
                 </th:block>
-            </div>
-            
-            <div class="col-sm-4" th:unless="${#lists.isEmpty(subOrders)}"> <!-- do this UNLESS ... -->
-                <div class="mt-2">
-                    <button class="btn btn-danger p-3 mt-2">Mark as Ready</button>
-                </div>
             </div>
             
             <div th:if="${#lists.isEmpty(subOrders)}">
                 <h3>Your cart is currently empty.</h3>
             </div>
         </div>
+        
+        <!-- javascript -->
+        <script src="/js/drivers.js"</script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </body>
 </html>

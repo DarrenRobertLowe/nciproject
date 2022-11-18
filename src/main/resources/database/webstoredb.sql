@@ -98,6 +98,11 @@ CREATE TABLE SubOrder (
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
+/*
+update SubOrder
+set orderStatus = 1;
+*/
+
 -- SET FOREIGN_KEY_CHECKS=0;
 -- drop table Product;
 CREATE TABLE Product (
@@ -133,7 +138,6 @@ CREATE TABLE OrderItems (
     quantity int UNSIGNED,
     unitPrice decimal
 );
-
 
 
 
