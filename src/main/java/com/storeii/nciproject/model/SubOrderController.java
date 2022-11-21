@@ -85,6 +85,16 @@ public class SubOrderController {
     }
     
     
+    // GET SUBORDERS BELONGING TO A SPECIFIC ORDER
+    @GetMapping(path="/getSubOrdersByOrder")
+    public List<SubOrder> getSubOrdersByOrder (
+        @RequestParam String orderID
+    ){
+        Order order = orderRepository.findById(Integer.parseInt(orderID)).get(); // .get() is VERY important here as it will return the actual object and not just a reference
+        return subOrderRepository.findByOrder(order);
+    }
+    
+    
     // MARK A SUBORDER AS READY FOR COLLECTION
     @PostMapping(path="/markSubOrderAsReady")
     public String markSubOrderAsReady(

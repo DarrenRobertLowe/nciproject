@@ -9,6 +9,8 @@ package com.storeii.nciproject.model;
  * @author Main
  */
 
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +28,16 @@ public class SupplierController {
     @Autowired
     private AddressRepository addressRepository;
     
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    
     @Autowired
     private LocationRepository locationRepository;
     
+    @Autowired
+    private EntityManager entityManager;
     
     // Add new
     @PostMapping(path="/addSupplier") // Map ONLY POST Requests
@@ -57,5 +66,15 @@ public class SupplierController {
     @GetMapping(path="/getSuppliers")
     public Iterable<Supplier> getSuppliers() {
         return supplierRepository.findAll();  // This returns a JSON or XML with the users
+    }
+    
+    
+    // GET ORDERS BELONGING TO A SPECIFIC DRIVER
+    @GetMapping(path="/getSuppliersByOrder")
+    public List<Supplier> getSuppliersByOrder (
+        @RequestParam String orderID
+    ){
+        Order order = entityManager.find(Order.class, Integer.parseInt(orderID));//orderRepository.findById(Integer.parseInt(orderID)).get(); // .get() is VERY important here as it will return the actual object and not just a reference
+        return supplierRepository.findByOrders(order);
     }
 }

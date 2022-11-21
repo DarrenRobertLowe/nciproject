@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -18,6 +19,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -58,6 +61,7 @@ public class Order {
     private int orderStatus;
     
     
+    
     // FOREIGN KEYS
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_ID", referencedColumnName = "id")
@@ -76,7 +80,6 @@ public class Order {
     private Location location;
     
     
-    
     // Order Items
     @OneToMany(
             mappedBy = "order",
@@ -84,28 +87,18 @@ public class Order {
             orphanRemoval = true
     )
     @JsonManagedReference
-    // this will be used to store the list of items
     private List<OrderItem> items = new ArrayList<>();
     
-    /*
-    @OneToMany(mappedBy="order") // this is the inverse side (Order is not the owner of the relationship, SubOrder is).
-    //@JoinColumn(name = "subOrders", referencedColumnName = "id")
-    @JsonIgnore
-    private Set<SubOrder> subOrders;
-    */
     
-    /*
-    // this will be used to store the list of subOrders
-    ArrayList<SubOrder> subOrders = new ArrayList();
+    // Suppliers
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "SupplierOrders", 
+        joinColumns = @JoinColumn(name = "order_ID", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "supplier_ID", referencedColumnName = "id"))
+    private Set<Supplier> suppliers = new HashSet<>();
     
-    public void addSubOrder(SubOrder subOrder){
-        subOrders.add(subOrder);
-    }
-    
-    public ArrayList<SubOrder> getSubOrders(){
-        return subOrders;
-    }
-    */
+
     
     
     
@@ -160,30 +153,31 @@ public class Order {
     }
     
     
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
     
-    
-    /*
-    public Set getOrderItems() {
-        return orderItems;
+    public Set<Supplier> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(Set<Supplier> suppliers) {
+        this.suppliers = suppliers;
     }
     
-    public void setOrderItems(Set<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-    */
-    
-    /*
-    public void addToSubOrders(SubOrder suborder) {
-        System.out.println("SubOrder is : " + suborder);
-        subOrders.add(suborder);
+    // METHODS
+    public void addSupplier(Supplier supplier){
+        suppliers.add(supplier);
+        supplier.getOrders().add(this);
     }
     
-    public Set getSubOrders() {
-        return subOrders;
+    public void removeSupplier(Supplier supplier){
+        this.suppliers.remove(supplier);
+        supplier.getOrders().remove(this);
     }
-    
-    public void setSubOrders(Set<SubOrder> subOrders) {
-        this.subOrders = subOrders;
-    }
-    */
 }

@@ -24,8 +24,6 @@ CREATE TABLE Address (
     country varchar(100)
 );
 
--- SET FOREIGN_KEY_CHECKS=0;
--- drop table Customer;
 CREATE TABLE Customer (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     firstName varchar(50) NOT NULL,
@@ -38,8 +36,6 @@ CREATE TABLE Customer (
     FOREIGN KEY (location) REFERENCES Location(id)
 );
 
-
--- drop table Driver;
 CREATE TABLE Driver (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     firstName varchar(50),
@@ -48,15 +44,11 @@ CREATE TABLE Driver (
     userPass varchar(512)
 );
 
-
--- SET FOREIGN_KEY_CHECKS=0;
--- drop table Location;
 CREATE TABLE Location (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     locationName varchar(50),
     driver_ID int UNSIGNED,
     FOREIGN KEY (driver_ID) REFERENCES Driver(id)
-    -- should there be a one to many relationship with the suppliers here?
 );
 
 CREATE TABLE Supplier (
@@ -66,7 +58,6 @@ CREATE TABLE Supplier (
     location_ID int UNSIGNED,
     FOREIGN KEY (address_ID) REFERENCES Address(id),
     FOREIGN KEY (location_ID) REFERENCES Location(id)
-    -- should there be a one to many relationship with the products here?
 );
 
 
@@ -98,13 +89,7 @@ CREATE TABLE SubOrder (
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
-/*
-update SubOrder
-set orderStatus = 1;
-*/
 
--- SET FOREIGN_KEY_CHECKS=0;
--- drop table Product;
 CREATE TABLE Product (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     productName varchar(100),
@@ -117,6 +102,7 @@ CREATE TABLE Product (
     FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
 );
 
+-- use webstoredb;
 -- SET FOREIGN_KEY_CHECKS=0;
 -- drop table SubOrder_Items;
 CREATE TABLE SubOrder_Items (
@@ -151,34 +137,26 @@ CREATE TABLE CartItem (
 );
 
 
+CREATE TABLE SupplierOrders (
+	supplier_ID int UNSIGNED,
+    order_ID int UNSIGNED,
+    PRIMARY KEY (supplier_ID, order_ID)
+);
 
 
--- INSERT INTO Customer(firstName, surname, userName, userPass, address)
--- VALUES ("Darren", "Lowe", "dlowe", "password", 1);
 
--- INSERT INTO Address(addressLine1, addressLine2, city, district, postcode, country)
--- VALUES ("41", "Wicker Row", "Greystones", "County Wicklow", "W2212345", "Ireland");
-
-
--- INSERT INTO Location(driver_ID)
--- VALUES(2);
-
-
--- INSERT INTO Supplier(storeName, location_ID, address_ID)
--- VALUES("Shoes R Us", 2, 1);
-
-
-/*
-	id int UNSIGNED auto_increment PRIMARY KEY,
-    orderStatus TINYINT UNSIGNED NOT NULL, -- this is a TINYINT to effectively be an enum, but maybe a varchar could be better?
-    customer_ID int UNSIGNED NOT NULL,
-    address_ID int UNSIGNED NOT NULL,
-    driver_ID smallint UNSIGNED,
-    location_ID smallint UNSIGNED NOT NULL,
+/* REFRESH TABLES - don't forget to re-create them after
+SET FOREIGN_KEY_CHECKS = 0;
+drop table Orders;
+drop table SubOrder;
+drop table SubOrder_Items;
+drop table OrderItems;
+drop table SupplierOrders;
 */
--- use webstoredb;
-select * from SubOrder where supplier_ID = 3;
 
+
+
+select * from SupplierOrders;
 select * from Driver;
 select * from Location;
 select * from Supplier;

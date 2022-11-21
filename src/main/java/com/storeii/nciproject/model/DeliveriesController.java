@@ -39,7 +39,7 @@ public class DeliveriesController {
         // get a list deliveries for the specific driver
         List<Order> orders = orderRepository.findOrdersByDriverAndOrderStatus(driver, readyStatus);
         
-        ModelAndView mav = new ModelAndView("driver-deliveries");
+        ModelAndView mav = new ModelAndView("deliveries");
         
         mav.addObject("orders", orders);
         

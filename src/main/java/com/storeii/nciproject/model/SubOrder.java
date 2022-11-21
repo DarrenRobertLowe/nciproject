@@ -57,6 +57,10 @@ public class SubOrder {
     @JsonManagedReference
     // this will be used to store the list of items
     private List<SubOrderItem> items = new ArrayList<>();
+
+    public void setItems(List<SubOrderItem> items) {
+        this.items = items;
+    }
     
     
     

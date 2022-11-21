@@ -42,7 +42,7 @@ public class OrderItem {
     
     
      // FOREIGN KEYS
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "order_ID", referencedColumnName = "id")
     @JsonBackReference
     private Order order;

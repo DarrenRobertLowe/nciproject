@@ -40,7 +40,7 @@ public class SubOrderItem {
     
     
     // FOREIGN KEYS
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "subOrder_ID", referencedColumnName = "id")
     @JsonBackReference
     private SubOrder subOrder;
