@@ -5,10 +5,11 @@
 package com.storeii.nciproject.model;
 
 
-import com.storeii.nciproject.model.OrderItem;
+
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-//import org.springframework.data.repository.CrudRepository;
+import com.storeii.nciproject.model.OrderItem;
+import java.util.ArrayList;
 
 /**
  *
@@ -25,7 +26,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
     public List<OrderItem> findByQuantity(int quantity);
     
     
-    public List<OrderItem> findByOrder(Order order);
+    public ArrayList<OrderItem> findByOrder(Order order);
     
+    
+    //public List<OrderItem> findOrderItemsByOrder(Order order);
     //public OrderItem addOrderItem(String orderId, String productID, String quantity, String unitPrice);
 }

@@ -4,10 +4,10 @@
  */
 package com.storeii.nciproject.model;
 import com.storeii.nciproject.model.Order;
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -16,21 +16,17 @@ import org.springframework.data.repository.query.Param;
 
 // Spring automatically implements this repository interface in 
 // a bean of the same name (lowecase first letter)
-public interface OrderRepository extends CrudRepository<Order, Integer> {
+public interface OrderRepository extends
+        JpaRepository<Order, Integer>
+        //OrderRepositoryCustom
+{
     Order getById(int id);
     public List<Order> findByDriver(Driver driver);
 
-    /*
-    @Query(value = "FROM Order WHERE orderStatus=3 and driver_ID = :driver_ID")
-    List<Order> getOrdersForCollectionByDriver(
-            @Param("driver_ID") String driver//List<Driver> drivers
-    );
-    
-    @Query(value = "FROM Order WHERE orderStatus=2")
-    public List<Order> findReadyOrdersByDriver(Driver driver);
-    */
     
     public List<Order> findOrdersByDriverAndOrderStatus(Driver driver, int orderStatus);
     
-    
+    //@Override
+    //public ArrayList<OrderItem> findOrderItems(Order order);
+    //public String addOrder (String orderId, String customer_ID);
 }

@@ -11,7 +11,7 @@ package com.storeii.nciproject;
 public class Enums {
     public static enum OrderStatus {
         CANCELLED,  // the order was cancelled for some reason
-        PROCESSING, // the order is being fulfilled by suppliers
+        CONFIRMED, // the order is being fulfilled by suppliers
         READY,      // the order is ready for collection by the delivery driver
         DELIVERING, // the order is being delivered to the customer's address
         COMPLETE    // the order is with the customer

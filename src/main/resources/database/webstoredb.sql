@@ -126,7 +126,8 @@ CREATE TABLE OrderItems (
 );
 
 
-
+-- use webstoredb;
+-- drop table CartItem;
 CREATE TABLE CartItem (
 	id int UNSIGNED auto_increment PRIMARY KEY,
     customer_ID int UNSIGNED,
@@ -160,6 +161,8 @@ select * from SupplierOrders;
 select * from Driver;
 select * from Location;
 select * from Supplier;
+select * from Orders;
+
 
 select Location.id, Location.driver_ID, Driver.firstName, Driver.surname
 from Location

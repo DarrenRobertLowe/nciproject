@@ -40,7 +40,7 @@ public class FulfilmentsController {
     @GetMapping("/fulfilments")
     public ModelAndView showFulfilments(int supplierID) {
         Supplier supplier = entityManager.find(Supplier.class, supplierID); // get the entity
-        int orderStatus = Enums.OrderStatus.PROCESSING.ordinal();           // suppliers only see suborders that haven't yet been fulfilled
+        int orderStatus = Enums.OrderStatus.CONFIRMED.ordinal();           // suppliers only see suborders that haven't yet been fulfilled
         
         
         // get a list deliveries for the specific driver

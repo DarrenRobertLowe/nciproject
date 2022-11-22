@@ -6,6 +6,7 @@ package com.storeii.nciproject.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -99,8 +100,8 @@ public class OrderItem {
     public OrderItem(){
     }
     
-    public OrderItem(Order orderId, Product productID, int quantity, double unitPrice) {
-        this.order      = orderId;
+    public OrderItem(Order orderID, Product productID, int quantity, double unitPrice) {
+        this.order      = orderID;
         this.product    = productID;
         this.quantity   = quantity;
         this.unitPrice  = unitPrice;

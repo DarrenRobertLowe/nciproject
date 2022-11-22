@@ -98,4 +98,17 @@ public class OrderItemController {
         Order realOrder = orderRepository.findById(Integer.parseInt(order)).get(); // .get() is VERY important here as it will return the actaul object and not just a reference
         return orderItemRepository.findByOrder(realOrder);
     }
+    
+    
+    
+    
+    // GET ITEMS BELONGING TO A SPECIFIC ORDER BUT BETTER
+    @GetMapping(path="/findOrderItemsByOrder")
+    public List<OrderItem> findOrderItemsByOrder(
+        @RequestParam Order order
+    ){
+        //Order realOrder = orderRepository.findById(Integer.parseInt(order)).get(); // .get() is VERY important here as it will return the actaul object and not just a reference
+        return orderItemRepository.findByOrder(order);
+    }
+    
 }

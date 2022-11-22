@@ -59,36 +59,73 @@ public class OrderController {
     private SupplierRepository supplierRepository;
     
     @Autowired
+    private CartItemRepository cartItemRepository;
+    
+    @Autowired
     private EntityManager entityManager;
     
+
     
     // Add new
     @PostMapping(path="/addOrder") // Map ONLY POST Requests
     public String addOrder (
-        @RequestParam String orderStatus,      // this should be set to 1 for new orders
-        @RequestParam String customer_ID,
-        @RequestParam String address_ID,
-        @RequestParam String driver_ID,
-        @RequestParam String location_ID
-        // @RequestParam String OrderItems_ID
+            
+        //@RequestParam String orderStatus,      // this should be set to 1 for new orders
+        @RequestParam Order order,
+        @RequestParam Customer customer,
+        @RequestParam List<OrderItem> orderItems,
+        @RequestParam SubOrderItemRepository subOrderRepo,
+        @RequestParam OrderRepository orderRepo
+        //@RequestParam String addressId,
+        //@RequestParam String driverId,
+        //@RequestParam String locationId,
+        //@RequestParam String cartItems
     ){
-        Order order = new Order();
-        
+
         
         // set fields
-        int st = Integer.parseInt(orderStatus);
-        int cu = Integer.parseInt(customer_ID);
-        int ad = Integer.parseInt(address_ID);
-        int dr = Integer.parseInt(driver_ID);
-        int lo = Integer.parseInt(location_ID);
+        //int st = Integer.parseInt(orderStatus);
+        //int cu = Integer.parseInt(customer_ID);
+        //int ad = Integer.parseInt(address_ID);
+       // int dr = Integer.parseInt(driver_ID);
+       // int lo = Integer.parseInt(location_ID);
         //int oi = Integer.parseInt(OrderItems_ID);
         
-        order.setOrderStatus(st);// st);
-        order.setCustomer(customerRepository.getById(cu));
-        order.setAddress(addressRepository.getById(ad));
-        order.setDriver(driverRepository.getById(dr));
-        order.setLocation(locationRepository.getById(lo));
-        //order.setOrderItems(orderItemsRepository.getById(oi));
+        // get entities
+        System.out.println("Customer ID is : " +customer.getId());
+        //int customerInt = Integer.parseInt(customerId);
+        //int orderInt = Integer.parseInt(orderId);
+        
+        System.out.println("orderId is " +order.getId());
+        //Customer customer = entityManager.find(Customer.class, customerInt);
+        System.out.println("Didn't fail after Customer.");
+        
+        //Order order = entityManager.find(Order.class, orderInt);
+        System.out.println("Didn't fail after order.");
+        
+        
+        // status
+        order.setOrderStatus(Enums.OrderStatus.CONFIRMED.ordinal());
+        
+        //System.out.println("orderItemRepository.findById(1) : " + orderItemRepository.findById(1));
+        //OrderItemController itemController = new OrderItemController();
+        //List<OrderItem> orderItems = null;
+        //orderItems = orderItemRepository.findAll();//findByOrder(order);//findOrderItemsByOrder(order);
+        
+        //List<OrderItem> orderItems = orderRepository.findOrderItems();
+        
+        //List<OrderItem> orderItems = itemController.getItemsFromOrder(order.toString());
+        
+        //ArrayList<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+        //System.out.println("didn't fail at list");
+        
+        order.setCustomer(customer);
+        order.setAddress(customer.getAddress());
+        Location location = customer.getLocation();
+        order.setLocation(location);
+        order.setDriver(location.getDriver());
+        
+        //order.setItems(orderItemRepository.getById(oi));
         
         
         /***** CREATE ORDER AND SUBORDERS *****
@@ -97,10 +134,9 @@ public class OrderController {
         * iterate through that list creating the sub orders for each supplier
         */
         
-        // Create a map for the Suppliers -> SubOrders
-        Map <Supplier, SubOrder> suppliers = new HashMap<>();
-
         
+
+        /*
         int productId;     //= 2;
         Product product;   //= productRepository.getById(productId);
         int quantity;      //= 7;
@@ -121,58 +157,72 @@ public class OrderController {
                                 
                                 OrderItem oItem = new OrderItem(order, product, quantity, unitPrice);
                                 orderItemRepository.save(oItem);
-        
-        
-        
-        /* ASSOCIATE SUBORDER WITH SUPPLIER
-        /*** Now we need to get this item to the relevant Supplier. 
-        * To do that, we will create a SubOrder for the Supplier (if it 
-        * doesn't already exist) and a SubOrderItem for the item, which
-        * will be associated with that SubOrder.
-        */
-        // Create the SubOrderItems
-        System.out.println("adding SubOrderItem...");
-        Product   prod     = oItem.getProduct();
-        Supplier  supplier = prod.getSupplier();
-        SubOrder  subOrder = null;
-        
-        System.out.println("Product is: " + product.getProductName() + " id:" +product.getId());
-        System.out.println("Product supplier is:" + supplier);
-        
-        /* Add a new SubOrder for supplier if supplier is not yet
-         * used or just grab the existing suborder if it exists.
         */
         
-        if (!suppliers.containsKey(supplier)) {
-            System.out.println("adding new SubOrder...");
-            subOrder = new SubOrder(Integer.parseInt(orderStatus), order, supplier);
-            System.out.println("New supplier is: " + supplier.getStoreName() + " id: " + supplier.getId());
-            suppliers.put(supplier, subOrder);  // add to the hashmap of [suppliers -> suborders]
+        
+        /*** CREATE SUBORDERS ***/
+        // Create a map for the Suppliers -> SubOrders
+        Map <Supplier, SubOrder> suppliers = new HashMap<>();
+        
+        // go through the list of orderItems belonging to this order
+        for (OrderItem oItem : orderItems) {
+            /* Now we need to get this order item to the relevant Supplier. 
+            * To do that, we will create a SubOrder for the Supplier (if it 
+            * doesn't already exist) and a SubOrderItem for the item, which
+            * will be associated with that SubOrder. 
+            */
+            
+            // Create the SubOrderItems
+            System.out.println("adding SubOrderItem...");
+            Product  product  = oItem.getProduct();
+            Supplier supplier = product.getSupplier();
+            SubOrder subOrder = null;
             
             
-            // add to the order's list of suppliers
-            // this will be used by delivery drivers
-            //order.addSupplier(supplier);
-            //System.out.println("");
-            System.out.println("supplier: " + supplier);
-            System.out.println("order:" +order + " has suppliers:" + order.getSuppliers());
-            order.addSupplier(supplier);
-        } else {
-            subOrder = suppliers.get(supplier);
-            System.out.println("Adding to an existing supplier suborder "+ subOrder + " for: " + supplier.getStoreName());
-        }
+            // debug //
+            System.out.println("Product is: " + product.getProductName() + " id:" + product.getId());
+            System.out.println("Product supplier is:" + supplier);
+            
+            
+            /* Add a new SubOrder for supplier if supplier is not yet
+             * used or just grab the existing suborder if it exists.
+            */
+            if (!suppliers.containsKey(supplier)) {
+                System.out.println("adding new SubOrder...");
+                int status = Enums.OrderStatus.CONFIRMED.ordinal();
+                
+                subOrder = new SubOrder(status, order, supplier);
+                System.out.println("New supplier is: " + supplier.getStoreName() + " id: " + supplier.getId());
+                suppliers.put(supplier, subOrder);  // add to the hashmap of [suppliers -> suborders]
+
+
+                // add to the order's list of suppliers
+                // this will be used by delivery drivers
+                //order.addSupplier(supplier);
+                //System.out.println("");
+                System.out.println("supplier: " + supplier);
+                System.out.println("order:" +order + " has suppliers:" + order.getSuppliers());
+                order.addSupplier(supplier);
+            } else {
+                subOrder = suppliers.get(supplier);
+                System.out.println("Adding to an existing supplier suborder "+ subOrder + " for: " + supplier.getStoreName());
+            }
+            
+            
+            
+            // Create the SubOrderItem
+            if (subOrder != null) {
+                SubOrderItem subItem = new SubOrderItem(subOrder, product, oItem.getQuantity());
+                subOrderRepo.save(subItem); // Save to make persistent
+            } else {
+                System.out.println("Error: SubOrder is null, cannot add SubOrderItems");
+            }
+        } // end of iterating through orderItems
         
         
-        // Create the SubOrderItem
-        if (subOrder != null) {
-            SubOrderItem subItem = new SubOrderItem(subOrder, product, quantity);
-            subOrderItemRepository.save(subItem); // Save to make persistent
-        } else {
-            System.out.println("Error: SubOrder is null, cannot add SubOrderItems");
-        }
         
         // SAVE THE NEW ORDER AND FINISH
-        orderRepository.save(order);
+        orderRepo.save(order);
         return "Saved";
     }
     

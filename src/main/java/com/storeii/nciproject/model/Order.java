@@ -49,14 +49,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
-    
-    
-    // order status
-    // 0: cancelled
-    // 1: placed
-    // 2: ready for pickup
-    // 3: delivering
-    // 4: completed
+
     
     private int orderStatus;
     
