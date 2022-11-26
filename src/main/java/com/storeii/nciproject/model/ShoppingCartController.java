@@ -8,8 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +31,7 @@ public class ShoppingCartController {
     private EntityManager entityManager;    // this allows us to refer to the entities mroe easily
     
     @Autowired
-    private CartItemRepository cartItemRepo;
+    private CartItemRepository cartItemRepository;
     
     @Autowired
     private OrderRepository orderRepository;
@@ -47,7 +52,7 @@ public class ShoppingCartController {
         // get the entity
         Customer customer = entityManager.find(Customer.class, customerID);
         
-        List<CartItem> cartItems = cartItemRepo.findByCustomer(customer);   // listCartItems(customer);
+        List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);   // listCartItems(customer);
         
         ModelAndView mav = new ModelAndView("shopping-cart");
         
@@ -57,6 +62,57 @@ public class ShoppingCartController {
     }
     
     
+    
+
+    @PostMapping("/cart/quantityDown")
+    public void quantityDown(String cartItemId){
+        System.out.println("************** Hi, Hello there! *************");
+        // get the entity
+        CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
+        
+        int qty = cartItem.getQuantity();
+        cartItem.setQuantity(qty-1);
+        
+        cartItemRepository.save(cartItem);
+        
+        System.out.println("The id was : " + cartItemId);
+        
+        System.out.println("************** Hi, Hello there! *************");
+    }
+    
+    
+
+    @PostMapping("/cart/quantityUp")
+    public void quantityUp(String cartItemId){
+        System.out.println("************** Hi, Hello there! *************");
+        
+        // get the entity
+        CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
+        
+        int qty = cartItem.getQuantity();
+        cartItem.setQuantity(qty+1);
+        cartItemRepository.save(cartItem);
+        
+        System.out.println("************** Hi, Hello there! *************");
+    }
+    
+    
+    
+    //@CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping("/quantity-fragment")
+    public ModelAndView getQuantity(int cartItemId) {
+        System.out.println("YES, THIS IS RUNNING!");
+
+        CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
+        
+        ModelAndView mv = new ModelAndView("quantity-fragment");
+        mv.addObject("item",cartItem);
+        return mv;
+    }
+    
+    
+    
+    
     @PostMapping(path="/checkout")
     public String checkout(String customerId){
         // get the entity
@@ -64,7 +120,7 @@ public class ShoppingCartController {
         
         System.out.println("entityManager found " + customerId);
         
-        List<CartItem> cartItems = cartItemRepo.findByCustomer(customer);
+        List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);
         
         System.out.println("_____cartItems_____\n"+ cartItems.toString());
         
@@ -101,5 +157,8 @@ public class ShoppingCartController {
         
         return "Checkout success";
     }
-        
+    
+    
+    
+    
 }

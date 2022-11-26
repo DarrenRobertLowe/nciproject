@@ -109,8 +109,7 @@ public class SubOrderController {
         subOrderRepository.save(subOrder);
         
         
-        /// We now need to check if all the SubOrders in Order are complete.
-        
+        /// CHECK IF ALL SUBORDERS OR ORDER ARE READY
         // NOTE We should be able to simply run Set orders = order.getSubOrders();
         // but attempting to add that functionality caused things to break.
         // For now we're doing it in a unidirectional way...
@@ -141,6 +140,7 @@ public class SubOrderController {
         for (SubOrder s : relevantSubOrders) {
             if (s.getOrderStatus() != OrderStatus.READY.ordinal()) {
                 failed = true;
+                System.out.println("Some items remain unfulfilled.");
                 break;          // exit the loop early as we know the Order isn't complete yet
             }
         }

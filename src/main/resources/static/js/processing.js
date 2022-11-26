@@ -5,8 +5,8 @@
 
 
 
-function confirmMarkAsReady(subOrderId) {
-  if (confirm("Are you sure you want to confirm order id: " + subOrderId + " and remove it from your queue?")) {
+function confirmMarkAsReady(subOrderId, orderId) {
+  if (confirm("Are you sure you want to confirm order id: " + orderId + " and remove it from your queue?")) {
       markAsReady(subOrderId);
   }
 }

@@ -34,7 +34,7 @@
                         <div>
                             <!-- Order id column -->
                             <div class="col">
-                                <h2 th:text="'Order # ' + ${subOrder.order.id}"></h2>
+                                <h2 th:text="'For Order # ' + ${subOrder.order.id}"></h2>
                             </div>
                             
                             <!-- products and quantity rows -->
@@ -44,7 +44,7 @@
                             </div>
                             
                             <div class="col">
-                                <button class="button_MarkAsReady" th:attr="onclick=|confirmMarkAsReady('${subOrder.id}')|">Mark as Ready</button>
+                                <button class="button_MarkAsReady" th:attr="onclick=|confirmMarkAsReady('${subOrder.id}','${subOrder.order.id}')|">Mark as Ready</button>
                             </div>
                         </div>
                     </div>

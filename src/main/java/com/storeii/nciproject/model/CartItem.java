@@ -49,9 +49,14 @@ public class CartItem {
     public int getQuantity() {
         return quantity;
     }
-
+    
+    
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        
+        if (this.quantity < 0) {
+            this.quantity = 0;
+        }
     }
 
     public Product getProduct() {

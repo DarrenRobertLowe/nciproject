@@ -24,23 +24,63 @@
         
         <div class="row">
             <div class="col-sm-8">
-                <th:block th:each="item : ${cartItems}">        <!-- <th:block th:each="item, status : ${cartItems}"> -->
-                    <div class="row border rounded" th:with="product = ${item.product}"> <!-- item points to the line above, which is cartItem, which has a "product" variable. -->
+                <!-- ALL CART ITEMS -->
+                <th:block th:each="item : ${cartItems}">
+                    
+                    <!-- EACH CART ITEM -->
+                    <div class="row border rounded" th:with="product = ${item.product}">
+                        
+                        <!-- REMOVE FROM CART -->
                         <div class="col">
                             <div>Remove Icon</div> <!-- <a class="fas fa-trash icon-dark" th:href="@{/}"></a> -->
                         </div>
+                        
+                        <!-- PRODUCT IMAGE & PRICE -->
                         <div class="col">
                             <img th:src="@{${product.image}}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
                             <p><span th:utext="|${product.price}|"></span>
                         </div>
+                        
+                        
                         <div class="col">
+                            <!-- PRODUCT NAME -->
                             <div>
                                 <a th:href="@{/}" th:title="${{product.productName}}" target="_blank"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
                                     <b>[[${product.productName}]]</b>
                                 </a>
                             </div>
-                            <div><input type="number" th:value="${item.quantity}" class="form-control"></div>
-                            <div> 
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            <!-- PRODUCT QUANTITY
+                            <div th:insert="quantity-control :: quantity-control(${item.id},${item.quantity})">Quantity</div>
+                             -->
+                            <ul>
+                                <!-- minus button -->
+                                <li>
+                                    <input type="button" class="w3-button w3-black" value="-" th:attr="onclick=|decreaseQty('${item.id}')|">
+                                </li>
+
+                                <!-- quantity text -->
+                                <div th:id="|quantity-${item.id}|" th:insert="quantity-fragment :: quantity-fragment(${item})"></div>
+                                
+                                <!-- plus button -->
+                                <li>
+                                    <input type="button" class="w3-button w3-black" value="+" th:attr="onclick=|increaseQty('${item.id}')|">
+                                </li>
+                            </ul>
+                            
+                            
+                            
+                            
+                            
+                            
+                            <!-- SUBTOTAL -->
+                            <div>
                                 <span>x</span><!-- product x price -->
                                 <span>€[[${product.price}]]</span>
                             </div>
@@ -49,6 +89,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </th:block>
             </div>
                     
@@ -72,6 +113,7 @@
         
         <!-- javascript -->
         <script src="/js/cart.js"</script>
+        <script src="/js/quantity.js"</script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </body>
 </html>
