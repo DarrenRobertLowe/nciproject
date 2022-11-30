@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang = "en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    
+    
+    <head>
+        <meta 
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no,
+            charset="utf-8" />
+        <title>Register</title>
+        
+        <!-- CSS -->
+        <link href="css/basicstyles.css" th:href="@{/css/basicstyles.css}" rel="stylesheet" />
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    </head>
+    
+    
+    
+    <body class="login-mg3-body">
+        <div class="container">
+            <form class="login-form"
+                  action="/addUser?firtName="+firstName
+                  +"&surname=" +surname
+                  +"&userName=" +userName
+                  +"&userPass="+userPass
+                  method="get"> <!-- th:object="${user}" method="POST" enctype="utf8"> -->
+                <div class="login-wrap">
+                    
+                    <!-- FIRST NAME -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_profile"></i></span>
+                        <input type="text" class="form-control" placeholder="First Name" name="firstName" autofocus>
+                    </div>
+                    
+                    <!-- LAST NAME -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_profile"></i></span>
+                        <input type="text" class="form-control" placeholder="Last Name" name="surname" autofocus>
+                    </div>
+                    
+                    
+                    <!-- USERNAME -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_profile"></i></span>
+                        <input type="text" class="form-control" placeholder="Username" name="userName" autofocus>
+                    </div>
+                    
+                    
+                    <!-- PASSWORD -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+                        <input type="text" class="form-control" placeholder="Password" id="userPass" name="userPass">
+                    </div>
+                    
+                    <!-- CONFIRM PASSWORD
+                      -- Note: we only submit elements with a name tag. "confirmPassword" has
+                      -- no name tag and will not be submitted, it's just for validation.
+                      -->
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+                        <input type="text" class="form-control" placeholder="Confirm Password" id="confirmPassword">
+                    </div>
+                    
+                    
+                    <!-- SUBMIT OR BACK TO LOGIN-->
+                    <a class="btn btn-primary btn-lg" href="/login">Login Instead</a>
+                    <button class="btn btn-info btn-lg" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+        
+        
+        <!-- JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="/js/register.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    </body>
+</html>

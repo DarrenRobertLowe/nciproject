@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package security.models;
+package com.storeii.nciproject;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,11 +24,15 @@ public class UserPrincipal implements UserDetails {
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
     }
 
+    public User getUser() {
+        return user;
+    }
+    
     @Override
-    public String getPassword() { return user.getPassword(); }
+    public String getPassword() { return user.getUserPass(); }
 
     @Override
-    public String getUsername() { return user.getUsername(); }
+    public String getUsername() { return user.getUserName(); }
 
     @Override
     public boolean isAccountNonExpired() { return true; }

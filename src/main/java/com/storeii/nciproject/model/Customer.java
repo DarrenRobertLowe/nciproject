@@ -25,7 +25,8 @@ public class Customer implements Serializable {
     private String surname;
     private String userName;
     private String userPass;
-   
+    //private String userRole;
+    
     
     // FOREIGN KEYS
     @OneToOne()
@@ -94,4 +95,13 @@ public class Customer implements Serializable {
         this.location = location;
     }
     
+    /*
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
+    */
 }

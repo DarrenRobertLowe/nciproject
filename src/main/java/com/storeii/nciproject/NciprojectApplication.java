@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //mysql and jdbc
 import org.springframework.boot.CommandLineRunner;// CommandLineRunner is part of the mysql connection tutorial, not sure if needed
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
@@ -21,6 +22,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 @SpringBootApplication // this is for convenience and adds @Configuration, @EnableAutoConfiguration, @ComponentScan so we don't have to.
+@EntityScan
 public class NciprojectApplication implements CommandLineRunner { //  { //is part of the mysql connection tutorial, not sure if needed
 
         // for jdbc

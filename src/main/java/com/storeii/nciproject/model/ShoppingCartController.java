@@ -4,10 +4,14 @@
  */
 package com.storeii.nciproject.model;
 
+import com.storeii.nciproject.User;
+import com.storeii.nciproject.UserPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +57,25 @@ public class ShoppingCartController {
         Customer customer = entityManager.find(Customer.class, customerID);
         
         List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);   // listCartItems(customer);
+        
+        
+        
+        // now we have the customer object we can check if the User id corresponds.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal)principal;
+        
+        //String username = "None";
+        if (principal instanceof UserDetails) {
+            User user = userPrincipal.getUser();
+            System.out.println("The user id is : " + user);
+            System.out.println("The user name is : " + user.getUserName());
+            System.out.println("The user password is : " + user.getUserPass());
+        } else {
+            System.out.println("The user id is : " + userPrincipal.getUser());
+        }
+        
+        //System.out.println("username: " + username);
+                
         
         ModelAndView mav = new ModelAndView("shopping-cart");
         

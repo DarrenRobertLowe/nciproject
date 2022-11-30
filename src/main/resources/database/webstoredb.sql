@@ -32,6 +32,7 @@ CREATE TABLE Customer (
     userPass varchar(512) NOT NULL,
     address int UNSIGNED,
     location int UNSIGNED,
+    userRole varchar(50),
     FOREIGN KEY (address) REFERENCES Address(id),
     FOREIGN KEY (location) REFERENCES Location(id)
 );
@@ -145,6 +146,15 @@ CREATE TABLE SupplierOrders (
 );
 
 
+CREATE TABLE User (
+	id int UNSIGNED auto_increment PRIMARY KEY,
+    firstName varchar(50),
+    surname varchar(50),
+    userName varchar(50),
+    userPass varchar(512),
+    userRole varchar(50)
+)
+
 
 /* REFRESH TABLES - don't forget to re-create them after
 SET FOREIGN_KEY_CHECKS = 0;
@@ -155,14 +165,15 @@ drop table OrderItems;
 drop table SupplierOrders;
 */
 
+desc User;
 
-
+use webstoredb;
 select * from SupplierOrders;
 select * from Driver;
 select * from Location;
 select * from Supplier;
 select * from Orders;
-
+select * from CartItem;
 
 select Location.id, Location.driver_ID, Driver.firstName, Driver.surname
 from Location
