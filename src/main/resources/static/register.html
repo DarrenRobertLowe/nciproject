@@ -20,67 +20,99 @@
     </head>
     
     
-    
-    <body class="login-mg3-body">
+    <body>
         <div class="container">
-            <form class="login-form"
-                  action="/addUser?firtName="+firstName
-                  +"&surname=" +surname
-                  +"&userName=" +userName
-                  +"&userPass="+userPass
-                  method="get"> <!-- th:object="${user}" method="POST" enctype="utf8"> -->
-                <div class="login-wrap">
-                    
+            <div class="row">
+                <form class="login-form"
+                      action="/addUserCustomer?firtName="+firstName
+                      +"&surname=" +surname
+                      +"&userName=" +userName
+                      +"&userPass="+userPass
+                      +"&location="+"1"
+                      +"&addressLine1="+addressLine1
+                      +"&addressLine2="+addressLine2
+                      +"&city="+city
+                      +"&district="+district
+                      +"&postcode="+postcode
+                      +"&country=Ireland"
+                      method="get"> <!-- th:object="${user}" method="POST" enctype="utf8"> -->
+                
+                <div class="col">
+                    <h2>Account Details<h2>
                     <!-- FIRST NAME -->
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="icon_profile"></i></span>
                         <input type="text" class="form-control" placeholder="First Name" name="firstName" autofocus>
                     </div>
-                    
+
                     <!-- LAST NAME -->
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="icon_profile"></i></span>
                         <input type="text" class="form-control" placeholder="Last Name" name="surname" autofocus>
                     </div>
-                    
-                    
+
+
                     <!-- USERNAME -->
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="icon_profile"></i></span>
                         <input type="text" class="form-control" placeholder="Username" name="userName" autofocus>
                     </div>
-                    
-                    
+
+
                     <!-- PASSWORD -->
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="icon_key_alt"></i></span>
                         <input type="text" class="form-control" placeholder="Password" id="userPass" name="userPass">
                     </div>
-                    
+
                     <!-- CONFIRM PASSWORD
                       -- Note: we only submit elements with a name tag. "confirmPassword" has
                       -- no name tag and will not be submitted, it's just for validation.
                       -->
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="icon_key_alt"></i></span>
                         <input type="text" class="form-control" placeholder="Confirm Password" id="confirmPassword">
                     </div>
-                    
-                    
-                    <!-- SUBMIT OR BACK TO LOGIN-->
-                    <a class="btn btn-primary btn-lg" href="/login">Login Instead</a>
-                    <button class="btn btn-info btn-lg" type="submit">Register</button>
                 </div>
-            </form>
+                
+                    
+                
+                <!-- ADDRESS -->
+                <br />
+                <div class="col">
+                    <h2>Address Details</h2>
+                    <input type="text" class="form-control" placeholder="Address Line 1" id="addressLine1" name="addressLine1">
+                    <input type="text" class="form-control" placeholder="Address Line 2" id="addressLine2" name="addressLine2">
+                    <input type="text" class="form-control" placeholder="City" id="city" name="city">
+                    <input type="text" class="form-control" placeholder="County" id="county" name="disctrict">
+                    <input type="text" class="form-control" placeholder="Eircode" id="postcode" name="postcode">
+                    <!--<input type="text" class="form-control" placeholder="Country" id="country" name="country"> -->
+                </div>
+                <br />
+                
+                
+                
+                <!-- LOCATION -->
+                <div class="row">
+                    <div th:replace="/locations"> nope</div>
+                </div>
+                
+                
+                <!-- SUBMIT OR BACK TO LOGIN-->
+                <br />
+                <div class="row">
+                    <div class="col" >
+                        <a class="btn btn-primary btn-lg" href="/login">Login Instead</a>
+                        <button class="btn btn-info btn-lg" type="submit">Register</button>
+                    </div>
+                </div>
+                
+                </form>
+            </div>
         </div>
         
         
         <!-- JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="/js/register.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="/js/register.js"></script>
     </body>
 </html>

@@ -6,6 +6,8 @@ package com.storeii.nciproject.model;
 
 
 import com.storeii.nciproject.model.Location;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -15,6 +17,7 @@ import org.springframework.data.repository.CrudRepository;
 
 // Spring automatically implements this repository interface in 
 // a bean of the same name (lowecase first letter)
-public interface LocationRepository extends CrudRepository<Location, Integer> {
+public interface LocationRepository extends JpaRepository<Location, Integer> {
     Location getById(int id);
+
 }

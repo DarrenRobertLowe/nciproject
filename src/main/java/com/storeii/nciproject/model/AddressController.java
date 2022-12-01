@@ -35,7 +35,7 @@ public class AddressController {
     
     // Add new
     @PostMapping(path="/addAddress")
-    public String addAddress (
+    public Address addAddress (
         @RequestParam String addressLine1,
         @RequestParam String addressLine2,
         @RequestParam String city,
@@ -43,16 +43,16 @@ public class AddressController {
         @RequestParam String postcode,
         @RequestParam String country)
     {
-        Address n = new Address();
-        n.setAddressLine1(addressLine1);
-        n.setAddressLine2(addressLine2);
-        n.setCity(city);
-        n.setDistrict(district);
-        n.setPostcode(postcode);
-        n.setCountry(country);
+        Address address = new Address();
+        address.setAddressLine1(addressLine1);
+        address.setAddressLine2(addressLine2);
+        address.setCity(city);
+        address.setDistrict(district);
+        address.setPostcode(postcode);
+        address.setCountry(country);
 
-      addressRepository.save(n);
-      return "Saved";
+      addressRepository.save(address);
+      return address;
     }
     
     

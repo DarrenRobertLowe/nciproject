@@ -5,7 +5,7 @@
 
 
 $('document').ready(function(){
-    var password = document.getElement("password");
+    var password = document.getElementById("userPass");
     var confirmPassword = document.getElementById("confirmPassword");
     
     function validatePassword(){

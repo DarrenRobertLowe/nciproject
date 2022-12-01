@@ -36,7 +36,7 @@ public class CustomerController {
     // Adding a new Customer
     // Note: try catch wrapping here will break the server
     @PostMapping(path="/addCustomer") // Map ONLY POST Requests
-    public String addCustomer (
+    public Customer addCustomer (
         @RequestParam String firstName,
         @RequestParam String surname,
         @RequestParam String userName,
@@ -45,11 +45,11 @@ public class CustomerController {
         @RequestParam String location
         )
     {
-        Customer n = new Customer();
-        n.setFirstName(firstName);
-        n.setSurname(surname);
-        n.setUserName(userName);
-        n.setUserPass(userPass);
+        Customer customer = new Customer();
+        customer.setFirstName(firstName);
+        customer.setSurname(surname);
+        customer.setUserName(userName);
+        customer.setUserPass(userPass);
         
         
         
@@ -63,11 +63,11 @@ public class CustomerController {
         */
         
         
-        n.setAddress(addressRepository.getById(i));
-        n.setLocation(locationRepository.getById(i2));
+        customer.setAddress(addressRepository.getById(i));
+        customer.setLocation(locationRepository.getById(i2));
         
-        customerRepository.save(n);
-        return "Saved";
+        customerRepository.save(customer);
+        return customer;
     }
     
     

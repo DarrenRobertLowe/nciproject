@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    
+<head th:fragment="headerfiles">
+    <meta charset="UTF-8" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+
+<body>
+    <div th:fragment="choose">
+        <select select th:field="*{locations}" > <!--class="form-control" id="location" name="location"> -->
+            <option value="">Choose a Location</option>
+            <option th:each="location : ${locations}"
+                    th:value="${location}"
+                    th:text="${location.getLocationName()}"></option>
+        </select>
+    </div>
+</body>
+
+</html>

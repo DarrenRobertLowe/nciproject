@@ -9,12 +9,16 @@ package com.storeii.nciproject.model;
  * @author Main
  */
 
+import com.storeii.nciproject.Enums;
+import java.util.List;
+import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 
 @RestController // @Rest means we don't need to include @ResponseBody
@@ -46,6 +50,16 @@ public class LocationController {
     // find all
     @GetMapping(path="/getLocations")
     public Iterable<Location> getLocations() {
-        return locationRepository.findAll();  // This returns a JSON or XML with the users
+        return locationRepository.findAll();
     }
+    
+    
+    
+    
+    @Autowired
+    private EntityManager entityManager;
+    
+    
+    
+    
 }

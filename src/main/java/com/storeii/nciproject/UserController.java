@@ -5,8 +5,11 @@
 package com.storeii.nciproject;
 
 import com.storeii.nciproject.UserRepository;
+import com.storeii.nciproject.model.Address;
+import com.storeii.nciproject.model.AddressController;
 import com.storeii.nciproject.model.Customer;
 import com.storeii.nciproject.model.CustomerController;
+import com.storeii.nciproject.model.CustomerRepository;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,6 +38,12 @@ public class UserController {
     
     @Autowired
     private EntityManager entityManager;
+    
+    @Autowired
+    private CustomerController customerController;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
     
     @Autowired
     PasswordEncoder passwordEncoder;    // this loads bCryptEncoder via the CustomSecurityConfig class
@@ -91,56 +100,52 @@ public class UserController {
     
     // CUSTOMER
     // Adding a new Customer
-    // Note: try catch wrapping here will break the server
     @GetMapping(path="/addUserCustomer")
     public String addUser (
         @RequestParam String firstName,
         @RequestParam String surname,
         @RequestParam String userName,
         @RequestParam String userPass,
-        @RequestParam String role,
-        //@RequestParam String customerId,
-        //@RequestParam String driverId,
-        //@RequestParam String supplierId
+        //@RequestParam String role,
+        @RequestParam String location,
+        @RequestParam String addressLine1,
+        @RequestParam String addressLine2,
+        @RequestParam String city,
+        @RequestParam String district,
+        @RequestParam String postcode,
+        @RequestParam String country
     ){
-        User n = new User();
-        n.setFirstName(firstName);
-        n.setSurname(surname);
-        n.setUserName(userName);
-        n.setRole("USER");
-        
-        
-        /********
-        // at this point we need to create a new Customer, Driver 
-        // or Supplier depending perhaps on the ROLE.
-        // After that we can assign customerId, driverId, supplierId.
-        ********/
-        if (role.equalsIgnoreCase("USER")) {   // This could actually point to a table entry
-            CustomerController.addCustomer();
-            Customer customer = entityManager.find(Customer.class, customerId);
-        }
-        
-        // get the entities
-        if (!customerId.equals("")) {
-            Customer customer = entityManager.find(Customer.class, customerId);
-        }
-        if (!driverId.equals("")) {
-            Customer driver = entityManager.find(Customer.class, driverId);
-        }
-        if (!supplierId.equals("")) {
-            Customer suplier = entityManager.find(Customer.class, supplierId);
-        }
-        
+        User user = new User();
+        user.setFirstName(firstName);
+        user.setSurname(surname);
+        user.setUserName(userName);
+        user.setRole("USER");
         
         // encrypt password
         String encryptedPass = passwordEncoder.encode(userPass);
-        n.setUserPass(encryptedPass);
+        user.setUserPass(encryptedPass);
         
         
+        /********
+        * At this point we need to create a new Customer object.
+        * Before we can do that we need to create the address.
+        * After that we can assign customerId to the User.
+        ********/
         
+        // CREATE ADDRESS
+        AddressController ac = new AddressController();
+        Address address = ac.addAddress(addressLine1, addressLine2, city, district, postcode, country);
+        String addressId = ((Integer)address.getId()).toString(); // get the addressId as a String for creating the Customer
         
-        // save the new user
-        userRepository.save(n);
+        // CREATE CUSTOMER
+        CustomerController cc = new CustomerController();
+        Customer newCustomer = cc.addCustomer(firstName, surname, userName, userPass, addressId, location);
+        
+        // SET THE CUSTOMER
+        user.setCustomer(newCustomer);
+        
+        // SAVE THE USER
+        userRepository.save(user);
         return "registration-success";
     }
     

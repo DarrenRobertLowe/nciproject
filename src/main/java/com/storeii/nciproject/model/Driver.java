@@ -4,14 +4,17 @@
  */
 package com.storeii.nciproject.model;
 
+import com.storeii.nciproject.User;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -36,10 +39,16 @@ public class Driver {
     
     /*
     // FOREIGN KEYS
-    @OneToMany(mappedBy = "id") // we are the owning side of the relationship
+    @OneToMany(mappedBy = "id")
     //@JoinColumn(name = "order_ID", referencedColumnName = "id")
     private List<Order> orders = new ArrayList();
-    */
+   
+    
+    @OneToOne(cascade=CascadeType.ALL)//one-to-one
+    @JoinColumn(name="id")
+    private User user;
+     */
+    
     
     
     public int getId() {
@@ -82,5 +91,13 @@ public class Driver {
         this.userPass = userPass;
     }
     
-    
+    /*
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    */
 }
