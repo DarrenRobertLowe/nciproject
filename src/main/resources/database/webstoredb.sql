@@ -152,8 +152,14 @@ CREATE TABLE User (
     surname varchar(50),
     userName varchar(50),
     userPass varchar(512),
-    userRole varchar(50)
-)
+    role varchar(50),
+    customer int UNSIGNED,
+    driver int UNSIGNED,
+    supplier int UNSIGNED,
+    FOREIGN KEY (customer) REFERENCES Customer(id),
+    FOREIGN KEY (driver) REFERENCES Driver(id),
+    FOREIGN KEY (supplier) REFERENCES Supplier(id)
+);
 
 
 /* REFRESH TABLES - don't forget to re-create them after
@@ -163,7 +169,14 @@ drop table SubOrder;
 drop table SubOrder_Items;
 drop table OrderItems;
 drop table SupplierOrders;
+drop table User;
+drop table locations;
 */
+
+
+select * from User;
+select * from Customer;
+select * from Location;
 
 desc User;
 
@@ -174,6 +187,9 @@ select * from Location;
 select * from Supplier;
 select * from Orders;
 select * from CartItem;
+select * from Address;
+
+
 
 select Location.id, Location.driver_ID, Driver.firstName, Driver.surname
 from Location

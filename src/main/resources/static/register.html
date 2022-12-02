@@ -34,7 +34,7 @@
                       +"&city="+city
                       +"&district="+district
                       +"&postcode="+postcode
-                      +"&country=Ireland"
+                      +"&country"+country
                       method="get"> <!-- th:object="${user}" method="POST" enctype="utf8"> -->
                 
                 <div class="col">
@@ -79,17 +79,59 @@
                     <input type="text" class="form-control" placeholder="Address Line 1" id="addressLine1" name="addressLine1">
                     <input type="text" class="form-control" placeholder="Address Line 2" id="addressLine2" name="addressLine2">
                     <input type="text" class="form-control" placeholder="City" id="city" name="city">
-                    <input type="text" class="form-control" placeholder="County" id="county" name="disctrict">
+                    <input type="text" class="form-control" placeholder="County" id="county" name="district">
                     <input type="text" class="form-control" placeholder="Eircode" id="postcode" name="postcode">
-                    <!--<input type="text" class="form-control" placeholder="Country" id="country" name="country"> -->
+                    
+                    <div hidden="true">
+                        <input class="form-check-input" type="radio" name="country" id="location1" value="Ireland" checked> 
+                        <label class="form-check-label" for="flexRadioDefault4">
+                        Ireland
+                        </label>
+                    </div>
                 </div>
                 <br />
                 
+                <!--
+                <table>
+                    <tr th:if="${locations.empty}">
+                        <td colspan="2"> No locations Available </td>
+                    </tr>
+                    <tr th:each="location : ${locations}">
+                        <td><span th:text="${locations.locationName}"> </span></td>
+                    </tr>
+                </table>
+                -->
                 
                 
-                <!-- LOCATION -->
-                <div class="row">
-                    <div th:replace="/locations"> nope</div>
+                <!--
+                <table th:object="${choose}">
+                    <tr th:each="location : ${locations}">
+                        <td><span th:text="${locations.locationName}"> </span></td>
+                    </tr>
+                </table>
+                -->
+                
+                <!-- This is hardcoded for now but the names should be derived from the Locations -->
+                <div>
+                    <h3>Location</h3>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="location" id="location1" value="1" >
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          SouthEast Ireland
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="location" id="location2" value="2" checked>
+                        <label class="form-check-label" for="flexRadioDefault2">
+                          Dublin
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="location" id="location3" value="3" checked>
+                        <label class="form-check-label" for="flexRadioDefault3">
+                          West Ireland
+                        </label>
+                    </div>
                 </div>
                 
                 

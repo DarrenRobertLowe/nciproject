@@ -51,21 +51,19 @@ public class CustomerController {
         customer.setUserName(userName);
         customer.setUserPass(userPass);
         
+        System.out.println("firstName set to : " + customer.getFirstName());
+        System.out.println("surname set to : " + customer.getSurname());
+        System.out.println("userName set to : " + customer.getUserName());
+        System.out.println("userPass set to : " + customer.getUserPass());
+        System.out.println("Location : " + location);
         
-        
-        
-        int i = Integer.parseInt(address);
+        // get the actual location and address from the repos
+        int i  = Integer.parseInt(address);
         int i2 = Integer.parseInt(location);
-        /*
-        AddressController ac = new AddressController();
-        
-        Address obj = ac.getById(num);
-        */
-        
-        
         customer.setAddress(addressRepository.getById(i));
         customer.setLocation(locationRepository.getById(i2));
         
+        // SAVE
         customerRepository.save(customer);
         return customer;
     }

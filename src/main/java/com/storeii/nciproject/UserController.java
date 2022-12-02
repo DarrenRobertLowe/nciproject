@@ -46,6 +46,12 @@ public class UserController {
     private CustomerRepository customerRepository;
     
     @Autowired
+    AddressController addressController;
+    
+    
+    
+    
+    @Autowired
     PasswordEncoder passwordEncoder;    // this loads bCryptEncoder via the CustomSecurityConfig class
     
     
@@ -133,13 +139,17 @@ public class UserController {
         ********/
         
         // CREATE ADDRESS
-        AddressController ac = new AddressController();
-        Address address = ac.addAddress(addressLine1, addressLine2, city, district, postcode, country);
-        String addressId = ((Integer)address.getId()).toString(); // get the addressId as a String for creating the Customer
+        
+                
+       // AddressController ac = new AddressController();
+        Integer addressInt = addressController.addAddress(addressLine1, addressLine2, city, district, postcode, country);
+        System.out.println("******* RETURNED ADDRESS ID IS : " + addressInt);
+        String addressId = addressInt.toString();// = ((Integer)address.getId()).toString(); // get the addressId as a String for creating the Customer
         
         // CREATE CUSTOMER
-        CustomerController cc = new CustomerController();
-        Customer newCustomer = cc.addCustomer(firstName, surname, userName, userPass, addressId, location);
+        //CustomerController cc = new CustomerController();
+        System.out.println("********* encryptedPass is " + encryptedPass);
+        Customer newCustomer = customerController.addCustomer(firstName, surname, userName, encryptedPass, addressId, location);
         
         // SET THE CUSTOMER
         user.setCustomer(newCustomer);
