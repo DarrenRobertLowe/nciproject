@@ -55,14 +55,18 @@ public class ShoppingCartController {
     public ModelAndView showShoppingCart(int customerID) {
         // get the entity
         Customer customer = entityManager.find(Customer.class, customerID);
-        
         List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);   // listCartItems(customer);
-        
         
         
         // now we have the customer object we can check if the User id corresponds.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserPrincipal userPrincipal = (UserPrincipal)principal;
+        UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+        
+        
+        // Create a Model And View
+        ModelAndView mav = new ModelAndView("shopping-cart");
+        
+        boolean valid = false;
         
         //String username = "None";
         if (principal instanceof UserDetails) {
@@ -70,17 +74,28 @@ public class ShoppingCartController {
             System.out.println("The user id is : " + user);
             System.out.println("The user name is : " + user.getUserName());
             System.out.println("The user password is : " + user.getUserPass());
+            System.out.println("The user Customer is : " + user.getCustomer());
+            
+            if (user.getCustomer() != null) {
+                if ((user.getCustomer().getId()) == customerID) {
+                    System.out.println("****** ACCESS GRANTED ******");
+                    valid = true;
+                    mav.addObject("customerId", customerID);
+                    mav.addObject("cartItems", cartItems);
+                } else {
+                    System.out.println("****** ACCESS DENIED! ******");
+                    valid = false;
+                }
+            } else {
+                System.out.println("****** ACCESS DENIED! ******");
+                valid = false;
+            }
         } else {
-            System.out.println("The user id is : " + userPrincipal.getUser());
+            System.out.println("****** ACCESS DENIED! ******");
+            valid = false;
         }
         
-        //System.out.println("username: " + username);
-                
-        
-        ModelAndView mav = new ModelAndView("shopping-cart");
-        
-        mav.addObject("customerId", customerID);
-        mav.addObject("cartItems", cartItems);
+        mav.addObject("valid", valid);
         return mav;
     }
     
@@ -89,7 +104,7 @@ public class ShoppingCartController {
 
     @PostMapping("/cart/quantityDown")
     public void quantityDown(String cartItemId){
-        System.out.println("************** Hi, Hello there! *************");
+        System.out.println("Reducing quantity...");
         // get the entity
         CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
         
@@ -99,15 +114,13 @@ public class ShoppingCartController {
         cartItemRepository.save(cartItem);
         
         System.out.println("The id was : " + cartItemId);
-        
-        System.out.println("************** Hi, Hello there! *************");
     }
     
     
 
     @PostMapping("/cart/quantityUp")
     public void quantityUp(String cartItemId){
-        System.out.println("************** Hi, Hello there! *************");
+        System.out.println("Increasing quantity...");
         
         // get the entity
         CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
@@ -115,8 +128,6 @@ public class ShoppingCartController {
         int qty = cartItem.getQuantity();
         cartItem.setQuantity(qty+1);
         cartItemRepository.save(cartItem);
-        
-        System.out.println("************** Hi, Hello there! *************");
     }
     
     
@@ -124,8 +135,6 @@ public class ShoppingCartController {
     //@CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/quantity-fragment")
     public ModelAndView getQuantity(int cartItemId) {
-        System.out.println("YES, THIS IS RUNNING!");
-
         CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
         
         ModelAndView mv = new ModelAndView("quantity-fragment");

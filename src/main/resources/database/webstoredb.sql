@@ -174,11 +174,12 @@ drop table locations;
 */
 
 
+
 select * from User;
 select * from Customer;
 select * from Location;
 
-desc User;
+desc Supplier;
 
 use webstoredb;
 select * from SupplierOrders;
@@ -188,8 +189,8 @@ select * from Supplier;
 select * from Orders;
 select * from CartItem;
 select * from Address;
-
-
+select * from Customer;
+select * from User;
 
 select Location.id, Location.driver_ID, Driver.firstName, Driver.surname
 from Location

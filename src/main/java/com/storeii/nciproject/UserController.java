@@ -10,6 +10,10 @@ import com.storeii.nciproject.model.AddressController;
 import com.storeii.nciproject.model.Customer;
 import com.storeii.nciproject.model.CustomerController;
 import com.storeii.nciproject.model.CustomerRepository;
+import com.storeii.nciproject.model.Driver;
+import com.storeii.nciproject.model.DriverController;
+import com.storeii.nciproject.model.Supplier;
+import com.storeii.nciproject.model.SupplierController;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -48,8 +52,11 @@ public class UserController {
     @Autowired
     AddressController addressController;
     
+    @Autowired
+    SupplierController supplierController;
     
-    
+    @Autowired
+    DriverController driverController;
     
     @Autowired
     PasswordEncoder passwordEncoder;    // this loads bCryptEncoder via the CustomSecurityConfig class
@@ -159,4 +166,98 @@ public class UserController {
         return "registration-success";
     }
     
+    
+    
+    
+    
+    // SUPPLIER
+    // Adding a new Supplier
+    @GetMapping(path="/addUserSupplier")
+    public String addSupplier (
+        @RequestParam String userName,
+        @RequestParam String userPass,
+        //@RequestParam String role,
+        @RequestParam String storeName,
+        @RequestParam String location,
+        @RequestParam String addressLine1,
+        @RequestParam String addressLine2,
+        @RequestParam String city,
+        @RequestParam String district,
+        @RequestParam String postcode,
+        @RequestParam String country
+    ){
+        User user = new User();
+        user.setUserName(userName);
+        user.setRole("SUPPLIER");
+        
+        // encrypt password
+        String encryptedPass = passwordEncoder.encode(userPass);
+        user.setUserPass(encryptedPass);
+        
+        
+        /********
+        * At this point we need to create a new Supplier object.
+        * Before we can do that we need to create the address.
+        * After that we can assign supplierId to the User.
+        ********/
+        
+        // CREATE ADDRESS
+        // AddressController ac = new AddressController();
+        Integer addressInt = addressController.addAddress(addressLine1, addressLine2, city, district, postcode, country);
+        System.out.println("******* RETURNED ADDRESS ID IS : " + addressInt);
+        String addressId = addressInt.toString();// = ((Integer)address.getId()).toString(); // get the addressId as a String for creating the Customer
+        
+        // CREATE SUPPLIER
+        //CustomerController cc = new CustomerController();
+        System.out.println("********* encryptedPass is " + encryptedPass);
+        Supplier supplier = supplierController.addSupplier(storeName, addressId, location);
+        
+        // SET THE CUSTOMER
+        user.setSupplier(supplier);
+        
+        // SAVE THE USER
+        userRepository.save(user);
+        return "registration-success";
+    }
+    
+    
+    
+    
+    
+    
+    // DRIVER
+    // Adding a new Driver
+    @GetMapping(path="/addUserDriver")
+    public String addDriver (
+        @RequestParam String firstName,
+        @RequestParam String surname,
+        @RequestParam String userName,
+        @RequestParam String userPass
+    ){
+        User user = new User();
+        user.setUserName(userName);
+        user.setRole("DRIVER");
+        
+        // encrypt password
+        String encryptedPass = passwordEncoder.encode(userPass);
+        user.setUserPass(encryptedPass);
+        
+        
+        /********
+        * At this point we need to create a new Driver object.
+        * After that we can assign driverId to the User.
+        ********/
+        
+        // CREATE DRIVER
+        //CustomerController cc = new CustomerController();
+        System.out.println("********* encryptedPass is " + encryptedPass);
+        Driver driver = driverController.addDriver(firstName, surname, userName, encryptedPass);
+        
+        // SET THE CUSTOMER
+        user.setDriver(driver);
+        
+        // SAVE THE USER
+        userRepository.save(user);
+        return "registration-success";
+    }
 }

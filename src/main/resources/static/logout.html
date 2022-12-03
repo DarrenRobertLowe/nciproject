@@ -29,9 +29,10 @@
     
     <body>
         <div>
-            <h1>You have logged out!</h1>
+            <h1>You have been logged out.</h1>
             <br />
-            <p>You can login below:</p>
+            <a class="btn btn-primary btn-lg" href="/login">Login</a>
+            <a class="btn btn-primary btn-lg" href="/index.html">Return to Home</a>
         </div>
         <div th:replace="fragments/general.html :: header"></div>
     </body>

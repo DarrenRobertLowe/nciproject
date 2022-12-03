@@ -31,20 +31,20 @@ public class DriverController {
     // Add new
     // Note: try catch wrapping here will break the server
     @PostMapping(path="/addDriver") // Map ONLY POST Requests
-    public String addDriver (
+    public Driver addDriver (
         @RequestParam String firstName,
         @RequestParam String surname,
         @RequestParam String userName,
         @RequestParam String userPass)
     {
-      Driver n = new Driver();
-      n.setFirstName(firstName);
-      n.setSurname(surname);
-      n.setUserName(userName);
-      n.setUserPass(userPass);
+      Driver driver = new Driver();
+      driver.setFirstName(firstName);
+      driver.setSurname(surname);
+      driver.setUserName(userName);
+      driver.setUserPass(userPass);
 
-      driverRepository.save(n);
-      return "Saved";
+      driverRepository.save(driver);
+      return driver;
     }
     
     

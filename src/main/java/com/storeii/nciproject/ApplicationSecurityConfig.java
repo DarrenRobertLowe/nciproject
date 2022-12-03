@@ -79,7 +79,7 @@ public class ApplicationSecurityConfig {
             .invalidateHttpSession(true)
             .clearAuthentication(true)
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .logoutSuccessUrl("/index.html")
+            .logoutSuccessUrl("/logout.html")
             .permitAll();
             return http.build();
     }

@@ -41,7 +41,7 @@ public class SupplierController {
     
     // Add new
     @PostMapping(path="/addSupplier") // Map ONLY POST Requests
-    public String addSupplier (
+    public Supplier addSupplier (
         @RequestParam String storeName,
         @RequestParam String address_ID,
         @RequestParam String location_ID
@@ -58,7 +58,7 @@ public class SupplierController {
         supplier.setLocation(locationRepository.getById(locale));
         
         supplierRepository.save(supplier);
-        return "Saved";
+        return supplier;
     }
     
     
