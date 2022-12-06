@@ -25,7 +25,7 @@ public class Location {
     */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String locationName;
     
     // FOREIGN KEYS
@@ -38,6 +38,10 @@ public class Location {
     // GETTERS and SETTERS
     public int getId() {
         return id;
+    }
+    
+    public String getIdAsString() {
+        return id.toString();
     }
     
     public void setId(int id) {

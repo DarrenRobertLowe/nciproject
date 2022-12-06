@@ -113,7 +113,7 @@ public class UserController {
     
     // CUSTOMER
     // Adding a new Customer
-    @GetMapping(path="/addUserCustomer")
+    @PostMapping(path="/addUserCustomer")
     public String addUser (
         @RequestParam String firstName,
         @RequestParam String surname,

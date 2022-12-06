@@ -71,7 +71,7 @@ public class ApplicationSecurityConfig {
         .formLogin()
             //.loginPage("/login.html")
             //.loginProcessingUrl("/perform_login")
-            .defaultSuccessUrl("/index.html", true)
+            .defaultSuccessUrl("/index", true)
             //.failureUrl("/login.html?error=true")
             //.failureHandler(authenticationFailureHandler())
             .and()

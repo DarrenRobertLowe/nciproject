@@ -6,6 +6,8 @@ package com.storeii.nciproject.model;
 
 
 import com.storeii.nciproject.model.SubOrder;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -15,6 +17,11 @@ import org.springframework.data.repository.CrudRepository;
 
 // Spring automatically implements this repository interface in 
 // a bean of the same name (lowecase first letter)
-public interface ProductRepository extends CrudRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
     Product getById(int id);
+    Product findByIdentifier(String identifier);
+    
+    List<Product> getProductsByCategory(String category);
+    
+    //List<Product> getProductsByLocation();
 }

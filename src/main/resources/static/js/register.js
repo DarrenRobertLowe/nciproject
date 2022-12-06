@@ -18,9 +18,9 @@ $('document').ready(function(){
     }
     
     
-    
-    
     // run the validatePassword() method whenever the passwords change.
     password.onchange = validatePassword;
     confirmPassword.onkeyup = validatePassword;
 });
+
+

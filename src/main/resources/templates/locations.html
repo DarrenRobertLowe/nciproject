@@ -8,7 +8,7 @@
 
 <body>
     <div th:fragment="choose">
-        <select select th:field="*{locations}" > <!--class="form-control" id="location" name="location"> -->
+        <select class="form-control" th:field="*{locations} name="locale" >
             <option value="">Choose a Location</option>
             <option th:each="location : ${locations}"
                     th:value="${location}"

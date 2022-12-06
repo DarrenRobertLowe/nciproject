@@ -173,13 +173,37 @@ drop table User;
 drop table locations;
 */
 
+ALTER TABLE Product
+MODIFY COLUMN identifier varchar(50);
+
+/*
+UPDATE Product
+SET image = "accessories/andrew-hutchings-Asngw4A5_tM-unsplash.jpg"
+WHERE id=1;
+select * from Product;
+
+
+UPDATE User
+SET supplier = 3
+WHERE id=19;
+select * from User;
+
+
+UPDATE Driver
+SET userPass = $2a$10$2gtbDJtQjRO5OnaNCUp5Heqpg1eSv0d4eOgVump1PxEMcYxDCwFyG
+where id = 2;
+select * from User;
+*/
 
 
 select * from User;
 select * from Customer;
 select * from Location;
+select * from Driver;
+select * from Supplier;
+select * from CartItem;
 
-desc Supplier;
+desc Driver;
 
 use webstoredb;
 select * from SupplierOrders;
@@ -190,6 +214,7 @@ select * from Orders;
 select * from CartItem;
 select * from Address;
 select * from Customer;
+select * from Orders;
 select * from User;
 
 select Location.id, Location.driver_ID, Driver.firstName, Driver.surname

@@ -44,6 +44,7 @@ public class Product {
     private double  price;
     private int     stock;
     private String  category;
+    private String  identifier;
     
     
     // FOREIGN KEYS
@@ -110,6 +111,17 @@ public class Product {
         this.category = category;
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    
+    
+    
     public Supplier getSupplier() {
         return supplier;
     }

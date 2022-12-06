@@ -1,121 +1,107 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head>
+    <head th:insert="fragments :: headers">
         <title>Cart</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap Icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
-        <!-- SimpleLightbox plugin CSS-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
     </head>
     <body>
-        
-        
+
         <div class="row">
-            <div class="col-sm-8">
-                <!-- ALL CART ITEMS -->
-                <div th:switch="${valid}">
-                    <th:block th:case = "false">
-                        <h1> Access Denied! </h1>
-                    </th:block>
-                    
-                    <th:block th:case="true">
-                        
-                        <h1> Your Shopping Cart </h1>
-                        
-                        <th:block th:each="item : ${cartItems}">
-                            <!-- EACH CART ITEM -->
-                            <div class="row border rounded" th:with="product = ${item.product}">
+            <div class="col-2" id="leftside"></div>
+                <div class="col-sm-8">
+                    <!-- ALL CART ITEMS -->
+                    <div th:switch="${valid}">
+                        <th:block th:case = "false">
+                            <h1> Access Denied! </h1>
+                        </th:block>
 
-                                <!-- REMOVE FROM CART -->
-                                <div class="col">
-                                    <div>Remove Icon</div> <!-- <a class="fas fa-trash icon-dark" th:href="@{/}"></a> -->
-                                </div>
+                        <th:block th:case="true">
 
-                                <!-- PRODUCT IMAGE & PRICE -->
-                                <div class="col">
-                                    <img th:src="@{${product.image}}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
-                                    <p><span th:utext="|${product.price}|"></span>
-                                </div>
+                            <h1> Your Shopping Cart </h1>
 
+                            <th:block th:each="item : ${cartItems}">
+                                <!-- EACH CART ITEM -->
+                                <div class="row border rounded" th:with="product = ${item.product}">
 
-                                <div class="col">
-                                    <!-- PRODUCT NAME -->
-                                    <div>
-                                        <a th:href="@{/}" th:title="${{product.productName}}" target="_blank"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
-                                            <b>[[${product.productName}]]</b>
-                                        </a>
+                                    <!-- REMOVE FROM CART -->
+                                    <div class="col">
+                                        <div>Remove Icon</div> <!-- <a class="fas fa-trash icon-dark" th:href="@{/}"></a> -->
+                                    </div>
+
+                                    <!-- PRODUCT IMAGE & PRICE -->
+                                    <div class="col">
+                                        <img th:src="@{${product.image}}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
+                                        <p><span th:utext="|${product.price}|"></span>
                                     </div>
 
 
-                                    <!-- PRODUCT QUANTITY
-                                    <div th:insert="quantity-control :: quantity-control(${item.id},${item.quantity})">Quantity</div>
-                                     -->
-                                    <ul>
-                                        <!-- minus button -->
-                                        <li>
-                                            <input type="button" class="w3-button w3-black" value="-" th:attr="onclick=|decreaseQty('${item.id}')|">
-                                        </li>
-
-                                        <!-- quantity text -->
-                                        <div th:id="|quantity-${item.id}|" th:insert="quantity-fragment :: quantity-fragment(${item})"></div>
-
-                                        <!-- plus button -->
-                                        <li>
-                                            <input type="button" class="w3-button w3-black" value="+" th:attr="onclick=|increaseQty('${item.id}')|">
-                                        </li>
-                                    </ul>
+                                    <div class="col">
+                                        <!-- PRODUCT NAME -->
+                                        <div>
+                                            <a th:href="@{/}" th:title="${{product.productName}}" target="_blank"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
+                                                <b>[[${product.productName}]]</b>
+                                            </a>
+                                        </div>
 
 
-                                    <!-- SUBTOTAL -->
-                                    <div>
-                                        <span>x</span><!-- product x price -->
-                                        <span>€[[${product.price}]]</span>
+                                        <!-- PRODUCT QUANTITY
+                                        <div th:insert="quantity-control :: quantity-control(${item.id},${item.quantity})">Quantity</div>
+                                         -->
+                                        <ul>
+                                            <!-- minus button -->
+                                            <li>
+                                                <input type="button" class="w3-button w3-black" value="-" th:attr="onclick=|decreaseQty('${item.id}')|">
+                                            </li>
+
+                                            <!-- quantity text -->
+                                            <div th:id="|quantity-${item.id}|" th:insert="quantity-fragment :: quantity-fragment(${item})"></div>
+
+                                            <!-- plus button -->
+                                            <li>
+                                                <input type="button" class="w3-button w3-black" value="+" th:attr="onclick=|increaseQty('${item.id}')|">
+                                            </li>
+                                        </ul>
+
+
+                                        <!-- SUBTOTAL -->
+                                        <div>
+                                            <span>x</span><!-- product x price -->
+                                            <span>€[[${product.price}]]</span>
+                                        </div>
+                                        <div>
+                                            <span>=</span><span class="h4">[Subtotal] </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span>=</span><span class="h4">[Subtotal] </span>
-                                    </div>
+                                </div>       
+                            </th:block> <!-- / Cart Items -->
+
+                            <!-- CART EMPTY -->
+                            <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"> <!-- do this UNLESS ... -->
+                                <div>
+                                    <span class="h3">Estimated Total:</span>
                                 </div>
-                            </div>       
-                        </th:block> <!-- / Cart Items -->
-                    
-                        <!-- CART EMPTY -->
-                        <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"> <!-- do this UNLESS ... -->
-                            <div>
-                                <span class="h3">Estimated Total:</span>
-                            </div>
-                            <div class="mt-2">
-                                <span class="h2">[Total Amount]</span>
-                            </div>
-                            
-                            <div class="mt-2">
-                                <button class="btn btn-danger p-3 mt-2" th:attr="onclick=|confirmCheckout('${customerId}')|">Check Out</button>
-                            </div>
-                        </div>
+                                <div class="mt-2">
+                                    <span class="h2">[Total Amount]</span>
+                                </div>
 
-                        <div th:if="${#lists.isEmpty(cartItems)}">
-                            <h3>Your cart is currently empty.</h3>
-                        </div> 
-                    </th:block> <!-- / case="true" -->
-                </div> <!-- /switch -->
-            </div>  <!-- / col -->
+                                <div class="mt-2">
+                                    <button class="btn btn-danger p-3 mt-2" th:attr="onclick=|confirmCheckout('${customerId}')|">Check Out</button>
+                                </div>
+                            </div>
+
+                            <div th:if="${#lists.isEmpty(cartItems)}">
+                                <h3>Your cart is currently empty.</h3>
+                            </div> 
+                        </th:block> <!-- / case="true" -->
+                    </div> <!-- /switch -->
+                </div>  <!-- / col -->
+            <div class="col-2" id="rightside"></div>
         </div>  <!-- / row -->
         
         
         <!-- javascript -->
+        <div th:insert="fragments :: footer"></div>
         <script src="/js/cart.js"</script>
         <script src="/js/quantity.js"</script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </body>
 </html>

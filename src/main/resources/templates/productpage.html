@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:insert="fragments :: headers">
+        <title>Product</title>
+    </head>
+    
+    
+    <body>
+        <div class="row">
+            <div class="col-2" id="leftside"></div>
+            
+            <div class="col">
+                <div th:replace="fragments :: navbar"></div>
+                
+                
+                <!-- CONTENT -->
+                <div th:with="myProduct = ${product}">
+                    
+                    <!-- PRODUCT NAME -->
+                    <div class="row">
+                        <h2 th:text="${myProduct.getProductName()}"></h2>
+                    </div>
+                    
+                    
+                    <div class="row">
+                        <!-- PRODUCT IMAGE -->
+                        <div class="col"  id="productImage">
+                            <img class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
+                        </div>
+                        
+                        
+                        <!-- PRODUCT DESCRIPTION -->
+                        <div class="col">
+                            <div class="row">
+                                <h3 th:text="${myProduct.getProductDescription()}"></h3>
+                            </div>
+                            <div class="row">
+                                <span class="price"><b>Price: €</b> <b th:text="${myProduct.getPrice()}"></b></span>
+                            </div>
+                        
+                        
+                            <form action="/webstoredb/addCartItem?"
+                            +"&customerID="+customerID
+                            +"&productID=" +productID
+                            +"&quantity=" +quantity
+                            method="post"}>
+                                  <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
+                                  <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
+                                  <label for="fname">Quantity:</label>
+                                  <input type="number" id="quantity" name="quantity"><br/>
+                                  <input type="submit" value="Add to Cart">
+                              </form>
+                        
+                        
+                         
+                            <!-- SUBTOTAL -->
+                            <div class="price">
+                                <span>x</span><!-- product x price -->
+                                <span>€[[${product.price}]]</span>
+                            </div>
+                            <div class="price">
+                                <span>=</span><span class="h4">[Subtotal] </span>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!-- /CONTENT -->
+            </div>
+            <div class="col-2"id="rightside"></div>
+        </div>
+        
+        <div th:replace="fragments :: footer"></div>
+    </body>
+</html>

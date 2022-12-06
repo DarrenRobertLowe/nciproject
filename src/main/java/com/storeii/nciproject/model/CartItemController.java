@@ -6,11 +6,16 @@ package com.storeii.nciproject.model;
 
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  *
@@ -35,8 +40,8 @@ public class CartItemController {
     
     // Add new
     // Note: try catch wrapping here will break the server
-    @PostMapping(path="/addCartItem")           // Map ONLY POST Requests
-    public String addCartItem (
+    @GetMapping(path="/addCartItem")
+    public ModelAndView addCartItem (
         @RequestParam int customerID,
         @RequestParam int productID,
         @RequestParam int quantity
@@ -54,7 +59,11 @@ public class CartItemController {
       
       // save the repo
       cartItemRepository.save(cartItem);
-      return "saved";
+      
+      String redirectURL = "redirect:/cart?customerID=" + customerID;
+      
+      return new ModelAndView(redirectURL);
+      //return "redirect:/cart?customerID=" + customerID;
     }
     
     
