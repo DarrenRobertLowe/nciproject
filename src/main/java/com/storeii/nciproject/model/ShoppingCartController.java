@@ -9,7 +9,9 @@ import com.storeii.nciproject.UserPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
@@ -52,56 +54,70 @@ public class ShoppingCartController {
     
     
     @GetMapping("/cart")
-    public ModelAndView showShoppingCart(int customerID) {
-        // get the entity
-        Customer customer = entityManager.find(Customer.class, customerID);
-        List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);   // listCartItems(customer);
-        
-        
-        // now we have the customer object we can check if the User id corresponds.
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
-        
-        
+    public ModelAndView showShoppingCart() {
         // Create a Model And View
         ModelAndView mav = new ModelAndView("shopping-cart");
+        String status = "ANONYMOUS";
         
-        boolean valid = false;
         
-        //String username = "None";
-        if (principal instanceof UserDetails) {
-            User user = userPrincipal.getUser();
-            System.out.println("The user id is : " + user);
-            System.out.println("The user name is : " + user.getUserName());
-            System.out.println("The user password is : " + user.getUserPass());
-            System.out.println("The user Customer is : " + user.getCustomer());
-            
-            if (user.getCustomer() != null) {
-                if ((user.getCustomer().getId()) == customerID) {
-                    System.out.println("****** ACCESS GRANTED ******");
-                    valid = true;
-                    mav.addObject("customerId", customerID);
-                    mav.addObject("cartItems", cartItems);
-                } else {
-                    System.out.println("****** ACCESS DENIED! ******");
-                    valid = false;
-                }
-            } else {
-                System.out.println("****** ACCESS DENIED! ******");
-                valid = false;
-            }
+        // we'll need the User to check if the id corresponds to the cart
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("AUTH IS " + auth);
+        
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("Prinicpal is " + principal);
+        
+        
+        if (principal == "anonymousUser") {
+            System.out.println("USER IS NOT LOGGED IN!");
+            status = "ANONYMOUS";
         } else {
-            System.out.println("****** ACCESS DENIED! ******");
-            valid = false;
+            // we're logged in
+            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+            
+            
+            if ((principal instanceof UserDetails) == false){
+                // I'm not sure this can happen, but just in case
+                status = "INVALID";
+            } else {
+                // get the User
+                User user = userPrincipal.getUser();
+                
+                // Check if valid
+                if (user.getCustomer() == null) {
+                    // prevent Suppliers and Drivers placing orders
+                    status = "INVALID";
+                } else {
+                    // get the Customer entity
+                    int customerID = user.getCustomer().getId();
+                    Customer customer = entityManager.find(Customer.class, customerID);
+                    List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);   // listCartItems(customer);
+
+                    // prevent customers accessing other carts
+                    if ((user.getCustomer().getId()) != customerID) {
+                        status = "INVALID";
+                    } else {
+                        System.out.println("****** ACCESS GRANTED ******");
+                        status = "AUTHORIZED";
+                        mav.addObject("customerId", customerID);
+                        mav.addObject("cartItems", cartItems);
+                    }
+                }
+            }
         }
         
-        mav.addObject("valid", valid);
+        mav.addObject("status", status);
+        mav.addObject("image_directory","../assets/img/products/");
         return mav;
     }
     
     
     
-
+    
+    
+    
+    
+    
     @PostMapping("/cart/quantityDown")
     public void quantityDown(String cartItemId){
         System.out.println("Reducing quantity...");
@@ -109,11 +125,11 @@ public class ShoppingCartController {
         CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
         
         int qty = cartItem.getQuantity();
-        cartItem.setQuantity(qty-1);
         
-        cartItemRepository.save(cartItem);
-        
-        System.out.println("The id was : " + cartItemId);
+        if (qty > 1) {
+            cartItem.setQuantity(qty-1);
+            cartItemRepository.save(cartItem);
+        }
     }
     
     
@@ -131,6 +147,21 @@ public class ShoppingCartController {
     }
     
     
+    @PostMapping("/cart/removeItem")
+    public void removeCartItem(String cartItemId){
+        System.out.println("Deleting item from cart...");
+        
+        // get the entity
+        CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
+        
+        cartItemRepository.deleteById(cartItem.getId());
+        //cartItemRepository.save();
+        
+        //System.out.println("The deleted cartItem was : " + cartItemId);
+    }
+    
+    
+    
     
     //@CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/quantity-fragment")
@@ -144,7 +175,7 @@ public class ShoppingCartController {
     
     
     
-    
+    @Transactional
     @PostMapping(path="/checkout")
     public String checkout(String customerId){
         // get the entity
@@ -186,8 +217,13 @@ public class ShoppingCartController {
         OrderController controller = new OrderController();
         controller.addOrder(order, customer, oList, subOrderItemRepository, orderRepo);
         
+        // EMPTY THE CART CONTENTS
+        cartItemRepository.deleteAllByCustomer(customer);
         
-        return "Checkout success";
+        // REDIRECT
+        String redirectURL = "redirect:/orderPlaced";
+        //return new ModelAndView(redirectURL);
+        return "Order placed";
     }
     
     

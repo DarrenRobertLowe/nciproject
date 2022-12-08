@@ -42,13 +42,9 @@ public class FulfilmentsController {
     
     
     @GetMapping("/fulfilments")
-    public ModelAndView showFulfilments(int supplierID) {
-        Supplier supplier = entityManager.find(Supplier.class, supplierID); // get the entity
-        int orderStatus = Enums.OrderStatus.CONFIRMED.ordinal();           // suppliers only see suborders that haven't yet been fulfilled
-        
+    public ModelAndView showFulfilments() {
         
         ModelAndView mav = new ModelAndView("fulfilments");
-        
         
         // now we have the supplier object we can check if the User id corresponds.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -59,6 +55,11 @@ public class FulfilmentsController {
         //String username = "None";
         if (principal instanceof UserDetails) {
             User user = userPrincipal.getUser();
+            
+            int supplierID = user.getSupplier().getId();
+            
+            Supplier supplier = entityManager.find(Supplier.class, supplierID); // get the entity
+            int orderStatus = Enums.OrderStatus.CONFIRMED.ordinal();           // suppliers only see suborders that haven't yet been fulfilled
             
             if ((user.getSupplier().getId()) == supplierID) {
                 System.out.println("***** ACCESS GRANTED *****");

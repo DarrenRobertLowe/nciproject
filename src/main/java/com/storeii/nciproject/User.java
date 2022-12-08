@@ -27,8 +27,6 @@ public class User implements Serializable {
     private Integer Id;
     private String userName;
     private String userPass;
-    private String firstName;
-    private String surname;
     private String role = "USER";   // temporary fix
     
     // FOREIGN KEYS
@@ -74,21 +72,6 @@ public class User implements Serializable {
         this.userPass = userPass;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
     
     public String getRole() {
         return role;

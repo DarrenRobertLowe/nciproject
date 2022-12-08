@@ -129,10 +129,10 @@ public class UserController {
         @RequestParam String country
     ){
         User user = new User();
-        user.setFirstName(firstName);
-        user.setSurname(surname);
+        //user.setFirstName(firstName);
+        //user.setSurname(surname);
         user.setUserName(userName);
-        user.setRole("USER");
+        user.setRole("CUSTOMER");
         
         // encrypt password
         String encryptedPass = passwordEncoder.encode(userPass);
@@ -251,7 +251,7 @@ public class UserController {
         // CREATE DRIVER
         //CustomerController cc = new CustomerController();
         System.out.println("********* encryptedPass is " + encryptedPass);
-        Driver driver = driverController.addDriver(firstName, surname, userName, encryptedPass);
+        Driver driver = driverController.addDriver(firstName, surname);
         
         // SET THE CUSTOMER
         user.setDriver(driver);

@@ -29,14 +29,6 @@ import javax.persistence.OneToOne;
  */
 @Entity // This tells Hibernate to make a table out of this class
 public class Supplier {
-    /*
-    id smallint UNSIGNED auto_increment PRIMARY KEY,
-    storeName varchar(100) NOT NULL,
-    address_ID int UNSIGNED,
-    location_ID smallint UNSIGNED,
-    FOREIGN KEY (address_ID) REFERENCES Address(id),
-    FOREIGN KEY (location_ID) REFERENCES Location(id)
-    */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;

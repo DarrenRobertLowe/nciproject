@@ -22,26 +22,14 @@ async function confirmCheckout(customerId) {
     }
 }
 
-
+/*
 async function updateQuantity(cartItemId) {
     $.get("quantity-fragment?cartItemId=" + cartItemId).done(function (fragment) {
         console.log(fragment);
         $("#quantity-"+cartItemId).replaceWith(fragment);
     });
-    /*
-    const options = {
-        method: 'GET'
-    };
-    
-    const response = await fetch( '/quantity-fragment?cartItemId='+cartItemId, options);
-    
-    if (response.status === 200) { // success
-        // refresh page to refresh the list
-        //window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
-    } else {
-    }
-    */
 }
+*/
 
 
 async function increaseQty(cartItemId) {
@@ -52,9 +40,9 @@ async function increaseQty(cartItemId) {
     const response = await fetch( '/cart/quantityUp?cartItemId='+cartItemId, options);
     
     if (response.status === 200) { // success
-        updateQuantity(cartItemId);
+        //updateQuantity(cartItemId);
         // refresh page to refresh the list
-        //window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
+        window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
     } else {
     }
 }
@@ -68,9 +56,32 @@ async function decreaseQty(cartItemId) {
     const response = await fetch( '/cart/quantityDown?cartItemId='+cartItemId, options);
     
     if (response.status === 200) { // success
-        updateQuantity(cartItemId);
+        //updateQuantity(cartItemId);
         // refresh page to refresh the list
-        //window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
+        window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
+    } else {
+    }
+}
+
+
+
+function confirmRemoveItem(cartItemId) {
+  if (confirm("Are you sure you want to remove this item from your cart?")) {
+      removeItem(cartItemId);
+  }
+}
+
+async function removeItem(cartItemId) {
+    const options = {
+        method: 'POST'
+    };
+    
+    const response = await fetch( '/cart/removeItem?cartItemId='+cartItemId, options);
+    
+    if (response.status === 200) { // success
+        //updateQuantity(cartItemId);
+        // refresh page to refresh the list
+        window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
     } else {
     }
 }

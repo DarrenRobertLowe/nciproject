@@ -2,86 +2,113 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:insert="fragments :: headers">
-        <title>Cart</title>
     </head>
-    <body>
-
-        <div class="row">
-            <div class="col-2" id="leftside"></div>
-                <div class="col-sm-8">
+    <body onload="calculate()">
+        <div class="container">
+            <div th:replace="fragments :: navbar"></div>
+            
+            <div class="row">
+                
+                <!-- COLUMN -->
+                <div class="col-2" id="leftside"></div>
+                
+                
+                <!-- CONTENT -->
+                <div class="col">
                     <!-- ALL CART ITEMS -->
-                    <div th:switch="${valid}">
-                        <th:block th:case = "false">
+                    <div th:switch="${status}">
+                        
+                        <th:block th:case = "ANONYMOUS">
+                            <h1> You must login to view your cart! </h1>
+                            <div class="centered">
+                                <br/>
+                                <a class="btn btn-primary btn-lg" href="/login">Login</a>
+                                <a class="btn btn-primary btn-lg" href="/index">Return to Home</a>
+                            </div>
+                        </th:block>
+                        
+                        <th:block th:case = "INVALID">
                             <h1> Access Denied! </h1>
                         </th:block>
-
-                        <th:block th:case="true">
-
+                        
+                        
+                        <th:block th:case="AUTHORIZED">
                             <h1> Your Shopping Cart </h1>
 
                             <th:block th:each="item : ${cartItems}">
+
                                 <!-- EACH CART ITEM -->
                                 <div class="row border rounded" th:with="product = ${item.product}">
+                                    <input type="hidden" id="quantity" th:value="${item.quantity}">
+                                    <input type="hidden" id="price" th:value="${product.price}">
 
-                                    <!-- REMOVE FROM CART -->
-                                    <div class="col">
-                                        <div>Remove Icon</div> <!-- <a class="fas fa-trash icon-dark" th:href="@{/}"></a> -->
-                                    </div>
 
                                     <!-- PRODUCT IMAGE & PRICE -->
                                     <div class="col">
-                                        <img th:src="@{${product.image}}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
-                                        <p><span th:utext="|${product.price}|"></span>
-                                    </div>
-
-
-                                    <div class="col">
                                         <!-- PRODUCT NAME -->
                                         <div>
-                                            <a th:href="@{/}" th:title="${{product.productName}}" target="_blank"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
-                                                <b>[[${product.productName}]]</b>
+                                            <a th:href="'/productpage?identifier=' + ${product.identifier}" th:title="${{product.productName}}"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
+                                                <h3>[[${product.productName}]]</h3>
                                             </a>
                                         </div>
 
-
-                                        <!-- PRODUCT QUANTITY
-                                        <div th:insert="quantity-control :: quantity-control(${item.id},${item.quantity})">Quantity</div>
-                                         -->
-                                        <ul>
+                                        <img th:src="${image_directory + product.getImage()}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
+                                    </div>
+                                    
+                                    
+                                    <div class="col">
+                                        <!-- PRODUCT QUANTITY -->
+                                        <div class="row">
+                                            <div class="col">
+                                                <!-- product x price -->
+                                                <span class="h4">€[[${product.price}]] x</span>
+                                            </div>
+                                            
                                             <!-- minus button -->
-                                            <li>
-                                                <input type="button" class="w3-button w3-black" value="-" th:attr="onclick=|decreaseQty('${item.id}')|">
-                                            </li>
-
+                                            <div class="col-sm-auto">
+                                                <button class="btn btn-lg" id="subtractQty"><i class="bi bi-dash-square" th:attr="onclick=|decreaseQty('${item.id}')|" onclick="calculate()"></i></button>
+                                            </div>
+                                            
+                                            
                                             <!-- quantity text -->
-                                            <div th:id="|quantity-${item.id}|" th:insert="quantity-fragment :: quantity-fragment(${item})"></div>
-
+                                            <div class="col-sm-auto">
+                                                <div class="h4" th:id="|quantity-${item.id}|" th:text="${item.quantity}" ></div>
+                                            </div>
+                                            
+                                            
                                             <!-- plus button -->
-                                            <li>
-                                                <input type="button" class="w3-button w3-black" value="+" th:attr="onclick=|increaseQty('${item.id}')|">
-                                            </li>
-                                        </ul>
-
+                                            <div class="col-sm-auto">
+                                                <button class="btn btn-lg" id="addQty"><i class="bi bi-plus-square"  th:attr="onclick=|increaseQty('${item.id}')|" onclick="calculate()"></i></button>
+                                            </div>    
+                                        </div>
+                                            
 
                                         <!-- SUBTOTAL -->
-                                        <div>
-                                            <span>x</span><!-- product x price -->
-                                            <span>€[[${product.price}]]</span>
+                                        <div class="row">
+                                            <div class="col">
+                                                <h4>Subtotal:</h4>
+                                            </div>
+                                            <div class="col">
+                                                <span class="h4" id="total"></span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span>=</span><span class="h4">[Subtotal] </span>
+                                        <br/>
+                                        <div class="row">
+                                            <!-- REMOVE FROM CART -->
+                                            <button class="button" id="removeCartItem" th:attr="onclick=|confirmRemoveItem('${item.id}')|" onclick="calculate()"><i class="bi bi-trash3"></i> Remove from cart</button>
                                         </div>
                                     </div>
                                 </div>       
                             </th:block> <!-- / Cart Items -->
-
+                            
+                            
                             <!-- CART EMPTY -->
                             <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"> <!-- do this UNLESS ... -->
                                 <div>
                                     <span class="h3">Estimated Total:</span>
                                 </div>
                                 <div class="mt-2">
-                                    <span class="h2">[Total Amount]</span>
+                                    <span class="h2" id="grandTotal">[Total Amount]</span>
                                 </div>
 
                                 <div class="mt-2">
@@ -91,17 +118,24 @@
 
                             <div th:if="${#lists.isEmpty(cartItems)}">
                                 <h3>Your cart is currently empty.</h3>
-                            </div> 
+                            </div>
                         </th:block> <!-- / case="true" -->
+
+
                     </div> <!-- /switch -->
                 </div>  <!-- / col -->
-            <div class="col-2" id="rightside"></div>
-        </div>  <!-- / row -->
+
+                
+                <!-- COLUMN -->
+                <div class="col-2" id="rightside"></div>
+            </div>  <!-- / row -->
+        </div>
         
         
         <!-- javascript -->
+        <script src="/js/cart.js"></script>
+        <script src="/js/calculations.js"></script>
         <div th:insert="fragments :: footer"></div>
-        <script src="/js/cart.js"</script>
-        <script src="/js/quantity.js"</script>
+        
     </body>
 </html>

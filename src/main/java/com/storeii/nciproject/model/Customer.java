@@ -23,8 +23,8 @@ public class Customer implements Serializable {
     private int id;
     private String firstName;
     private String surname;
-    private String userName;
-    private String userPass;
+    //private String userName;
+   //private String userPass;
     //private String userRole;
     
     
@@ -63,6 +63,7 @@ public class Customer implements Serializable {
         this.surname = surname;
     }
 
+    /*
     public String getUserName() {
         return userName;
     }
@@ -78,11 +79,14 @@ public class Customer implements Serializable {
     public void setUserPass(String userPass) {
         this.userPass = userPass;
     }
-
+    */
+    
+    
     public Address getAddress() {
         return address;
     }
 
+    
     public void setAddress(Address address) {
         this.address = address;
     }

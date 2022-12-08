@@ -8,22 +8,20 @@
     
     <body>
         <div class="container">
-            <div th:replace="navbar :: navbar"></div>
-            
             <div class="row">
-                <!-- COLUMN -->
                 <div class="col-2" id="leftside"></div>
-                
-                <!-- CONTENT -->
                 <div class="col">
-                    <div th:replace="fragments :: carousel"></div>
+                    <br/>
+                    <br/>
+                    <h1 class = "centered"> Thank you! Your order has been placed! </h1>
+                    <br/>
+                    <br/>
+                    <p class = "centered"> <a class="btn btn-primary btn-lg" href="/index">Return to Home</a> </p>
                 </div>
-                
-                <!-- COLUMN -->
                 <div class="col-2"id="rightside"></div>
             </div>
-            
-            <div th:replace="fragments :: footer"></div>
+
+            <div th:replace="fragments :: footer"
         </div>
     </body>
 </html>

@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     public List<CartItem> findByCustomer(Customer customer);
+    
+    public Integer deleteAllByCustomer(Customer customer);
 }

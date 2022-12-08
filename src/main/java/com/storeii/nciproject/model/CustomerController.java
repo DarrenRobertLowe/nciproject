@@ -48,13 +48,13 @@ public class CustomerController {
         Customer customer = new Customer();
         customer.setFirstName(firstName);
         customer.setSurname(surname);
-        customer.setUserName(userName);
-        customer.setUserPass(userPass);
+        //customer.setUserName(userName);
+        //customer.setUserPass(userPass);
         
         System.out.println("firstName set to : " + customer.getFirstName());
         System.out.println("surname set to : " + customer.getSurname());
-        System.out.println("userName set to : " + customer.getUserName());
-        System.out.println("userPass set to : " + customer.getUserPass());
+        //System.out.println("userName set to : " + customer.getUserName());
+        //System.out.println("userPass set to : " + customer.getUserPass());
         System.out.println("Location : " + location);
         
         // get the actual location and address from the repos

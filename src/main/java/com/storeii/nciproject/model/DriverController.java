@@ -33,15 +33,11 @@ public class DriverController {
     @PostMapping(path="/addDriver") // Map ONLY POST Requests
     public Driver addDriver (
         @RequestParam String firstName,
-        @RequestParam String surname,
-        @RequestParam String userName,
-        @RequestParam String userPass)
-    {
+        @RequestParam String surname
+    ){
       Driver driver = new Driver();
       driver.setFirstName(firstName);
       driver.setSurname(surname);
-      driver.setUserName(userName);
-      driver.setUserPass(userPass);
 
       driverRepository.save(driver);
       return driver;

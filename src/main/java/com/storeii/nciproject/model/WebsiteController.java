@@ -8,6 +8,7 @@ import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -28,54 +29,132 @@ public class WebsiteController {
     ProductRepository productRepository;
     
     
+    
+    
+    @GetMapping("/accessories")
+    public String getAccessories(Model model) {
+        getNavbar(model);
+        return "accessories";
+    }
+    
+    
+    
+    public String getUserRole() {
+        String userRole = "ANONYMOUS";
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        
+        if (principal == "anonymousUser") {
+            userRole = "ANONYMOUS";
+        } else {
+            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+            
+            if (principal instanceof UserDetails) {
+                User user = userPrincipal.getUser();
+                System.out.println("USER = " +user);
+                userRole = user.getRole();
+            } else {
+                userRole = "ANONYMOUS";
+            }
+        }
+        
+        return userRole;
+    }
+    
+    
+    
+    @GetMapping("/navbar")
+    public Model getNavbar(Model model) {
+        String userRole = getUserRole();
+        model.addAttribute("userRole", userRole);
+        
+        System.out.println("STARTING NAVBAR AS " + userRole);
+        return model;//"navbar";
+    }
+    
+    @GetMapping("/navbarAlt")
+    public ModelAndView getNavbar(ModelAndView model) {
+        String userRole = getUserRole();
+        model.addObject("userRole", userRole);
+        
+        System.out.println("STARTING NAVBAR AS " + userRole);
+        return model;//"navbar";
+    }
+    
+    
+    
     @GetMapping("/index")
     public String getAll(Model model) {
-        //List<Location> locations = locationRepo.findAll();
-       // model.addAttribute("locations", locations);
         
+        String userRole = getUserRole();
+        
+        getNavbar(model);
+        model.addAttribute("userType", userRole);
         return "index";
     }
     
+    
+    
+    
+    
     @GetMapping(path = "/productpage")
-    public ModelAndView productListing(
-        ModelAndView model,
+    public String productListing(
+        Model model,
         @RequestParam String identifier
     ){
         Product product = productRepository.findByIdentifier(identifier);
         
-        // now we have the supplier object we can check if the User id corresponds.
+        // We need to check if the user is logged in
+        String status = "ANONYMOUS";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
         
-        boolean valid = false;
-        
-        //String username = "None";
-        if (principal instanceof UserDetails) {
-            User user = userPrincipal.getUser();
-            System.out.println("USER = " +user);
-            
-            Customer customer = user.getCustomer();
-            System.out.println("CUSTOMER = " + customer);
-            System.out.println("customer.id = " + customer.getId());
-            Integer customerId = customer.getId();
-            
-            if (customer == null) {
-                valid = false;
-            } else {
-               model.addObject("customerId", customerId.toString());
-            }
+        if (principal == "anonymousUser") {
+            System.out.println("USER IS NOT LOGGED IN!");
+            status = "ANONYMOUS";
         } else {
-            System.out.println("***** ACCESS DENIED *****");
-            valid = false;
+            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+            
+            
+            if (principal instanceof UserDetails) {
+                User user = userPrincipal.getUser();
+                System.out.println("USER = " +user);
+                
+                Customer customer = user.getCustomer();
+                
+                if (customer == null) {
+                    status = "ANONYMOUS";
+                } else {
+                   System.out.println("CUSTOMER = " + customer);
+                   System.out.println("customer.id = " + customer.getId());
+                   
+                   Integer customerId = customer.getId();
+                   status = "AUTHORIZED";
+                   model.addAttribute("customerId", customerId.toString());
+                }
+            } else {
+                status = "ANONYMOUS";
+            }
         }
         
+        model.addAttribute("status", status);
+        model.addAttribute("product", product);
+        model.addAttribute("image_directory","../assets/img/products/");
+        getNavbar(model);
         
-        model.addObject("loginIsValid", valid);
-        model.addObject("product", product);
-        model.addObject("image_directory","../assets/img/products/");
-        return model;//"productpage";
+        return "productpage"; //return model
     }
     
     
+    @GetMapping(path = "/orderplaced")
+    public String orderplaced(Model model) {
+        return "orderplaced";
+    }
     
+    
+    @GetMapping(path = "/loggedout")
+    public String loggedout(Model model) {
+        return "loggedout";
+    }
 }

@@ -38,6 +38,8 @@ public class CartItemController {
     // this allows us to refer to the objects easily
     private EntityManager entityManager;
     
+    
+    
     // Add new
     // Note: try catch wrapping here will break the server
     @GetMapping(path="/addCartItem")

@@ -6,73 +6,89 @@
     </head>
     
     
-    <body>
-        <div class="row">
-            <div class="col-2" id="leftside"></div>
-            
-            <div class="col">
-                <div th:replace="fragments :: navbar"></div>
+    <body onload="calculate()">
+        <div class="container">
+            <div class="row">
+                <div class="col-2" id="leftside"></div>
                 
-                
-                <!-- CONTENT -->
-                <div th:with="myProduct = ${product}">
-                    
-                    <!-- PRODUCT NAME -->
-                    <div class="row">
-                        <h2 th:text="${myProduct.getProductName()}"></h2>
-                    </div>
+                <div class="col">
+                    <div th:replace="navbar :: navbar"></div>
                     
                     
-                    <div class="row">
-                        <!-- PRODUCT IMAGE -->
-                        <div class="col"  id="productImage">
-                            <img class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
+                    <!-- CONTENT -->
+                    <div th:with="myProduct = ${product}">
+
+                        <!-- PRODUCT NAME -->
+                        <div class="row">
+                            <h2 th:text="${myProduct.getProductName()}"></h2>
                         </div>
                         
                         
-                        <!-- PRODUCT DESCRIPTION -->
-                        <div class="col">
-                            <div class="row">
-                                <h3 th:text="${myProduct.getProductDescription()}"></h3>
+                        <div class="row">
+                            <!-- PRODUCT IMAGE -->
+                            <div class="col"  id="productImage">
+                                <img class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
                             </div>
-                            <div class="row">
-                                <span class="price"><b>Price: €</b> <b th:text="${myProduct.getPrice()}"></b></span>
+
+
+                            <!-- PRODUCT DESCRIPTION -->
+                            <div class="col">
+                                <div class="row">
+                                    <h3 th:text="${myProduct.getProductDescription()}"></h3>
+                                </div>
+                                <div class="row">
+                                    <span class="price"><b>Price: €</b> <b th:text="${myProduct.getPrice()}"></b></span>
+                                </div>
+
+                                <div th:switch="${status}">
+                                    <th:block th:case = "ANONYMOUS">
+                                        <p>You must be logged in as a customer to add items to your cart!</p>
+                                        <div class="centered">
+                                            <br/>
+                                            <a class="btn btn-primary btn-lg" href="/login">Login</a>
+                                        </div>
+                                    </th:block>
+
+                                    <th:block th:case = "AUTHORIZED">
+                                        <form action="/webstoredb/addCartItem?"
+                                        +"&customerID="+customerID
+                                        +"&productID=" +productID
+                                        +"&quantity=" +quantity
+                                        method="post"}>
+                                              <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
+                                              <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
+                                              <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
+                                              <label for="fname">Quantity:</label>
+                                              <input type="number" id="quantity" min="1" value="1" name="quantity" onchange="calculate()"><br/>
+
+                                                <!-- SUBTOTAL -->
+                                                <div class="price">
+                                                    <span>x</span><!-- product x price -->
+                                                    <span th:with="price = ${product.price}">€[[${price}]]</span>
+                                                </div>
+                                                <div class="price">
+                                                    <span>Total: €</span><span id="total"></span>
+                                                </div>
+
+
+                                              <input type="submit" value="Add to Cart">
+                                        </form>
+                                    </th:block>
+                                </div> <!-- /switch -->
+
                             </div>
-                        
-                        
-                            <form action="/webstoredb/addCartItem?"
-                            +"&customerID="+customerID
-                            +"&productID=" +productID
-                            +"&quantity=" +quantity
-                            method="post"}>
-                                  <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
-                                  <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
-                                  <label for="fname">Quantity:</label>
-                                  <input type="number" id="quantity" name="quantity"><br/>
-                                  <input type="submit" value="Add to Cart">
-                              </form>
-                        
-                        
-                         
-                            <!-- SUBTOTAL -->
-                            <div class="price">
-                                <span>x</span><!-- product x price -->
-                                <span>€[[${product.price}]]</span>
-                            </div>
-                            <div class="price">
-                                <span>=</span><span class="h4">[Subtotal] </span>
-                            </div>
-                        
                         </div>
                     </div>
+
+
+                    <!-- /CONTENT -->
                 </div>
-                
-                
-                <!-- /CONTENT -->
+                <div class="col-2"id="rightside"></div>
             </div>
-            <div class="col-2"id="rightside"></div>
         </div>
         
+        <!-- javascript -->
+        <script src="/js/calculations.js"></script>
         <div th:replace="fragments :: footer"></div>
     </body>
 </html>

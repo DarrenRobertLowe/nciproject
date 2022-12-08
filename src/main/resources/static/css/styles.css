@@ -36,9 +36,6 @@ p {
 }
 
 
-div {
-    border:1px solid black;
-}
 
 .price {
     text-align: right;
@@ -47,4 +44,35 @@ div {
 
 #productImage {
     padding:0;
+}
+
+.centered {
+    margin: auto;
+    text-align: center;
+}
+
+input[type='number']{
+    width: 50px;
+}
+#quantity {
+    width: 50px;
+}
+
+#highlight {
+    border: solid 1px red;
+    background-color: yellow;
+}
+
+form {
+    background-color: floralwhite;
+}
+
+.nav-link {
+    align-items: center;
+    display: flex;
+}
+
+/* DEBUG */
+div {
+    border:1px solid black;
 }

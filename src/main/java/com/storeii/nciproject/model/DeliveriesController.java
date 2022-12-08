@@ -36,8 +36,8 @@ public class DeliveriesController {
     
     
     @GetMapping("/deliveries")
-    public ModelAndView showDeliveries(int driverID) {
-        Driver driver = entityManager.find(Driver.class, driverID);         // get the entity
+    public ModelAndView showDeliveries() {
+        
         int readyStatus = 2;// Enums.OrderStatus.READY.ordinal();           // get the status value as an int
         
         ModelAndView mav = new ModelAndView("deliveries");
@@ -50,6 +50,9 @@ public class DeliveriesController {
         
         if (principal instanceof UserDetails) {
             User user = userPrincipal.getUser();
+            
+            int driverID = user.getDriver().getId();
+            Driver driver = entityManager.find(Driver.class, driverID);         // get the entity
             
             if ((user.getDriver().getId()) == driverID) {
                 System.out.println("***** ACCESS GRANTED *****");
