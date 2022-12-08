@@ -35,6 +35,7 @@ public class ProductController {
         @RequestParam String price,
         @RequestParam String stock,
         @RequestParam String category,
+        @RequestParam String identifier,
         @RequestParam String supplier_ID
         )
     {
@@ -43,9 +44,10 @@ public class ProductController {
         product.setProductName(productName);
         product.setProductDescription(productDescription);
         product.setImage(image);
-        product.setCategory(category);
         product.setPrice(Double.parseDouble(price));
         product.setStock(Integer.parseInt(stock));
+        product.setCategory(category);
+        product.setIdentifier(identifier);
         
         // foreign keys
         int i = Integer.parseInt(supplier_ID);

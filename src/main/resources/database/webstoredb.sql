@@ -203,6 +203,20 @@ where id < 7;
 Update Supplier
 Set location_ID = 2;
 where id = 4;
+
+Update Product
+set supplier_ID = 9
+where supplier_ID = 2;
+
+select * from supplier;
+select * from product;
+
+update User
+set role = "CUSTOMER"
+where role = "USER";
+
+update Product
+
 */
 
 
@@ -217,6 +231,7 @@ use webstoredb;
 select * from SupplierOrders;
 select * from Driver;
 select * from Location;
+select * from Product;
 select * from Supplier;
 select * from Orders;
 select * from CartItem;
