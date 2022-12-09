@@ -25,14 +25,6 @@ import javax.persistence.Table;
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="SubOrder")
 public class SubOrder {
-    /*
-    id int UNSIGNED auto_increment PRIMARY KEY,
-    orderStatus TINYINT UNSIGNED NOT NULL,
-    order_ID int UNSIGNED NOT NULL,
-    supplier_ID smallint UNSIGNED NOT NULL,
-    FOREIGN KEY (order_ID) REFERENCES Orders(id),
-    FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
-    */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;

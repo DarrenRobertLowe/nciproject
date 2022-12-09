@@ -69,55 +69,15 @@ public class OrderController {
     // Add new
     @PostMapping(path="/addOrder") // Map ONLY POST Requests
     public String addOrder (
-            
-        //@RequestParam String orderStatus,      // this should be set to 1 for new orders
         @RequestParam Order order,
         @RequestParam Customer customer,
         @RequestParam List<OrderItem> orderItems,
         @RequestParam SubOrderItemRepository subOrderRepo,
         @RequestParam OrderRepository orderRepo
-        //@RequestParam String addressId,
-        //@RequestParam String driverId,
-        //@RequestParam String locationId,
-        //@RequestParam String cartItems
     ){
 
-        
-        // set fields
-        //int st = Integer.parseInt(orderStatus);
-        //int cu = Integer.parseInt(customer_ID);
-        //int ad = Integer.parseInt(address_ID);
-       // int dr = Integer.parseInt(driver_ID);
-       // int lo = Integer.parseInt(location_ID);
-        //int oi = Integer.parseInt(OrderItems_ID);
-        
-        // get entities
-        System.out.println("Customer ID is : " +customer.getId());
-        //int customerInt = Integer.parseInt(customerId);
-        //int orderInt = Integer.parseInt(orderId);
-        
-        System.out.println("orderId is " +order.getId());
-        //Customer customer = entityManager.find(Customer.class, customerInt);
-        System.out.println("Didn't fail after Customer.");
-        
-        //Order order = entityManager.find(Order.class, orderInt);
-        System.out.println("Didn't fail after order.");
-        
-        
         // status
         order.setOrderStatus(Enums.OrderStatus.CONFIRMED.ordinal());
-        
-        //System.out.println("orderItemRepository.findById(1) : " + orderItemRepository.findById(1));
-        //OrderItemController itemController = new OrderItemController();
-        //List<OrderItem> orderItems = null;
-        //orderItems = orderItemRepository.findAll();//findByOrder(order);//findOrderItemsByOrder(order);
-        
-        //List<OrderItem> orderItems = orderRepository.findOrderItems();
-        
-        //List<OrderItem> orderItems = itemController.getItemsFromOrder(order.toString());
-        
-        //ArrayList<OrderItem> orderItems = orderItemRepository.findByOrder(order);
-        //System.out.println("didn't fail at list");
         
         order.setCustomer(customer);
         order.setAddress(customer.getAddress());
@@ -125,41 +85,11 @@ public class OrderController {
         order.setLocation(location);
         order.setDriver(location.getDriver());
         
-        //order.setItems(orderItemRepository.getById(oi));
-        
-        
         /***** CREATE ORDER AND SUBORDERS *****
         * create the order items
         * while doing that, compile a list of categories/suppliers
         * iterate through that list creating the sub orders for each supplier
         */
-        
-        
-
-        /*
-        int productId;     //= 2;
-        Product product;   //= productRepository.getById(productId);
-        int quantity;      //= 7;
-        double unitPrice;  //= 26.32;
-        
-        
-        
-                                // Create the OrderItems
-                                // NOTE: THIS NEEDS TO LOOP THROUGH THE CART ITEMS
-                                // THE BELOW ITEM IS ONLY FOR TESTING
-
-                                System.out.println("adding Order item...");
-
-                                productId     = 3;
-                                product       = productRepository.getById(productId);
-                                quantity      = 77;
-                                unitPrice     = 123.32;
-                                
-                                OrderItem oItem = new OrderItem(order, product, quantity, unitPrice);
-                                orderItemRepository.save(oItem);
-        */
-        
-        
         /*** CREATE SUBORDERS ***/
         // Create a map for the Suppliers -> SubOrders
         Map <Supplier, SubOrder> suppliers = new HashMap<>();
@@ -194,12 +124,9 @@ public class OrderController {
                 subOrder = new SubOrder(status, order, supplier);
                 System.out.println("New supplier is: " + supplier.getStoreName() + " id: " + supplier.getId());
                 suppliers.put(supplier, subOrder);  // add to the hashmap of [suppliers -> suborders]
-
-
+                
                 // add to the order's list of suppliers
                 // this will be used by delivery drivers
-                //order.addSupplier(supplier);
-                //System.out.println("");
                 System.out.println("supplier: " + supplier);
                 System.out.println("order:" +order + " has suppliers:" + order.getSuppliers());
                 order.addSupplier(supplier);

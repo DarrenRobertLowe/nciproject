@@ -181,17 +181,12 @@ public class ShoppingCartController {
         // get the entity
         Customer customer = entityManager.find(Customer.class, Integer.parseInt(customerId));
         
-        System.out.println("entityManager found " + customerId);
-        
         List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);
-        
-        System.out.println("_____cartItems_____\n"+ cartItems.toString());
         
         
         // Create a new Order object, the details are added later with addOrder();
         Order order = new Order();
         orderRepository.save(order);
-        
         
         
         // create a list fort the orderItems

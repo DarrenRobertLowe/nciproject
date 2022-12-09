@@ -35,7 +35,7 @@ public class SubOrderController {
     @Autowired
     private SupplierRepository supplierRepository;
     
-    
+
     
     // Add new
     @PostMapping(path="/addSubOrder")
@@ -110,30 +110,25 @@ public class SubOrderController {
         
         
         /// CHECK IF ALL SUBORDERS OR ORDER ARE READY
-        // NOTE We should be able to simply run Set orders = order.getSubOrders();
-        // but attempting to add that functionality caused things to break.
-        // For now we're doing it in a unidirectional way...
-        
+        // Note the following is done in a Unidirectional fashion
         // first we get the parent Order
         Order order = subOrder.getOrder();
-        //Set orders = order.getSubOrders();    // uncomment when we have bidirectionality working
-        
-        
+        System.out.println("******* SubOrder.Order points to " + order.getId());
         /// Uni-Directional
         // get a list of all the sub orders
-        SubOrderController subOrderController = new SubOrderController();
-        //Iterable<SubOrder> subOrders = subOrderController.getSubOrders();   
-        Iterable<SubOrder> subOrders = subOrderRepository.findAll();
+        List<SubOrder> subOrders = subOrderRepository.findAll();
         
         
         // compile a list of all the SubOrders that point to our parent order
-        List<SubOrder> relevantSubOrders = new ArrayList<>();
+        List<SubOrder> relevantSubOrders = new ArrayList<>(); // we will store each one in this list
         for (SubOrder s : subOrders) {
+            System.out.println("looking at subOrder: " + s.getId());
             if (s.getOrder() == order) {
                 System.out.println("***** SUBORDER POINTS TO ORDER *****");
                 relevantSubOrders.add(s);
             }
         }
+        
         
         // Check the status of each SubOrder
         boolean failed = false;
@@ -145,11 +140,13 @@ public class SubOrderController {
             }
         }
         
+        
         // if all the SubOrders have been marked as ready, we mark
         // the parent Order as ready for collection. Drivers need
         // to update their request to see the new delivery.
         if (!failed) {
             System.out.println("****** SUCCESS!! ALL PARTS OF ORDER ARE READY! ******* ");
+            System.out.println("Driver " + order.getDriver().getId() + " : " +order.getDriver().getFirstName() + " " + order.getDriver().getSurname() + " will be notified.");
             order.setOrderStatus(OrderStatus.READY.ordinal());
             orderRepository.save(order);
         }

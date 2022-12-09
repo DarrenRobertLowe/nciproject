@@ -6,7 +6,8 @@ package com.storeii.nciproject.model;
 
 import com.storeii.nciproject.model.SubOrder;
 import java.util.List;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.repository.CrudRepository;
 
 /**
  *
@@ -15,7 +16,7 @@ import org.springframework.data.repository.CrudRepository;
 
 // Spring automatically implements this repository interface in 
 // a bean of the same name (lowecase first letter)
-public interface SubOrderRepository extends CrudRepository<SubOrder, Integer> {
+public interface SubOrderRepository extends JpaRepository<SubOrder, Integer> {
     SubOrder getById(int id);
     
     public List<SubOrder> findBySupplier(Supplier supplier);

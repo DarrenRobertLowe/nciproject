@@ -13,7 +13,7 @@
 
                     <div class="col">
                         
-                        <div th:replace="fragments :: navbar"></div>
+                        <div th:replace="navbar :: navbar"></div>
                         
                         <div th:switch="${valid}">
                             <th:block th:case = "false">

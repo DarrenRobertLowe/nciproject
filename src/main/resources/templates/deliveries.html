@@ -7,8 +7,12 @@
     
     <body>
         <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
+            <div class="row" id="fulfilments">
+                <div class="col-2" id="leftside"></div>
+
+                    <div class="col">
+                        
+                        <div th:replace="navbar :: navbar"></div>
                     <div th:switch="${valid}">
                         <th:block th:case="true">
                             <h1> Your Deliveries </h1>
@@ -41,12 +45,28 @@
                                                         <b th:text="${supplier.getAddress().district}"></b>
                                                         <br/>
                                                         <b th:text="${supplier.getAddress().postcode}"></b>
+                                                        <br/>
+                                                        <br/>
                                                     </th:block>
                                                 </div>
                                                 <!-- add some space after each supplier -->
-                                                <br/>
                                             </div>
-
+                                            
+                                        <!-- ORDER PRODUCTS -->
+                                        <div class="col">
+                                            <b class="header"> Contents: </b>
+                                            <br/>
+                                            <div class="product_contents">
+                                                <th:block th:each="orderItem : ${order.getItems()}" >
+                                                    <th:block th:each="product : ${orderItem.getProduct()}" >
+                                                        
+                                                        <b><span th:text="${product.getProductName} + ' x ' +  ${orderItem.getQuantity}"></b>
+                                                    <br/>
+                                                    <br/>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                        
                                         <!-- CUSTOMER ADDRESS -->
                                         <div class="col">
                                             <b class="header"> To: </b>

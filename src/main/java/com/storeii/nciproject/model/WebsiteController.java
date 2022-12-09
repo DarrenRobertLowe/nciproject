@@ -28,6 +28,8 @@ public class WebsiteController {
     @Autowired
     ProductRepository productRepository;
     
+    @Autowired
+    CartItemRepository cartItemRepository;
     
     
     
@@ -103,9 +105,11 @@ public class WebsiteController {
         Model model,
         @RequestParam String identifier
     ){
+        // GET THE PRODUCT
         Product product = productRepository.findByIdentifier(identifier);
+        boolean isProductInCart = false;
         
-        // We need to check if the user is logged in
+        //CHECK IF USER IS LOGGED IN
         String status = "ANONYMOUS";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -132,12 +136,25 @@ public class WebsiteController {
                    Integer customerId = customer.getId();
                    status = "AUTHORIZED";
                    model.addAttribute("customerId", customerId.toString());
+                   
+                   // GET THE CUSTOMER'S CART ITEMS
+                   List<CartItem> cartItemList = cartItemRepository.findByCustomer(customer);
+                   
+                   for(CartItem item: cartItemList) {
+                       if (item.getProduct() == product) {
+                           System.out.println("***** PRODUCT WAS ALREADY IN CUSTOMER CART *****");
+                           isProductInCart = true;
+                       }
+                   }
+                   
                 }
             } else {
                 status = "ANONYMOUS";
             }
         }
         
+        
+        model.addAttribute("isProductInCart", isProductInCart);
         model.addAttribute("status", status);
         model.addAttribute("product", product);
         model.addAttribute("image_directory","../assets/img/products/");

@@ -33,27 +33,10 @@ import javax.persistence.Table;
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "Orders") // the table name differs to this object name so we need to tell JPA that.
 public class Order {
-    /*
-    id int UNSIGNED auto_increment PRIMARY KEY,
-    orderStatus int UNSIGNED NOT NULL, -- this is a TINYINT to effectively be an enum, but maybe a varchar could be better?
-    
-    customer_ID int UNSIGNED NOT NULL,
-    address_ID int UNSIGNED NOT NULL,
-    driver_ID int UNSIGNED,                        // driver must be null because they won't be assigned until later
-    location_ID int UNSIGNED,
-    FOREIGN KEY (customer_ID) REFERENCES Customer(id),
-    FOREIGN KEY (address_ID) REFERENCES Address(id),
-    FOREIGN KEY (driver_ID) REFERENCES Driver(id),
-    FOREIGN KEY (location_ID) REFERENCES Location(id),
-    */
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
-
-    
     private int orderStatus;
-    
-    
     
     // FOREIGN KEYS
     @ManyToOne(cascade = CascadeType.ALL)

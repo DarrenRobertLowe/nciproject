@@ -5,7 +5,7 @@
     </head>
     <body onload="calculate()">
         <div class="container">
-            <div th:replace="fragments :: navbar"></div>
+            <div th:replace="navbar :: navbar"></div>
             
             <div class="row">
                 
@@ -34,15 +34,15 @@
                         
                         <th:block th:case="AUTHORIZED">
                             <h1> Your Shopping Cart </h1>
-
+                            
                             <th:block th:each="item : ${cartItems}">
-
+                                
                                 <!-- EACH CART ITEM -->
                                 <div class="row border rounded" th:with="product = ${item.product}">
                                     <input type="hidden" id="quantity" th:value="${item.quantity}">
                                     <input type="hidden" id="price" th:value="${product.price}">
-
-
+                                    
+                                    
                                     <!-- PRODUCT IMAGE & PRICE -->
                                     <div class="col">
                                         <!-- PRODUCT NAME -->
@@ -61,7 +61,7 @@
                                         <div class="row">
                                             <div class="col">
                                                 <!-- product x price -->
-                                                <span class="h4">€[[${product.price}]] x</span>
+                                                <span class="h4">€[[${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}]] x</span>
                                             </div>
                                             
                                             <!-- minus button -->
@@ -89,7 +89,7 @@
                                                 <h4>Subtotal:</h4>
                                             </div>
                                             <div class="col">
-                                                <span class="h4" id="total"></span>
+                                                <b>€</b><span class="h4" id="total"></span>
                                             </div>
                                         </div>
                                         <br/>

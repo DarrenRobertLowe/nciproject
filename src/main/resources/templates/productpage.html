@@ -21,25 +21,27 @@
                         <!-- PRODUCT NAME -->
                         <div class="row">
                             <h2 th:text="${myProduct.getProductName()}"></h2>
+                            <!-- SUPPLIED BY... -->
+                            <h5 class="supplier-name" th:text="'supplied by ' + ${myProduct.getSupplier().getStoreName()}"></h5>
                         </div>
                         
                         
                         <div class="row">
                             <!-- PRODUCT IMAGE -->
-                            <div class="col"  id="productImage">
-                                <img class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
+                            <div class="col">
+                                    <img id="product-image" th:alt="${myProduct.getProductName()}" class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
                             </div>
-
-
+                            
+                            
                             <!-- PRODUCT DESCRIPTION -->
                             <div class="col">
                                 <div class="row">
-                                    <h3 th:text="${myProduct.getProductDescription()}"></h3>
+                                    <p th:text="${myProduct.getProductDescription()}"></p>
                                 </div>
                                 <div class="row">
-                                    <span class="price"><b>Price: €</b> <b th:text="${myProduct.getPrice()}"></b></span>
+                                    <span class="price">Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</span> <!-- the price here is formatted for 2 decimal places -->
                                 </div>
-
+                                
                                 <div th:switch="${status}">
                                     <th:block th:case = "ANONYMOUS">
                                         <p>You must be logged in as a customer to add items to your cart!</p>
@@ -48,46 +50,73 @@
                                             <a class="btn btn-primary btn-lg" href="/login">Login</a>
                                         </div>
                                     </th:block>
-
+                                    
                                     <th:block th:case = "AUTHORIZED">
-                                        <form action="/webstoredb/addCartItem?"
-                                        +"&customerID="+customerID
-                                        +"&productID=" +productID
-                                        +"&quantity=" +quantity
-                                        method="post"}>
-                                              <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
-                                              <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
-                                              <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
-                                              <label for="fname">Quantity:</label>
-                                              <input type="number" id="quantity" min="1" value="1" name="quantity" onchange="calculate()"><br/>
-
-                                                <!-- SUBTOTAL -->
-                                                <div class="price">
-                                                    <span>x</span><!-- product x price -->
-                                                    <span th:with="price = ${product.price}">€[[${price}]]</span>
+                                        <div th:switch="${isProductInCart}">
+                                            <div th:case="true">
+                                                <p>This item is already in your cart.</p>
+                                                <div class="centered">
+                                                    <br/>
+                                                    <a class="btn btn-primary btn-lg" href="/cart">Go To Cart</a>
                                                 </div>
-                                                <div class="price">
-                                                    <span>Total: €</span><span id="total"></span>
-                                                </div>
+                                            </div> <!--/* /case for isProductInCart = true */-->
 
 
-                                              <input type="submit" value="Add to Cart">
-                                        </form>
-                                    </th:block>
-                                </div> <!-- /switch -->
+                                            <th:block th:case="false">
+                                                <!-- ADD TO CART FORM -->
+                                                <form id="purchase-form" action="/webstoredb/addCartItem?"
+                                                +"&customerID="+customerID
+                                                +"&productID=" +productID
+                                                +"&quantity=" +quantity
+                                                method="post"}>
+                                                      <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
+                                                      <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
+                                                      <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
+                                                      <label for="fname">Quantity:</label>
+                                                      <input type="number" id="quantity" min="1" value="1" name="quantity" onchange="calculate()"><br/>
+
+
+                                                      <!--/*
+                                                        <div class="price">
+                                                        <span>x</span>
+                                                        <span th:with="price = ${product.price}">€[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</span>
+                                                         */-->
+
+                                                        <!-- SUBTOTAL -->
+                                                        <div class="sub-total">
+                                                            <span>Total: €</span><span id="total"></span>
+                                                        </div>
+
+
+                                                      <input type="submit" value="Add to Cart">
+                                                </form>
+                                            </th:block> <!--/* /case for isProductInCart = false */-->
+                                        </div> <!--/* /switch for isProductInCart */-->
+                                    </th:block> <!--/* /case = "AUTHORIZED" */-->
+                                </div> <!--/* /switch for status */-->
 
                             </div>
                         </div>
                     </div>
+                    
 
-
-                    <!-- /CONTENT -->
+                <!--/* /CONTENT  */-->
                 </div>
+                
+                
+                <!-- The Modal -->
+                <div id="product-modal" class="modal">
+                  <span class="close">&times;</span>
+                  <img class="modal-content" id="modal-image">
+                  <div id="caption"></div>
+                </div>
+                
                 <div class="col-2"id="rightside"></div>
             </div>
         </div>
         
         <!-- javascript -->
+        <script src="/js/modal.js"></script>
         <script src="/js/calculations.js"></script>
         <div th:replace="fragments :: footer"></div>
     </body>
