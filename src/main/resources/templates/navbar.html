@@ -43,6 +43,7 @@
         <nav class="navbar navbar-expand-lg bg-light" th:fragment="navbar">
             
             <div th:switch="${userRole}">
+                <!-- CUSTOMER -->
                 <th:block th:case = "CUSTOMER">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -51,28 +52,41 @@
                       </button>
                       <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            
+                          <!-- HOME -->
                           <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="index">Home</a>
                           </li>
+                          
+                          
+                          <!-- CATEGORIES -->
                           <li class="nav-item">
-                            <a class="nav-link" href="coats">Coats</a>
+                            <a class="nav-link" href="category?category=Coats">Coats</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="clothes">Clothes</a>
+                            <a class="nav-link" href="category?category=Clothing">Clothes</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="shoes">Shoes</a>
+                            <a class="nav-link" href="category?category=Shoes">Shoes</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="accessories">Accessories</a>
+                            <a class="nav-link"  href="category?category=Accessories">Accessories</a>
                           </li>
-                          <li class="nav-item">
-                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
-                          </li>
+                          
+                          
+                          <!-- CART -->
                           <li class="nav-item">
                               <a class="nav-link" href="cart"><i class="bi bi-cart4"></i>Cart</a>
                           </li>
+                          
+                          <!-- LOGOUT -->
+                          <li class="nav-item">
+                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
+                          </li>
+                          
                         </ul>
+                          
+                        <!-- SEARCH -->
                         <form class="d-flex" role="search">
                           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                           <button class="btn btn-outline-success" type="submit">Search</button>
@@ -83,6 +97,8 @@
                 
                 
                 
+                
+                <!-- SUPPLIER -->
                 <th:block th:case = "SUPPLIER">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -91,28 +107,38 @@
                       </button>
                       <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                          <!-- HOME -->
                           <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="index">Home</a>
                           </li>
+                          
+                          <!-- CATEGRORES -->
                           <li class="nav-item">
-                            <a class="nav-link" href="coats">Coats</a>
+                            <a class="nav-link" href="category?category=Coats">Coats</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="clothes">Clothes</a>
+                            <a class="nav-link" href="category?category=Clothing">Clothes</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="shoes">Shoes</a>
+                            <a class="nav-link" href="category?category=Shoes">Shoes</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="accessories">Accessories</a>
+                            <a class="nav-link"  href="category?category=Accessories">Accessories</a>
                           </li>
-                          <li class="nav-item">
-                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
-                          </li>
+                          
+                          
+                          <!-- ORDERS -->
                           <li class="nav-item">
                               <a class="nav-link" href="fulfilments"><i class="bi bi-cart4"></i>Orders</a>
                           </li>
+                          
+                          <!-- LOGIN / LOGOUT -->
+                          <li class="nav-item">
+                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
+                          </li>
                         </ul>
+                          
+                        <!-- SEARCH -->
                         <form class="d-flex" role="search">
                           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                           <button class="btn btn-outline-success" type="submit">Search</button>
@@ -122,6 +148,7 @@
                 </th:block>
                 
                 
+                <!-- DRIVER -->
                 <th:block th:case = "DRIVER">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -135,12 +162,14 @@
                           </li>
                           
                           
-                          <li class="nav-item">
-                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
-                          </li>
-                          
+                          <!-- DELIVERIES -->
                           <li class="nav-item">
                               <a class="nav-link" href="deliveries"><i class="bi bi-cart4"></i>Go To Deliveries</a>
+                          </li>
+                          
+                          <!-- LOGIN / LOGOUT -->
+                          <li class="nav-item">
+                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
                           </li>
                         </ul>
                       </div>
@@ -148,6 +177,8 @@
                 </th:block>
                 
                 
+                
+                <!--/* DEFAULT (LOGGED OUT)*/-->
                 <th:block th:case = "*">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -160,24 +191,33 @@
                             <a class="nav-link active" aria-current="page" href="index">Home</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="coats">Coats</a>
+                            <a class="nav-link" href="category?category=Coats">Coats</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="clothes">Clothes</a>
+                            <a class="nav-link" href="category?category=Clothing">Clothes</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="shoes">Shoes</a>
+                            <a class="nav-link" href="category?category=Shoes">Shoes</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="accessories">Accessories</a>
+                            <a class="nav-link"  href="category?category=Accessories">Accessories</a>
                           </li>
-                          <li class="nav-item">
-                              <a class="nav-link" href="register"><i class="bi bi-box-arrow-in-right"></i>Login</a>
-                          </li>
+                          
+                          
+                          <!-- CART -->
                           <li class="nav-item">
                               <a class="nav-link" href="cart"><i class="bi bi-cart4"></i>Cart</a>
                           </li>
+                          
+                          
+                          <!-- LOGIN / LOGOUT -->
+                          <li class="nav-item">
+                              <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Login</a>
+                          </li>
+                          
                         </ul>
+                          
+                        <!-- SEARCH -->
                         <form class="d-flex" role="search">
                           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                           <button class="btn btn-outline-success" type="submit">Search</button>

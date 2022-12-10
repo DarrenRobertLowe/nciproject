@@ -9,6 +9,7 @@
     <body onload="calculate()">
         <div class="container">
             <div class="row">
+                
                 <div class="col-2" id="leftside"></div>
                 
                 <div class="col">
@@ -44,7 +45,7 @@
                                 
                                 <div th:switch="${status}">
                                     <th:block th:case = "ANONYMOUS">
-                                        <p>You must be logged in as a customer to add items to your cart!</p>
+                                        <p class="warning-text">You must be logged in as a customer to add items to your cart!</p>
                                         <div class="centered">
                                             <br/>
                                             <a class="btn btn-primary btn-lg" href="/login">Login</a>

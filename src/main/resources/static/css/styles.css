@@ -81,6 +81,7 @@ form {
     transition: .3s; /*how quickly the image fades when mouse is hovered */
 }
 
+
 #purchase-form {
     margin-right:0%;
     text-align:right;
@@ -90,11 +91,29 @@ form {
     font-weight: bold;
 }
 
-
 #product-image:hover {opacity: 0.7;}
 
+#products-page-warning {
+    text-align: center;
+    animation: fadeIn 3s;
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
+.warning-text {
+    color: red;
+}
+/* product cards 
+.img-card-top {
+    cursor: pointer;
+    transition: .3s;
+}
 
+.img-card-top:hover {opacity: 0.7;}
+
+*/
 
 /* MODAL */
 /* The Modal (background) */
@@ -187,8 +206,8 @@ form {
 
 
 
-/* DEBUG */
+/* DEBUG
 div {
     border:1px solid black;
 }
-
+ */

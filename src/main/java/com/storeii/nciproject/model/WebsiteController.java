@@ -6,6 +6,7 @@ package com.storeii.nciproject.model;
 
 import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -40,25 +41,33 @@ public class WebsiteController {
     }
     
     
+    public User getUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        User user = null;
+        
+        if (principal != "anonymousUser") {
+            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+            
+            if (principal instanceof UserDetails) {
+                user = userPrincipal.getUser();
+            }
+        }
+        
+        return user;
+    }
+    
     
     public String getUserRole() {
         String userRole = "ANONYMOUS";
         
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = auth.getPrincipal();
+        User user = getUser();
         
-        if (principal == "anonymousUser") {
-            userRole = "ANONYMOUS";
+        if (user != null) {
+            System.out.println("USER = " +user);
+            userRole = user.getRole();
         } else {
-            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
-            
-            if (principal instanceof UserDetails) {
-                User user = userPrincipal.getUser();
-                System.out.println("USER = " +user);
-                userRole = user.getRole();
-            } else {
-                userRole = "ANONYMOUS";
-            }
+            userRole = "ANONYMOUS";
         }
         
         return userRole;
@@ -85,6 +94,94 @@ public class WebsiteController {
     }
     
     
+    // show products by category
+    @GetMapping("/category")
+    public String getProducts(Model model, @RequestParam String category) {
+        // we need to handle anonymous users differently
+        String status   = "ANONYMOUS";
+        String location = "none";
+        List<Product> results = new ArrayList(); // list to be added to model
+        
+        
+        // get the user role for the navbar
+        String userRole = getUserRole();
+        getNavbar(model);
+        model.addAttribute("userType", userRole);
+        
+        
+        // get the user so we can determine Customer
+        User user = getUser();
+        System.out.println("***** USER is : " + user);
+        
+        
+        // get the customer so we can determine Location
+        if (user != null) {
+            Customer customer = user.getCustomer();
+            
+            // get the location
+            if (customer != null) {
+                status = "valid";
+                Location locationObj = customer.getLocation();
+                
+                
+                if (locationObj != null) {
+                    // RETURN ONLY THE ITEMS FROM THE USER'S LOCATION
+                    // get the location name so we can print it, etc
+                    location = locationObj.getLocationName();   
+                    
+                    // we want to return a list of products that belong to the location.
+                    
+                    // get all products
+                    List<Product> products = productRepository.findAll();
+                    System.out.println("********* Size of products list is " + products.size());
+                    for(Product p : products) {
+                        System.out.println("******** Iterating... *********");
+                        
+                        // get all the prodcuts
+                        String categoryMatch = p.getCategory();
+                        
+                        if (categoryMatch.equalsIgnoreCase(category)) {
+                            // results.add(p);
+                            // System.out.println("******** Adding a " +category +" to the list! *********");
+                            
+                            // filter by location
+                            if (p.getSupplier().getLocation().getId() == locationObj.getId()){
+                                results.add(p);
+                                System.out.println("******** Adding a " +category +" to the list! *********");
+                            }
+                        }
+                    }
+                }
+            }
+        }  else {
+            // RETURN ALL PRODUCTS FROM ALL LOCATIONS
+            // get all products
+            List<Product> products = productRepository.findAll();
+            System.out.println("********* Size of products list is " + products.size());
+            for(Product p : products) {
+                System.out.println("******** Iterating... *********");
+
+                // get all the prodcuts
+                String categoryMatch = p.getCategory();
+
+                if (categoryMatch.equalsIgnoreCase(category)) {
+                    results.add(p);
+                    // System.out.println("******** Adding a " +category +" to the list! *********");
+                }
+            }
+        }
+        
+        
+        
+        
+        model.addAttribute("image_directory","../assets/img/products/");
+        model.addAttribute("category", category);
+        model.addAttribute("results", results);
+        model.addAttribute("location", location);
+        model.addAttribute("status", status);
+        return "category";
+    }
+    
     
     @GetMapping("/index")
     public String getAll(Model model) {
@@ -95,8 +192,6 @@ public class WebsiteController {
         model.addAttribute("userType", userRole);
         return "index";
     }
-    
-    
     
     
     
