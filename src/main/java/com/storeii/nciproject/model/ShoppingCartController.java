@@ -51,13 +51,23 @@ public class ShoppingCartController {
     @Autowired
     private OrderRepository orderRepo;
     
-    
+    @Autowired
+    private WebsiteController webController;
     
     @GetMapping("/cart")
     public ModelAndView showShoppingCart() {
         // Create a Model And View
         ModelAndView mav = new ModelAndView("shopping-cart");
         String status = "ANONYMOUS";
+        int customerID = -1;
+        List<CartItem> cartItems = new ArrayList();
+        double totalPrice = 0;
+        
+        
+        // get the user role for the navbar
+        String userRole = webController.getUserRole();
+        webController.getNavbar(mav);
+        mav.addObject("userType", userRole);
         
         
         // we'll need the User to check if the id corresponds to the cart
@@ -89,23 +99,30 @@ public class ShoppingCartController {
                     status = "INVALID";
                 } else {
                     // get the Customer entity
-                    int customerID = user.getCustomer().getId();
+                    customerID = user.getCustomer().getId();
                     Customer customer = entityManager.find(Customer.class, customerID);
-                    List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);   // listCartItems(customer);
-
+                    cartItems = cartItemRepository.findByCustomer(customer);
+                    
+                    // get the totalPrice of the cart items
+                    for (CartItem item : cartItems) {
+                        totalPrice += ( item.getProduct().getPrice() * item.getQuantity() );
+                    }
+                    
                     // prevent customers accessing other carts
                     if ((user.getCustomer().getId()) != customerID) {
                         status = "INVALID";
                     } else {
                         System.out.println("****** ACCESS GRANTED ******");
                         status = "AUTHORIZED";
-                        mav.addObject("customerId", customerID);
-                        mav.addObject("cartItems", cartItems);
                     }
                 }
             }
         }
         
+        
+        mav.addObject("customerId", customerID);
+        mav.addObject("cartItems", cartItems);
+        mav.addObject("totalPrice", totalPrice);
         mav.addObject("status", status);
         mav.addObject("image_directory","../assets/img/products/");
         return mav;
@@ -220,8 +237,5 @@ public class ShoppingCartController {
         //return new ModelAndView(redirectURL);
         return "Order placed";
     }
-    
-    
-    
     
 }

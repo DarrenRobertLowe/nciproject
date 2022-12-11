@@ -47,7 +47,7 @@
                                     <div class="col">
                                         <!-- PRODUCT NAME -->
                                         <div>
-                                            <a th:href="'/productpage?identifier=' + ${product.identifier}" th:title="${{product.productName}}"> <!-- th:href="@{${product.URI}}  // should link to the product's page -->
+                                            <a th:href="'/productpage?identifier=' + ${product.identifier}" th:title="${{product.productName}}">
                                                 <h3>[[${product.productName}]]</h3>
                                             </a>
                                         </div>
@@ -102,20 +102,21 @@
                             </th:block> <!-- / Cart Items -->
                             
                             
-                            <!-- CART EMPTY -->
-                            <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"> <!-- do this UNLESS ... -->
+                            <!-- GRAND TOTAL -->
+                            <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"> <!--/* do this UNLESS ... */-->
                                 <div>
-                                    <span class="h3">Estimated Total:</span>
+                                    <span class="h3">Total before shipping:</span>
                                 </div>
-                                <div class="mt-2">
-                                    <span class="h2" id="grandTotal">[Total Amount]</span>
+                                <div class="mt-2" th:with="totalPrice = ${totalPrice}">
+                                    <span class="h2" id="grandTotal">€[[${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')}]] </span>
                                 </div>
 
                                 <div class="mt-2">
                                     <button class="btn btn-danger p-3 mt-2" th:attr="onclick=|confirmCheckout('${customerId}')|">Check Out</button>
                                 </div>
                             </div>
-
+                            
+                            <!-- CART EMPTY -->
                             <div th:if="${#lists.isEmpty(cartItems)}">
                                 <h3>Your cart is currently empty.</h3>
                             </div>
