@@ -61,8 +61,9 @@ public class ShoppingCartController {
         String status = "ANONYMOUS";
         int customerID = -1;
         List<CartItem> cartItems = new ArrayList();
+        List<Double> cartItemTotals = new ArrayList(); // price * quantity for each item
         double totalPrice = 0;
-        
+        double deliveryCost = 6.0;
         
         // get the user role for the navbar
         String userRole = webController.getUserRole();
@@ -105,7 +106,9 @@ public class ShoppingCartController {
                     
                     // get the totalPrice of the cart items
                     for (CartItem item : cartItems) {
-                        totalPrice += ( item.getProduct().getPrice() * item.getQuantity() );
+                        double subTotal = ( item.getProduct().getPrice() * item.getQuantity() );
+                        cartItemTotals.add(subTotal);
+                        totalPrice += subTotal;
                     }
                     
                     // prevent customers accessing other carts
@@ -122,7 +125,9 @@ public class ShoppingCartController {
         
         mav.addObject("customerId", customerID);
         mav.addObject("cartItems", cartItems);
+        mav.addObject("cartItemTotals", cartItemTotals);
         mav.addObject("totalPrice", totalPrice);
+        mav.addObject("deliveryCost", deliveryCost);
         mav.addObject("status", status);
         mav.addObject("image_directory","../assets/img/products/");
         return mav;

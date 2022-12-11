@@ -4,5 +4,5 @@ function calculate(){
     var quantity = document.getElementById("quantity").value;
 
     var result = (quantity * price);
-    document.getElementById('total').innerHTML = ""+result.toFixed(2);;//.value = result;
+    document.getElementById('subtotal').innerHTML = ""+result.toFixed(2);//.value = result;
 }

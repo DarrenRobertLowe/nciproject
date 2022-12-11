@@ -23,7 +23,7 @@
                         <div class="row">
                             <h2 th:text="${myProduct.getProductName()}"></h2>
                             <!-- SUPPLIED BY... -->
-                            <h5 class="supplier-name" th:text="'supplied by ' + ${myProduct.getSupplier().getStoreName()}"></h5>
+                            <h3 class="supplier-name" th:text="'supplied by ' + ${myProduct.getSupplier().getStoreName()}"></h3>
                         </div>
                         
                         
@@ -40,7 +40,7 @@
                                     <p th:text="${myProduct.getProductDescription()}"></p>
                                 </div>
                                 <div class="row">
-                                    <span class="price">Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</span> <!-- the price here is formatted for 2 decimal places -->
+                                    <h4>Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</h4> <!-- the price here is formatted for 2 decimal places -->
                                 </div>
                                 
                                 <div th:switch="${status}">
@@ -73,7 +73,7 @@
                                                       <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
                                                       <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
                                                       <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
-                                                      <label for="fname">Quantity:</label>
+                                                      <label for="fname"><h5>Quantity:</h5></label>
                                                       <input type="number" id="quantity" min="1" value="1" name="quantity" onchange="calculate()"><br/>
 
 
@@ -85,7 +85,7 @@
 
                                                         <!-- SUBTOTAL -->
                                                         <div class="sub-total">
-                                                            <span>Total: €</span><span id="total"></span>
+                                                            <span>Total: €</span><span id="subtotal"></span>
                                                         </div>
 
 
