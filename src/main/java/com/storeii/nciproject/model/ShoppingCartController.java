@@ -52,7 +52,15 @@ public class ShoppingCartController {
     private OrderRepository orderRepo;
     
     @Autowired
+    private ProductRepository productRepository;
+    
+    
+    
+    @Autowired
     private WebsiteController webController;
+    
+    
+    
     
     @GetMapping("/cart")
     public ModelAndView showShoppingCart() {
@@ -222,6 +230,20 @@ public class ShoppingCartController {
             
             
             OrderItem oItem  = new OrderItem(order, product, quantity, unitPrice);
+            
+            // Update the product's stock
+            int stock = product.getStock();
+            
+            if (stock < quantity) {
+                String redirectURL = "redirect:/orderProblem";
+                //return new ModelAndView(redirectURL);
+                return "We're sorry! Your order cannot be fulfilled at this time! The quantity of your order exceeds the number of items in stock. Please try again with a smaller quantity.";
+            } else {
+                product.setStock(stock - quantity);
+                productRepository.save(product);
+            }
+            
+            
             orderItemRepository.save(oItem);
             
             oList.add(oItem); // add the orderItem to the list
