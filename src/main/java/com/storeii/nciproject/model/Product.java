@@ -20,7 +20,7 @@ import javax.persistence.OneToOne;
  * @author Main
  */
 @Entity // This tells Hibernate to make a table out of this class
-public class Product {
+public class Product implements Comparable<Product> {
     /*
     id int UNSIGNED auto_increment PRIMARY KEY,
     
@@ -131,4 +131,8 @@ public class Product {
     }
     
     
+    /// Comparator
+    public int compareTo(Product otherProduct){
+        return (productName.compareTo(otherProduct.getProductName()));
+    }
 }

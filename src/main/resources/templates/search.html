@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:insert="fragments :: headers">
+        <title>Products</title>
+    </head>
+    
+    
+    <body>
+        <div class="container">
+            <!-- NAVBAR -->
+            <div th:replace="navbar :: navbar"></div>
+            
+            
+            <div class="row">
+                <!-- LEFT COLUMN -->
+                <div th:replace="fragments :: leftcolumn"></div>
+                
+                
+                <!-- CONTENT -->
+                <div class="col" th:with="results = ${results}">
+                    <h1> Search Results </h1>
+                    <div th:each="result : ${results}">
+                        <!-- <div th:if="${userRole} == 'CUSTOMER'"> -->
+                            Name: [[${result.getProductName()}]]
+                            URL: [[${result.getId()}]]
+                        </div>
+                    </div>
+                </div> <!-- / CONTENT -->
+                
+                
+                <!-- RIGHT COLUMN -->
+                <div th:replace="fragments :: rightcolumn"></div>
+            </div>
+        </div>
+        
+        <!-- javascript -->
+        <script src="/js/processing.js"></script>
+        <div th:insert="fragments :: footer"></div>
+    </body>
+</html>

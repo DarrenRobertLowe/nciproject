@@ -28,7 +28,7 @@ import javax.persistence.OneToOne;
  * @author Main
  */
 @Entity // This tells Hibernate to make a table out of this class
-public class Supplier {
+public class Supplier implements Comparable<Supplier> {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
@@ -124,6 +124,11 @@ public class Supplier {
     public void removeOrder(Order order){
         this.orders.remove(order);
         order.getSuppliers().remove(this);
+    }
+
+    
+    public int compareTo(Supplier other) {
+        return (storeName.compareTo(other.getStoreName()));
     }
     
 }

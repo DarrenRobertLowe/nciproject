@@ -37,8 +37,21 @@
             <link href="css/styles.css" rel="stylesheet" />
         </head>
         
+    <body>
         
-        <body>
+        <!-- SEARCH 
+        <form th:fragment="search"
+            class="d-flex" role="search" action="/search?"
+                                  +"&searchTerm="+searchTerms
+                                  method="GET">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit" id="searchTerms" name="searchTerms">Search</button>
+        </form>
+        -->
+        
+        
+        
+        
         <!-- NAV BAR -->
         <nav class="navbar navbar-expand-lg bg-light" th:fragment="navbar">
             
@@ -85,12 +98,6 @@
                           </li>
                           
                         </ul>
-                          
-                        <!-- SEARCH -->
-                        <form class="d-flex" role="search">
-                          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
                       </div>
                     </div>
                 </th:block>
@@ -137,12 +144,6 @@
                               <a class="nav-link" href="logout"><i class="bi bi-box-arrow-in-right"></i>Logout</a>
                           </li>
                         </ul>
-                          
-                        <!-- SEARCH -->
-                        <form class="d-flex" role="search">
-                          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
                       </div>
                     </div>
                 </th:block>
@@ -216,17 +217,33 @@
                           </li>
                           
                         </ul>
-                          
-                        <!--/* SEARCH */-->
-                        <form class="d-flex" role="search">
-                          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
                       </div>
                     </div>
                 </th:block>
                 
                 </div> <!--/* /switch  */-->
+                
+                
+                <!-- SEARCH -->
+                <form th:replace=":: navsearch"></form>
             </nav>
+            
+            
+            <!-- SEARCH
+            <form th:fragment="navsearch" class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchTerms" name="blargh">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+             -->
+            <form th:fragment="navsearch" class="d-flex">
+                <div class="col">
+                    <input class="form-control me-2" placeholder="Search" aria-label="Search" id="searchTerms" name="searchTerms"/>
+
+                    <button type="button" class="btn btn-outline-success" onclick="search()">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            
         </body>
 </html>
