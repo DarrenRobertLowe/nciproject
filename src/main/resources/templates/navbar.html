@@ -43,7 +43,7 @@
         <nav class="navbar navbar-expand-lg bg-light" th:fragment="navbar">
             
             <div th:switch="${userRole}">
-                <!-- CUSTOMER -->
+                <!--/* CUSTOMER */-->
                 <th:block th:case = "CUSTOMER">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -98,7 +98,7 @@
                 
                 
                 
-                <!-- SUPPLIER -->
+                <!--/* SUPPLIER */-->
                 <th:block th:case = "SUPPLIER">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -148,7 +148,7 @@
                 </th:block>
                 
                 
-                <!-- DRIVER -->
+                <!--/* DRIVER */-->
                 <th:block th:case = "DRIVER">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -178,7 +178,7 @@
                 
                 
                 
-                <!--/* DEFAULT (LOGGED OUT)*/-->
+                <!--/* DEFAULT (LOGGED OUT) */-->
                 <th:block th:case = "*">
                     <div class="container-fluid">
                       <a class="navbar-brand" href="#">Storeii</a>
@@ -217,7 +217,7 @@
                           
                         </ul>
                           
-                        <!-- SEARCH -->
+                        <!--/* SEARCH */-->
                         <form class="d-flex" role="search">
                           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                           <button class="btn btn-outline-success" type="submit">Search</button>

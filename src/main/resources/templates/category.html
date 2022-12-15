@@ -2,70 +2,72 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:insert="fragments :: headers">
-        <title>Shoes</title>
+        <title>Products</title>
     </head>
     
     
     <body>
         <div class="container">
-            <div class="row" id="fulfilments">
+            <!-- NAVBAR -->
+            <div th:replace="navbar :: navbar"></div>
+            
+            
+            <div class="row">
                 <!-- LEFT COLUMN -->
-                <div class="col-1" id="leftside"></div>
+                <div th:replace="fragments :: leftcolumn"></div>
                 
-                    <div class="col">
-                        
-                        <!-- NAVBAR -->
-                        <div th:replace="navbar :: navbar"></div>
-                        
-                        <!-- CONTENTS -->
-                        <th:block th:with="location=${location}, category=${category}">
+                
+                <!-- CONTENT -->
+                <div class="col">
+                    
+                    <th:block th:with="location=${location}, category=${category}">
 
-                            <h1 th:text="${category}"></h1>
-                            <div th:unless="${location} == none">
-                                <h3 th:text="'in ' +${location}"></h3>
-                            </div>
-                            
-                            <div th:switch="${status}">
-                                <th:block th:case = "ANONYMOUS">
-                                    <div th:unless="${#lists.isEmpty(results)}">
-                                        <div class="border border-danger" id="products-page-warning">
-                                            <b class="warning-text"> You are not logged in as a customer. You will not be able to purchase any products!</b>
-                                            <br/>
-                                            <a class="btn btn-primary btn-lg" href="/login">Login</a>
-                                            <br/>
+                        <h1 th:text="${category}"></h1>
+                        <div th:unless="${location} == none">
+                            <h3 th:text="'in ' +${location}"></h3>
+                        </div>
+
+                        <div th:switch="${status}">
+                            <th:block th:case = "ANONYMOUS">
+                                <div th:unless="${#lists.isEmpty(results)}">
+                                    <div class="border border-danger" id="products-page-warning">
+                                        <b class="warning-text"> You are not logged in as a customer. You will not be able to purchase any products!</b>
+                                        <br/>
+                                        <a class="btn btn-primary btn-lg" href="/login">Login</a>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+
+
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            <th:block th:each="product : ${results}">
+                                <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                                    <div class="card mx-auto">
+                                        <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}">   
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${product.getProductName()}"></h5>
+                                            <h6 class="card-subtitle mb-2 text-muted" th:text="'From ' +${product.getSupplier().getStoreName()}"></h6>
+                                            <p class="card-text" th:text="${product.getProductDescription()}"></p>
+                                            <a class="btn btn-primary" th:href="'productpage?identifier='+${product.getIdentifier()}">See Details</a>
                                         </div>
                                     </div>
-                                </th:block>
-                            </div>
+                                </div>
+                            </th:block>
+                        </div>
 
 
-                            <div class="row row-cols-1 row-cols-md-2 g-4">
-                                <th:block th:each="product : ${results}">
-                                    <div class="col-lg-4 mb-3 d-flex align-items-stretch">
-                                        <div class="card mx-auto" style="width: 18rem;">
-                                            <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}">   
-                                            <div class="card-body">
-                                                <h5 class="card-title" th:text="${product.getProductName()}"></h5>
-                                                <h6 class="card-subtitle mb-2 text-muted" th:text="'From ' +${product.getSupplier().getStoreName()}"></h6>
-                                                <p class="card-text" th:text="${product.getProductDescription()}"></p>
-                                                <a class="btn btn-primary" th:href="'productpage?identifier='+${product.getIdentifier()}">See Details</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th:block>
-                            </div>
-                            
-                            
-                            <!-- NO RESULTS -->
-                            <div th:if="${#lists.isEmpty(results)}">
-                                <h3>There are no products matching this filter.</h3>
-                            </div>
-                        </th:block>
-                    </div> <!-- / switch -->
-                </div>
+                        <!-- NO RESULTS -->
+                        <div th:if="${#lists.isEmpty(results)}">
+                            <h3>There are no products matching this filter.</h3>
+                        </div>
+                    </th:block>
+                </div> <!-- / CONTENT -->
+                
                 
                 <!-- RIGHT COLUMN -->
-                <div class="col-1" id="rightside"></div>
+                <div th:replace="fragments :: rightcolumn"></div>
             </div>
         </div>
         

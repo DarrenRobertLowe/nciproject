@@ -1,3 +1,5 @@
+
+safety
 -- DROP DATABASE IF EXISTS webstoredb;
 -- DROP TABLE IF EXISTS Customer;
 -- DROP TABLE IF EXISTS Address;
@@ -173,69 +175,31 @@ drop table User;
 drop table locations;
 */
 
-/*
-UPDATE Product
-SET image = "accessories/andrew-hutchings-Asngw4A5_tM-unsplash.jpg"
-WHERE id=1;
-select * from Product;
-
-UPDATE User
-WHERE id=9;
-select * from User;
-
-Alter Table Driver
-Auto_increment = 1;
-
-SET userPass = $2a$10$2gtbDJtQjRO5OnaNCUp5Heqpg1eSv0d4eOgVump1PxEMcYxDCwFyG
-where id = 2;
-select * from User;
-
-delete from Driver;
-where id > 2;
-
-delete from User
-where id = 24;
-select * from User;
-
-delete from Supplier
-where id < 7;
-
-Update Supplier
-Set location_ID = 2;
-where id = 4;
-
-Update Product
-set supplier_ID = 9
-where supplier_ID = 2;
-
-select * from supplier;
-select * from product;
-
-update User
-set role = "CUSTOMER"
-where role = "USER";
-
-update Product
-
+/* THIS IS A FIX FOR STRANGENESS DURING ORDER PLACEMENT - DON'T FORGOT TO RECREATE THE TABLES
+drop table Orders;
+drop table SubOrder;
+drop table SubOrder_Items;
+drop table OrderItems;
+drop table SupplierOrders;
 */
 
-
-select * from User;
-select * from Customer;
-select * from Location;
-select * from Driver;
-select * from Supplier;
-select * from CartItem;
+/*
+delete from Customer
+where id = 25;
+*/
 
 use webstoredb;
-select * from SupplierOrders;
+SET FOREIGN_KEY_CHECKS = 0;
 select * from Driver;
 select * from Location;
 select * from Product;
 select * from Supplier;
-select * from Orders;
-select * from CartItem;
-select * from Address;
+select * from SupplierOrders;
 select * from Customer;
 select * from Orders;
+select * from SubOrder;
+select * from CartItem;
+select * from Address;
+select * from orderItems;
+
 select * from User;

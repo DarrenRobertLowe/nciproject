@@ -2,16 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:insert="fragments :: headers">
+        <title>Your Shopping Cart</title>
     </head>
     <body onload="calculate()">
         <div class="container">
             <div th:replace="navbar :: navbar"></div>
             
+            
             <div class="row">
                 
                 <!-- COLUMN -->
-                <div class="col-2" id="leftside"></div>
-                
+                <div th:replace="fragments :: leftcolumn"></div>
                 
                 <!-- CONTENT -->
                 <div class="col">
@@ -32,13 +33,13 @@
                         </th:block>
                         
                         
-                        <th:block th:case="AUTHORIZED">
+                        <th:block th:case="AUTHORIZED" th:with="outOfStock=${false}">
                             <h1> Your Shopping Cart </h1>
                             
                             <th:block th:each="item, iterator : ${cartItems}">
                                 
                                 <!-- EACH CART ITEM -->
-                                <div class="row border rounded" th:with="product = ${item.product}">
+                                <div class="row border rounded" id="cart-item" th:with="product = ${item.product}">
                                     <input type="hidden" id="quantity" th:value="${item.quantity}">
                                     <input type="hidden" id="price" th:value="${product.price}">
                                     
@@ -51,68 +52,76 @@
                                                 <h3>[[${product.productName}]]</h3>
                                             </a>
                                         </div>
-
-                                        <img th:src="${image_directory + product.getImage()}" class="img-fluid"> <!-- image refers to the field name in Product entity -->
+                                        
+                                        <div class="cart-image-container">
+                                            <img th:src="${image_directory + product.getImage()}" class="img-fluid" style='max-height:250px;'> <!-- image refers to the field name in Product entity -->
+                                        </div>
                                     </div>
                                     
                                     
                                     <div class="col">
                                         <!-- PRODUCT QUANTITY -->
                                         <div class="row">
+                                            <div class="col-4">
+                                            </div>
+                                            <br/>
                                             <div class="col">
-                                                <!-- product x price -->
-                                                <span class="price">€[[${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}]] x</span>
-                                            </div>
-                                            
-                                            <!-- minus button -->
-                                            <div class="col-sm-auto">
-                                                <button class="btn btn-lg" id="subtractQty"><i class="bi bi-dash-square" th:attr="onclick=|decreaseQty('${item.id}')|" onclick="calculate()"></i></button>
+                                                <!-- price -->
+                                                <span class="price">€[[${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}]] x</span><!-- comment -->
                                             </div>
                                             
                                             
-                                            <!-- quantity text -->
-                                            <div class="col-sm-auto">
-                                                <div class="quantity" th:id="|quantity-${item.id}|" th:text="${item.quantity}" ></div>
+                                            <!-- BUTTON GROUP -->
+                                            <div class="col">
+                                                <div class="btn-group mr-2 btn-group-lg col-2" role="group" id="quantityGroup" aria-label="quantity controls">
+                                                    <!-- minus button -->
+                                                    <div class="minusButton">
+                                                        <button class="btn btn-light" type="button" id="subtractQty"><i class="bi bi-dash-square" th:attr="onclick=|decreaseQty('${item.id}')|" onclick="calculate()"></i></button>
+                                                    </div>
+
+                                                    <!-- quantity text -->
+                                                    <div class="quantityText">
+                                                        <input type="text" class="form-control mb-2" th:id="|quantity-${item.id}|" th:value="${item.quantity}" >
+                                                    </div>
+
+                                                    <!-- plus button -->
+                                                    <div class="plusButton">
+                                                        <button class="btn btn-light" type="button" id="addQty"><i class="bi bi-plus-square"  th:attr="onclick=|increaseQty('${item.id}')|" onclick="calculate()"></i></button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             
                                             
-                                            <!-- plus button -->
-                                            <div class="col-sm-auto">
-                                                <button class="btn btn-lg" id="addQty"><i class="bi bi-plus-square"  th:attr="onclick=|increaseQty('${item.id}')|" onclick="calculate()"></i></button>
-                                            </div>    
+                                        </div>
+                                        <div th:if="${item.quantity} > ${product.stock}">
+                                            <p th:with="outOfStock = ${true}" class="warning-text"> Quantity exceeds available stock! </p>
                                         </div>
                                         
                                         <!--/* SUBTOTAL */-->
                                         <div class="row">
-                                            <div class="col">
-                                                <p>Subtotal:</p>
-                                            </div>
+                                            <div class="col"></div>
+                                            <br/>
                                             <div class="col" th:with="value=${cartItemTotals[iterator.index]}">
-                                                <b>€[[${#numbers.formatDecimal(value, 0, 'COMMA', 2, 'POINT')}]] </b>
+                                                <br/>
+                                                <p class="cart-subtotal">subtotal: €[[${#numbers.formatDecimal(value, 0, 'COMMA', 2, 'POINT')}]] </b>
                                             </div>
                                         </div>
-                                        <!--/*
-                                        <div class="row">
-                                            <div class="col">
-                                                <p>Subtotal:</p>
-                                            </div>
-                                            <div class="col">
-                                                <b>€</b><span th:id="${#ids.seq('subtotal')}"></span> //this gives a unique sequential id which can use in javascript
-                                            </div>
-                                        </div>
-                                        */-->
                                         <br/>
                                         <div class="row">
-                                            <!-- REMOVE FROM CART -->
-                                            <button class="button" id="removeCartItem" th:attr="onclick=|confirmRemoveItem('${item.id}')|" onclick="calculate()"><i class="bi bi-trash3"></i> Remove from cart</button>
+                                            <div class="col"  id="removeCartRow">
+                                                <!-- REMOVE FROM CART -->
+                                                <button class="btn btn-danger" id="removeCartItem" th:attr="onclick=|confirmRemoveItem('${item.id}')|" onclick="calculate()"><i class="bi bi-trash3"></i> Remove from cart</button>
+                                            </div>                                            
                                         </div>
                                     </div>
-                                </div>       
+                                </div>
+                                <br/>
+                                
                             </th:block> <!-- / Cart Items -->
                             
                             
                             <!-- GRAND TOTAL -->
-                            <div class="col-sm-4" th:unless="${#lists.isEmpty(cartItems)}"> <!--/* do this UNLESS cart is empty */-->
+                            <div id="grandTotal" class="col-sm-4 row border rounded" th:unless="${#lists.isEmpty(cartItems)}"> <!--/* do this UNLESS cart is empty */-->
                                 <div>
                                     <p class="h3">Total before shipping:</p>
                                 </div>
@@ -124,9 +133,15 @@
                                     <h2 id="grantTotal">Final Total: €[[${#numbers.formatDecimal(totalPrice+delivery, 0, 'COMMA', 2, 'POINT')}]] </h2>
                                 </div>
 
-                                <div class="mt-2">
-                                    <button class="btn btn-danger p-3 mt-2" th:attr="onclick=|confirmCheckout('${customerId}')|">Check Out</button>
+                                <div class="mt-2" th:if="${somethingOverStock} == false">
+                                    <button class="btn btn-warning p-3 mt-2" th:attr="onclick=|confirmCheckout('${customerId}')|">Check Out</button>
                                 </div>
+                                
+                                <div th:if="${somethingOverStock} == true">
+                                    <p class = warning-text> One or more items in your cart exceeds available stock! </p>
+                                </div>
+                                
+                                
                             </div>
                             
                             <!-- CART EMPTY -->
@@ -137,11 +152,11 @@
 
 
                     </div> <!-- /switch -->
-                </div>  <!-- / col -->
+                </div>  <!-- / CONTENT -->
 
                 
                 <!-- COLUMN -->
-                <div class="col-2" id="rightside"></div>
+                <div th:replace="fragments :: rightcolumn"></div>
             </div>  <!-- / row -->
         </div>
         

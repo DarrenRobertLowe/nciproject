@@ -12,24 +12,23 @@ async function confirmCheckout(customerId) {
         method: 'POST'
     };
     
-    const response = await fetch( '/checkout?customerId='+customerId, options);
+    let response = await fetch('/checkout?customerId='+customerId, options);
+    let responseText = await response.text();
+    
+    //document.getElementById('result').innerHTML = responseText;
+    //alert(responseText);
+    
     
     if (response.status === 200) { // success
+        window.location.replace("/orderplaced");
         //window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
-        alert("customerId: " + customerId + " : Order placed successfully!");
+        //alert("customerId: " + customerId + " : Order placed successfully!");
     } else {
-        alert("Something went wrong");
+        window.location.replace("/outOfStock?message=" + responseText);
     }
 }
 
-/*
-async function updateQuantity(cartItemId) {
-    $.get("quantity-fragment?cartItemId=" + cartItemId).done(function (fragment) {
-        console.log(fragment);
-        $("#quantity-"+cartItemId).replaceWith(fragment);
-    });
-}
-*/
+
 
 
 async function increaseQty(cartItemId) {

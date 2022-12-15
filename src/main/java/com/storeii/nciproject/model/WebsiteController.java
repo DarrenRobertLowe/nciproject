@@ -101,7 +101,7 @@ public class WebsiteController {
         String status   = "ANONYMOUS";
         String location = "none";
         List<Product> results = new ArrayList(); // list to be added to model
-        
+        Customer customer = null;
         
         // get the user role for the navbar
         String userRole = getUserRole();
@@ -116,7 +116,7 @@ public class WebsiteController {
         
         // get the customer so we can determine Location
         if (user != null) {
-            Customer customer = user.getCustomer();
+            customer = user.getCustomer();
             
             // get the location
             if (customer != null) {
@@ -153,7 +153,10 @@ public class WebsiteController {
                     }
                 }
             }
-        }  else {
+        }
+        
+        
+        if (customer == null) {
             // RETURN ALL PRODUCTS FROM ALL LOCATIONS
             // get all products
             List<Product> products = productRepository.findAll();
@@ -166,7 +169,6 @@ public class WebsiteController {
 
                 if (categoryMatch.equalsIgnoreCase(category)) {
                     results.add(p);
-                    // System.out.println("******** Adding a " +category +" to the list! *********");
                 }
             }
         }
@@ -209,6 +211,7 @@ public class WebsiteController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
+        
         if (principal == "anonymousUser") {
             System.out.println("USER IS NOT LOGGED IN!");
             status = "ANONYMOUS";
@@ -223,24 +226,24 @@ public class WebsiteController {
                 Customer customer = user.getCustomer();
                 
                 if (customer == null) {
-                    status = "ANONYMOUS";
+                    status = "ANONYMOUS"; // drivers and suppliers are treated as ANONYMOUS
                 } else {
-                   System.out.println("CUSTOMER = " + customer);
-                   System.out.println("customer.id = " + customer.getId());
+                    System.out.println("CUSTOMER = " + customer);
+                    System.out.println("customer.id = " + customer.getId());
+
+                    Integer customerId = customer.getId();
+                    status = "AUTHORIZED";
+                    model.addAttribute("customerId", customerId.toString());
+
+                    // GET THE CUSTOMER'S CART ITEMS
+                    List<CartItem> cartItemList = cartItemRepository.findByCustomer(customer);
                    
-                   Integer customerId = customer.getId();
-                   status = "AUTHORIZED";
-                   model.addAttribute("customerId", customerId.toString());
-                   
-                   // GET THE CUSTOMER'S CART ITEMS
-                   List<CartItem> cartItemList = cartItemRepository.findByCustomer(customer);
-                   
-                   for(CartItem item: cartItemList) {
-                       if (item.getProduct() == product) {
+                    for(CartItem item: cartItemList) {
+                        if (item.getProduct() == product) {
                            System.out.println("***** PRODUCT WAS ALREADY IN CUSTOMER CART *****");
                            isProductInCart = true;
-                       }
-                   }
+                        }
+                    }
                    
                 }
             } else {

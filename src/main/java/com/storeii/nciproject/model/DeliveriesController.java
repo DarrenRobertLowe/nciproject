@@ -34,6 +34,9 @@ public class DeliveriesController {
     @Autowired
     private EntityManager entityManager;
     
+    @Autowired
+    private WebsiteController webController;
+    
     
     @GetMapping("/deliveries")
     public ModelAndView showDeliveries() {
@@ -42,6 +45,11 @@ public class DeliveriesController {
         
         ModelAndView mav = new ModelAndView("deliveries");
         
+        
+        // get the user role for the navbar
+        String userRole = webController.getUserRole();
+        webController.getNavbar(mav);
+        mav.addObject("userType", userRole);
         
         // now we have the supplier object we can check if the User id corresponds.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

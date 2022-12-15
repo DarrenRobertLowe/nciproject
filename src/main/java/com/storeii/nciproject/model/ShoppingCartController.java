@@ -11,6 +11,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  *
@@ -68,6 +71,7 @@ public class ShoppingCartController {
         ModelAndView mav = new ModelAndView("shopping-cart");
         String status = "ANONYMOUS";
         int customerID = -1;
+        boolean somethingOverStock = false; // lets the page know a cart item's quantity exceeds the available stock
         List<CartItem> cartItems = new ArrayList();
         List<Double> cartItemTotals = new ArrayList(); // price * quantity for each item
         double totalPrice = 0;
@@ -115,6 +119,11 @@ public class ShoppingCartController {
                     // get the totalPrice of the cart items
                     for (CartItem item : cartItems) {
                         double subTotal = ( item.getProduct().getPrice() * item.getQuantity() );
+                        
+                        if (item.getQuantity() > item.getProduct().getStock() ){
+                            somethingOverStock = true;
+                        }
+                        
                         cartItemTotals.add(subTotal);
                         totalPrice += subTotal;
                     }
@@ -130,7 +139,7 @@ public class ShoppingCartController {
             }
         }
         
-        
+        mav.addObject("somethingOverStock", somethingOverStock);
         mav.addObject("customerId", customerID);
         mav.addObject("cartItems", cartItems);
         mav.addObject("cartItemTotals", cartItemTotals);
@@ -207,7 +216,10 @@ public class ShoppingCartController {
     
     @Transactional
     @PostMapping(path="/checkout")
-    public String checkout(String customerId){
+    public ResponseEntity checkout(String customerId){
+        ModelAndView mav = new ModelAndView();
+        String message = "";
+        
         // get the entity
         Customer customer = entityManager.find(Customer.class, Integer.parseInt(customerId));
         
@@ -219,7 +231,7 @@ public class ShoppingCartController {
         orderRepository.save(order);
         
         
-        // create a list fort the orderItems
+        // create a list for the orderItems
         List<OrderItem> oList = new ArrayList<>();
         
         // Create an OrderItem for each CartItem
@@ -235,18 +247,21 @@ public class ShoppingCartController {
             int stock = product.getStock();
             
             if (stock < quantity) {
-                String redirectURL = "redirect:/orderProblem";
-                //return new ModelAndView(redirectURL);
-                return "We're sorry! Your order cannot be fulfilled at this time! The quantity of your order exceeds the number of items in stock. Please try again with a smaller quantity.";
+                System.out.println("STOCK < QUANTITY!");
+                message = "Oops! Looks like someone got there before you! The quantity of your order exceeds the number of items in stock. Please try again with a smaller quantity.";
+                mav.addObject("message", message);
+                //return mav;//
+                //orderproblem(mav);
+                return new ResponseEntity<String>(message, HttpStatus.BAD_REQUEST);
             } else {
+                System.out.println("stock is fine.");
                 product.setStock(stock - quantity);
                 productRepository.save(product);
+                
+                // save the item
+                orderItemRepository.save(oItem);
+                oList.add(oItem); // add the orderItem to the list
             }
-            
-            
-            orderItemRepository.save(oItem);
-            
-            oList.add(oItem); // add the orderItem to the list
         }
         
         System.out.println("_____orderItems_____\n"+ oList.toString());
@@ -260,9 +275,30 @@ public class ShoppingCartController {
         cartItemRepository.deleteAllByCustomer(customer);
         
         // REDIRECT
-        String redirectURL = "redirect:/orderPlaced";
-        //return new ModelAndView(redirectURL);
-        return "Order placed";
+        mav.addObject("message", message);
+        //return mav;//
+        return new ResponseEntity<>(HttpStatus.OK);
+        //return "/checkout";
     }
     
+    
+    
+    
+    @GetMapping(path = "/outOfStock") 
+    public ModelAndView outOfStock(String message) {
+        System.out.println("Running /outOfStock");
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("message", message);
+        //orderproblem(mav);
+        return mav;
+    }
+    
+    
+    
+    public RedirectView orderproblem(ModelAndView model) {
+        System.out.println("Running /orderproblem");
+        //return model;
+        //model.addAttribute(message);
+        return new RedirectView("/orderproblem");
+    }
 }

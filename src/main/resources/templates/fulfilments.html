@@ -8,13 +8,16 @@
     
     <body>
         <div class="container">
-            <div class="row" id="fulfilments">
-                <div class="col-2" id="leftside"></div>
-
+            <div th:replace="navbar :: navbar"></div>
+            
+            
+            <div class="row">
+                
+                <!-- COLUMN -->
+                <div th:replace="fragments :: leftcolumn"></div>
+                
+                    <!-- CONTENTS -->
                     <div class="col">
-                        
-                        <div th:replace="navbar :: navbar"></div>
-                        
                         <div th:switch="${valid}">
                             <th:block th:case = "false">
                                 <h1> Access Denied! </h1>
@@ -90,7 +93,7 @@
                     </div>
 
 
-                <div class="col-2" id="rightside"></div>
+                <div th:replace="fragments :: rightcolumn"></div>
             </div>
         </div>
         
