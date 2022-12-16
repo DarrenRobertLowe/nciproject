@@ -19,87 +19,19 @@
                     <div class="col">
                     <div th:switch="${valid}">
                         <th:block th:case="true">
+                            <h3 th:with="driverName = ${driverName}"> [[${driverName}]] </h3>
                             <h1> Your Deliveries </h1>
+                            
                             <div>
                                 <button class="reload" onclick=window.location.reload()> Refresh </button>
                             </div>
+                            
+                            
                             <th:block th:each="order : ${orders}" th:if="${orders!=null and !orders.empty}">
-                                <div <div class="infocard">
-                                    <!-- ORDER INFO -->
-                                    <div class="col">
-                                        <div class="row">
-                                            <h2 th:text="'Order id : ' + ${order.id}"></h2>
-                                        </div>
-
-                                        <!-- SUPPLIER ADDRESS -->
-                                        <div class="row">
-                                            <div class="col">
-                                                <b class="header"> Suppliers: </b>
-                                                <br/>
-                                                <div class="supplier_content">
-                                                    <th:block th:each="supplier : ${order.getSuppliers()}" >
-                                                        <b th:text="${supplier.storeName}"></b>
-                                                        <br/>
-                                                        <b th:text="${supplier.getAddress().addressLine1}"></b>
-                                                        <br/>
-                                                        <b th:text="${supplier.getAddress().addressLine2}"></b>
-                                                        <br/>
-                                                        <b th:text="${supplier.getAddress().city}"></b>
-                                                        <br/>
-                                                        <b th:text="${supplier.getAddress().district}"></b>
-                                                        <br/>
-                                                        <b th:text="${supplier.getAddress().postcode}"></b>
-                                                        <br/>
-                                                        <br/>
-                                                    </th:block>
-                                                </div>
-                                                <!-- add some space after each supplier -->
-                                            </div>
-                                            
-                                        <!-- ORDER PRODUCTS -->
-                                        <div class="col">
-                                            <b class="header"> Contents: </b>
-                                            <br/>
-                                            <div class="product_contents">
-                                                <th:block th:each="orderItem : ${order.getItems()}" >
-                                                    <th:block th:each="product : ${orderItem.getProduct()}" >
-                                                        
-                                                        <b><span th:text="${product.getProductName} + ' x ' +  ${orderItem.getQuantity}"></b>
-                                                    <br/>
-                                                    <br/>
-                                                </th:block>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- CUSTOMER ADDRESS -->
-                                        <div class="col">
-                                            <b class="header"> To: </b>
-                                            <br/>
-                                            <span>
-                                                <b th:text="${order.customer.firstName}"></b>
-                                                <b th:text="${order.customer.surname}"></b>
-                                            </span>
-                                            <br/>
-                                                <b th:text="${order.customer.address.addressLine1}"></b>
-                                            <br/>
-                                                <b th:text="${order.customer.address.addressLine2}"></b>
-                                            <br/>
-                                                <b th:text="${order.customer.address.city}"></b>
-                                            <br/>
-                                                <b th:text="${order.customer.address.district}"></b>
-                                            <br/>
-                                                <b th:text="${order.customer.address.postcode}"></b>
-                                            <br/>
-                                        </div>
-
-                                        <div class="col">
-                                            <button class="button_MarkAsDelivered" th:attr="onclick=|confirmMarkAsDelivered('${order.id}')|">Mark as Delivered</button>
-                                        </div>
-
-                                        </div>
-                                    </div>
-                                </div>
+                                <div th:replace="fragments :: delivery-card"></div>
                             </th:block>
+                            
+                            
                             <div th:if="${#lists.isEmpty(orders)}">
                                 <h3>Your cart is currently empty.</h3>
                             </div>

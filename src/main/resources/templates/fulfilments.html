@@ -24,8 +24,9 @@
                             </th:block>
 
                             <th:block th:case = "true">
-
-                                <h1> Fulfilments </h1>
+                                <h3 th:with="storeName = ${storeName}"> [[${storeName}]] </h3>
+                                <h1> Your Orders </h1>
+                                
                                 <!-- REFRESH CONTENTS -->
                                 <div>
                                     <button class="reload" onclick=window.location.reload()> Refresh Orders List </button>
@@ -34,53 +35,7 @@
                                 
                                 <!-- CONTENTS -->
                                 <th:block th:each="subOrder : ${subOrders}">
-                                    <div class="col" id="suborder-container">
-                                        <h2 th:text="'For Order # ' + ${subOrder.order.id}"></h2>
-                                        <h5 th:text="'Customer Name: ' + ${subOrder.order.customer.firstName} + ' ' + ${subOrder.order.customer.surname}"> </h5>
-                                        <h6 th:text="'Expected driver: ' + ${subOrder.order.driver.firstName} + ' ' + ${subOrder.order.driver.surname}"> </h6>
-                                        <div class="row row-cols-1 row-cols-md-2 g-4">
-                                            <th:block th:each="subOrderItem : ${subOrder.items}">
-                                                <div class="col-lg-4 mb-3 d-flex align-items-stretch">
-                                                    <div class="card mx-auto" style="width: 18rem;">
-                                                        
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <!-- CHECKBOX -->
-                                                                <div class="col-1">
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                                    </div>
-                                                                </div>
-                                                                
-                                                                
-                                                                <!-- TITLE -->
-                                                                <div class="col">
-                                                                    <h5 class="card-title" th:text="${subOrderItem.product.productName}"></h5>
-                                                                </div>
-                                                                
-                                                                
-                                                            </div>
-                                                            
-                                                            <!-- QUANTITY -->
-                                                            <h5 th:text="x + ${subOrderItem.quantity}"></h5>
-                                                                <div class ="button-wrapper">
-                                                                    <a class="btn btn-primary mr-1" th:href="'productpage?identifier='+${subOrderItem.product.getIdentifier()}">See Details</a>
-                                                                    <a class="btn btn-danger" th:href="'productpage?identifier='+${subOrderItem.product.getIdentifier()}">Cancel Item</a>
-                                                                </div>
-                                                            </div>
-                                                    </div>
-                                                </div>
-                                            </th:block>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- MARK AS READ -->
-                                    <div class="row">
-                                        <div class="col">
-                                            <button class="btn btn-warning" style="float:right" th:attr="onclick=|confirmMarkAsReady('${subOrder.id}','${subOrder.order.id}')|">Mark as Ready</button>
-                                        </div>
-                                    </div>
-                                    <br/>
+                                    <div th:replace="fragments :: fulfilment-card"></div>
                                 </th:block>
                                 
                                 

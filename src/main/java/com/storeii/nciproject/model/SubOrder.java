@@ -24,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="SubOrder")
-public class SubOrder {
+public class SubOrder implements Comparable<SubOrder>{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
@@ -116,5 +116,11 @@ public class SubOrder {
         this.orderStatus = orderStatus;
         this.order       = order_ID;
         this.supplier    = supplier_ID;
+    }
+
+    
+    @Override
+    public int compareTo(SubOrder o) {
+        return (supplier.compareTo(o.getSupplier()));
     }
 }

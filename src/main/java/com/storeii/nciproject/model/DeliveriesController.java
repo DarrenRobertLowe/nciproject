@@ -40,11 +40,8 @@ public class DeliveriesController {
     
     @GetMapping("/deliveries")
     public ModelAndView showDeliveries() {
-        
-        int readyStatus = 2;// Enums.OrderStatus.READY.ordinal();           // get the status value as an int
-        
+        int readyStatus = Enums.OrderStatus.READY.ordinal();        // get the status value as an int
         ModelAndView mav = new ModelAndView("deliveries");
-        
         
         // get the user role for the navbar
         String userRole = webController.getUserRole();
@@ -53,19 +50,22 @@ public class DeliveriesController {
         
         // now we have the supplier object we can check if the User id corresponds.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+        UserPrincipal userPrincipal = (UserPrincipal)principal;         // make sure you're logged in or you'll get an error!
         boolean valid = false;
         
         if (principal instanceof UserDetails) {
             User user = userPrincipal.getUser();
             
             int driverID = user.getDriver().getId();
-            Driver driver = entityManager.find(Driver.class, driverID);         // get the entity
+            Driver driver = entityManager.find(Driver.class, driverID); // get the entity
+            mav.addObject("driver", driver);
+            mav.addObject("driverName", driver.getFirstName() + " " + driver.getSurname());
             
             if ((user.getDriver().getId()) == driverID) {
                 System.out.println("***** ACCESS GRANTED *****");
                 // get a list deliveries for the specific driver
                 List<Order> orders = orderRepository.findOrdersByDriverAndOrderStatus(driver, readyStatus);
+                
                 
                 mav.addObject("orders", orders);
                 valid = true;

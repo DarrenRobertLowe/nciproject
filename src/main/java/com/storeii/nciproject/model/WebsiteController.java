@@ -58,6 +58,8 @@ public class WebsiteController {
     }
     
     
+    // GET USER ROLE
+    // returns the role value from the given User
     public String getUserRole() {
         String userRole = "ANONYMOUS";
         
@@ -74,7 +76,10 @@ public class WebsiteController {
     }
     
     
-    
+    // get navbar
+    // note both versions are needed, the 2nd version
+    // allows for a ModelAndView instead of just a Model
+    // and is used by FulfilmentsController.
     @GetMapping("/navbar")
     public Model getNavbar(Model model) {
         String userRole = getUserRole();

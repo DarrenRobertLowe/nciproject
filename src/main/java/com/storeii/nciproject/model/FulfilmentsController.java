@@ -83,6 +83,11 @@ public class FulfilmentsController {
                 // to explicitely return that using the id, which is the same for both.
                 System.out.println("supplierID: " + supplierObj.getId());
                 Supplier supplier = entityManager.find(Supplier.class, supplierObj.getId());    // get the supplier entity. this might be redundant)
+                
+                String storeName = supplier.getStoreName();
+                mav.addObject("supplier", supplier);
+                mav.addObject("storeName", storeName);
+                
                 int orderStatus = Enums.OrderStatus.CONFIRMED.ordinal();                        // suppliers should only see suborders that haven't yet been fulfilled
                 
                 // get a list deliveries for the specific driver

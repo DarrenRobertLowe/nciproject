@@ -229,20 +229,13 @@
             </nav>
             
             
-            <!-- SEARCH
-            <form th:fragment="navsearch" class="d-flex">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchTerms" name="blargh">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-             -->
-            <form th:fragment="navsearch" class="d-flex">
-                <div class="col">
-                    <input class="form-control me-2" placeholder="Search" aria-label="Search" id="searchTerms" name="searchTerms"/>
+            <!-- SEARCH -->
+            <form th:fragment="navsearch" class="d-flex" action="/search?searchTerms="+&searchTerms method="GET">
+                    <input class="form-control me-2" placeholder="Search" aria-label="Search" id="searchTerms" name="searchTerms"  />
 
-                    <button type="button" class="btn btn-outline-success" onclick="search()">
+                    <button type="submit" class="btn btn-outline-success">
                         <i class="bi bi-search"></i>
                     </button>
-                </div>
             </form>
             
         </body>

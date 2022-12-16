@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:insert="fragments :: headers">
-        <title>Products</title>
+        <title>Search Results</title>
     </head>
     
     
@@ -18,16 +18,66 @@
                 
                 
                 <!-- CONTENT -->
-                <div class="col" th:with="results = ${results}">
-                    <h1> Search Results </h1>
-                    <div th:each="result : ${results}">
-                        <!-- <div th:if="${userRole} == 'CUSTOMER'"> -->
-                            Name: [[${result.getProductName()}]]
-                            URL: [[${result.getId()}]]
+                <h1> Search Results </h1>
+                <!-- FOR -->
+                <h2 th:with="driverName = ${driverName}"> for "[[${searchTerms}]]"</h2>
+                
+                
+                <th:block th:switch="${userRole}">
+                    
+                    <!--/* SUPPLIER */-->
+                    <div th:case="SUPPLIER">
+                        <div class="col">
+                            <h3 th:with="storeName = ${storeName}"> belonging to [[${storeName}]]</h3>
+                            
+                            <div th:each="subOrder : ${results}">
+                                <div th:replace="fragments :: fulfilment-card"></div>
+                            </div>
                         </div>
                     </div>
-                </div> <!-- / CONTENT -->
+                    <!-- /SUPPLIER -->
+                    
+                    
+                    
+                    
+                    <!--/* DRIVER */-->
+                    <div th:case="DRIVER">
+                        <div class="col">
+                            <h3 th:with="driverName = ${driverName}"> belonging to [[${driverName}]]</h3>
+                            
+                            <div th:each="order : ${results}">
+                                <div th:replace="fragments :: delivery-card"></div>
+                            </div>
+                        </div> 
+                    </div>
+                    <!-- /DRIVER -->
+                    
+                    
+                    
+                    
+                    <!--/* DEFAULT (i.e. CUSTOMER OR ANONYMOUS) */-->
+                    <div th:case="*">
+                        <div class="col" th:with="results = ${results}, location=${location}">
+                            <h3 th:unless="${location} == none"> belonging to [[${location}]] </h3>
+                            
+                            <div th:each="result : ${results}">
+                                <span> Name: [[${result.getProductName()}]] </span>
+                                <span th:with="id = ${result.getIdentifier()}"> URL: <a th:href="@{/productpage?identifier=__${id}__}">view product</a> </span>
+                            </div>
+                        </div> 
+                    </div>
+                    <!-- /CUSTOMER -->
+                    
+                    
+                    
+                    
+                    
+                    
+                </th:block>
                 
+                <div th:if="${#lists.isEmpty(results)}">
+                    <h4 class="warning-text">Found no results matching your query.</h4>
+                </div>
                 
                 <!-- RIGHT COLUMN -->
                 <div th:replace="fragments :: rightcolumn"></div>
