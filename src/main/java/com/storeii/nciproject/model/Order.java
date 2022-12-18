@@ -37,6 +37,9 @@ public class Order {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private int orderStatus;
+    private String date;
+    private String time;
+    
     
     // FOREIGN KEYS
     @ManyToOne(cascade = CascadeType.ALL)
@@ -127,6 +130,25 @@ public class Order {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    
+    
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+    
+    
     
     
     public List<OrderItem> getItems() {

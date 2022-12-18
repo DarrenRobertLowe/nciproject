@@ -152,8 +152,12 @@ public class SearchController {
         // product name (and maybe the suppler store name)
         for(Product product : products) {
             System.out.println("checking: " + product.getProductName());
+            
             // DIRECTLY MATCHING ITEM
-            if (product.getProductName().toLowerCase().contains(searchTerms)) {
+            String productName = product.getProductName().toLowerCase();
+            productName = cleanString(productName);
+            
+            if (productName.contains(searchTerms)) {
                 System.out.println(product.getProductName() + " is a direct match!");
                 
                 // now we'll prevent added products that contain the wrong location.
@@ -268,8 +272,21 @@ public class SearchController {
             String orderNo = Integer.toString(subOrder.getOrder().getId());
             
             
+            // Order date and time
+            String dateString = null;
+            String timeString = null;
+            String date = subOrder.getOrder().getDate();
+            String time = subOrder.getOrder().getTime();
+            if (date != null){
+                dateString = date;
+            }
+            
+            if (time != null){
+                timeString = time;
+            }
+            
             // finalize the criteria string
-            String subOrderString = (subOrderNo + customerName + addressString + productString + driverString + orderNo);
+            String subOrderString = cleanString(subOrderNo + customerName + addressString + productString + driverString + orderNo + "Date:" + dateString + "Time:" + timeString);
             subOrderString = subOrderString.toLowerCase();
             System.out.println("Searching for query in :: " + subOrderString);
             
@@ -384,7 +401,7 @@ public class SearchController {
             
             
             // finalize the criteria string
-            String subOrderString = (customerName + addressString + suppliersString + productString + driverString + orderNo);
+            String subOrderString = cleanString(customerName + addressString + suppliersString + productString + driverString + orderNo);
             subOrderString = subOrderString.toLowerCase();
             System.out.println("Searching for query in :: " + subOrderString);
             

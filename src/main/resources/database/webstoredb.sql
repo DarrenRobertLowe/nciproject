@@ -73,6 +73,8 @@ CREATE TABLE Orders (
     address_ID int UNSIGNED,
     driver_ID int UNSIGNED,
     location_ID int UNSIGNED,
+    date varchar(10),
+    time varchar(8),
     -- OrderItems int UNSIGNED,
     FOREIGN KEY (customer_ID) REFERENCES Customer(id),
     FOREIGN KEY (address_ID) REFERENCES Address(id),
@@ -184,12 +186,14 @@ drop table SupplierOrders;
 */
 
 /*
-delete from Customer
-where id = 25;
+delete from Orders
+where customer_ID IS NULL;
 */
 
+
 use webstoredb;
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 1;
+select * from User;
 select * from Driver;
 select * from Location;
 select * from Product;

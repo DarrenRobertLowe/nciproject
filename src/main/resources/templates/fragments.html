@@ -82,9 +82,10 @@
         
         <!-- FULFILMENT CARD -->
         <th:block th:fragment="fulfilment-card">
-            <div class="col" id="suborder-container">
+            <div class="col" id="suborder-container" th:with="date = ${subOrder.order.getDate()}">
                 <h2 th:text="'For Order #: ' + ${subOrder.order.id}"></h2>
                 <h3 th:text="'SubOrder #: ' + ${subOrder.id}"></h3>
+                <h6 th:unless="${date == null}" th:text=" 'Ordered: ' + ${subOrder.order.getDate()} + ' at ' + ${subOrder.order.getTime()} "> </h6>
                 <h5 th:text="'Customer Name: ' + ${subOrder.order.customer.firstName} + ' ' + ${subOrder.order.customer.surname}"> </h5>
                 <h6 th:text="'Expected driver: ' + ${subOrder.order.driver.firstName} + ' ' + ${subOrder.order.driver.surname}"> </h6>
                 <div class="row row-cols-1 row-cols-md-2 g-4">

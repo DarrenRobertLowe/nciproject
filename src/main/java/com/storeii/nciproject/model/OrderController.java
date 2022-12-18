@@ -9,13 +9,21 @@ package com.storeii.nciproject.model;
  * @author Main
  */
 
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.storeii.nciproject.Enums;
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -147,12 +155,89 @@ public class OrderController {
         } // end of iterating through orderItems
         
         
+        // GET THE DATE AND TIME
+        // This attempts to get the datetime from the WorldTime server API.
+        // If it fails reach the WorldTime server API, it will instead revert
+        // to Java's DateTimeLocal() method. It then parses the result into
+        // separate "date" and "time" fields.
+        String date = "no date";
+        String time = "no time";
+        
+        try {
+            String datetime = getDateTime();
+            date = parseDate(datetime);
+            time = parseTime(datetime);
+            System.out.println("date: " + date);
+            System.out.println("time: " + time);
+        } catch (IOException e) {
+            System.out.println("Datetime API server is unavailable, using getDateTimeLocal instead.");
+            String datetime = getDateTimeLocal();
+            date = parseDate(datetime);
+            time = parseTime(datetime);
+        }
+        
+        order.setDate(date);
+        order.setTime(time);
         
         // SAVE THE NEW ORDER AND FINISH
         orderRepo.save(order);
         return "Saved";
     }
     
+    
+    // Get datetime from worldtime API server
+    @GetMapping(path="/getDateTime")
+    public String getDateTime() throws IOException {
+        String datetime = "";
+        
+        //Instantiating the URL class
+        URL url = new URL("http://worldtimeapi.org/api/timezone/Europe/Dublin");
+ 
+        // Read the JSON
+        JsonNode node = new ObjectMapper().readTree(url);
+        
+        // Get the value for the datetime field
+        node = node.get("datetime");
+        
+        // get the String of that value
+        datetime = node.textValue();
+        
+        // return the result
+        System.out.println("result from datetime server: " + datetime);
+        
+        // test
+        String date = parseDate(datetime);
+        String time = parseTime(datetime);
+        System.out.println("date: " + date);
+        System.out.println("time: " + time);
+        
+        return datetime;
+    }
+    
+    
+    // GET THE DATETIME USING JAVA'S LOCALDATETIME()
+    // This is used if retrieving datetime from the
+    // worldtime api fails.
+    @GetMapping(path="/getDateTimeLocal")
+    public String getDateTimeLocal(){
+        String datetime = LocalDateTime.now().toString();
+        return datetime;
+    }
+    
+    public String parseDate(String datetime) {
+        int tPoint = datetime.indexOf('T');
+        String date = datetime.subSequence(0, tPoint).toString();
+        System.out.println("Date: " + date);
+        return date;
+    }
+    
+    public String parseTime(String datetime){
+        int tPoint = datetime.indexOf('T');
+        int dPoint = datetime.indexOf('.'); // we don't need milliseconds
+        String time = datetime.subSequence(tPoint+1, dPoint).toString();
+        System.out.println("Time: " + time);
+        return time;
+    }
     
     
     // find all
