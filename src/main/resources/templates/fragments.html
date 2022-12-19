@@ -204,6 +204,18 @@
                             <b th:text="${order.customer.address.postcode}"></b>
                         <br/>
                     </div>
+                    
+                    <!-- Google Maps API -->
+                    <div class="col">
+                        <iframe
+                        width="450"
+                        height="250"
+                        frameborder="0" style="border:0"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyALT3yXsFTUtCLKH_zNEW8YgC_4D37lsek&origin=Oslo+Norway&destination=Telemark+Norway&avoid=tolls|highways"
+                        allowfullscreen>
+                      </iframe>
+                    </div>
 
                     <div class="col">
                         <button class="button_MarkAsDelivered" th:attr="onclick=|confirmMarkAsDelivered('${order.id}')|">Mark as Delivered</button>
