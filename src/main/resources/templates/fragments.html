@@ -82,16 +82,17 @@
         
         <!-- FULFILMENT CARD -->
         <th:block th:fragment="fulfilment-card">
-            <div class="col" id="suborder-container" th:with="date = ${subOrder.order.getDate()}">
+            <div class="col" id="infocard-container" th:with="date = ${subOrder.order.getDate()}">
                 <h2 th:text="'For Order #: ' + ${subOrder.order.id}"></h2>
                 <h3 th:text="'SubOrder #: ' + ${subOrder.id}"></h3>
                 <h6 th:unless="${date == null}" th:text=" 'Ordered: ' + ${subOrder.order.getDate()} + ' at ' + ${subOrder.order.getTime()} "> </h6>
                 <h5 th:text="'Customer Name: ' + ${subOrder.order.customer.firstName} + ' ' + ${subOrder.order.customer.surname}"> </h5>
+                <p class="customer-address" th:text="'Address: ' + ${subOrder.order.customer.getAddress().getFullAddress()}"> </p>
                 <h6 th:text="'Expected driver: ' + ${subOrder.order.driver.firstName} + ' ' + ${subOrder.order.driver.surname}"> </h6>
                 <div class="row row-cols-1 row-cols-md-2 g-4">
                     <th:block th:each="subOrderItem : ${subOrder.items}">
                         <div class="col-lg-4 mb-3 d-flex align-items-stretch">
-                            <div class="card mx-auto" style="width: 18rem;">
+                            <div class="card mx-auto">
 
                                 <div class="card-body">
                                     <div class="row">
@@ -137,7 +138,7 @@
         
         
         <th:block th:fragment="delivery-card">
-            <div <div class="infocard">
+            <div class="infocard-container">
                 <!-- ORDER INFO -->
                 <div class="col">
                     <div class="row">
@@ -206,14 +207,19 @@
                     </div>
                     
                     <!-- Google Maps API -->
-                    <div class="col">
+                    <div class="col" th:with="customerAddress = ${order.getCustomer().getAddress().getFullAddress()}">
                         <iframe
                         width="450"
                         height="250"
-                        frameborder="0" style="border:0"
+                        frameborder="0"
+                        style="border:0"
+                        allowfullscreen
                         referrerpolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyALT3yXsFTUtCLKH_zNEW8YgC_4D37lsek&origin=Oslo+Norway&destination=Telemark+Norway&avoid=tolls|highways"
-                        allowfullscreen>
+                            th:src="${
+                                'https://www.google.com/maps/embed/v1/directions?key=AIzaSyALT3yXsFTUtCLKH_zNEW8YgC_4D37lsek
+                                &origin=' + driverAddress +
+                                '&destination=' + customerAddress +
+                                '&avoid=tolls'}">
                       </iframe>
                     </div>
 

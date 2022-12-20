@@ -82,4 +82,17 @@ public class Address implements Serializable {
         this.country = country;
     }
 
+    public String getFullAddress() {
+        // Returns the full address in a single 
+        // string separated by spaces.
+        // Used for Google Maps
+        return (
+            addressLine1 + " " +
+            addressLine2 + " " +
+            city + " " +
+            district + " " +
+            postcode + " " +
+            country
+            );
+    }
 }

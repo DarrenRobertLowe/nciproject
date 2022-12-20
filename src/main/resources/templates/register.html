@@ -2,127 +2,134 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:insert="fragments :: headers">
-        <title>Login / Registration</title>
+        <title>Products</title>
     </head>
     
     
-    <body onload="calculate()">
+    <body>
         <div class="container">
+            <!-- NAVBAR -->
             <div th:replace="navbar :: navbar"></div>
-            <div class="row">
-                <div class="col-2" id="leftside"></div>
+            
+            
+            <div class="row"> <!-- OUTER ROW -->
+                <!-- LEFT COLUMN -->
+                <div th:replace="fragments :: leftcolumn"></div>
                 
-                <div class="col" id="content">
-                    
-                    <div class="row">
-                        <div class="col-2">
-                            <a class="btn btn-primary btn-lg" href="/login">Login</a>
-                        </div>
-                        
-                        
-                        <div class="col">
-                            <form id="register" class="login-form"
-                                  action="/addUserCustomer?"
-                                  +"&firstName="+firstName
-                                  +"&surname=" +surname
-                                  +"&userName=" +userName
-                                  +"&userPass=" +userPass
-                                  +"&location=" +location
-                                  +"&addressLine1="+addressLine1
-                                  +"&addressLine2="+addressLine2
-                                  +"&city="+city
-                                  +"&district="+district
-                                  +"&postcode="+postcode
-                                  +"&country"+country
-                                  method="POST"> <!-- th:object="${user}" method="POST" enctype="utf8"> -->
+                
+                <!-- CONTENT -->
+                <div class="col"></div> <!-- spacer -->
+                <div class="col-8 col-sm-9 col-md-7 col-lg-6 col-xl-5"> <!-- forms col -->
+                    <form id="register" class="login-form"
+                          action="/addUserCustomer?"
+                          +"&firstName="+firstName
+                          +"&surname=" +surname
+                          +"&userName=" +userName
+                          +"&userPass=" +userPass
+                          +"&location=" +location
+                          +"&addressLine1="+addressLine1
+                          +"&addressLine2="+addressLine2
+                          +"&city="+city
+                          +"&district="+district
+                          +"&postcode="+postcode
+                          +"&country"+country
+                          method="POST"> <!-- th:object="${user}" method="POST" enctype="utf8"> -->
 
-                                <div class="col-4">
-                                    <h2>Account Details<h2>
-                                    <!-- FIRST NAME -->
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="FirstName" name="firstName" id="firstName" required>
-                                    </div>
+                        <div class="row">
+                            <div class="col">
+                                <h2>Account Details</h2>
 
-                                    <!-- LAST NAME -->
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="LastName" name="surname" id="surname" required>
-                                    </div>
-
-
-                                    <!-- USERNAME -->
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Username" name="userName" id="userName" required>
-                                    </div>
-
-
-                                    <!-- PASSWORD -->
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Password" id="userPass" name="userPass" required>
-                                    </div>
-
-                                    <!-- CONFIRM PASSWORD
-                                      -- Note: we only submit elements with a name tag. "confirmPassword" has
-                                      -- no name tag and will not be submitted, it's just for validation.
-                                      -->
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="ConfirmPassword" id="confirmPassword" required>
-                                    </div>
+                                <!-- FIRST NAME -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="FirstName" name="firstName" id="firstName" required>
                                 </div>
 
-                                
+                                <!-- LAST NAME -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="LastName" name="surname" id="surname" required>
+                                </div>
 
-                                <!-- ADDRESS -->
+
+                                <!-- USERNAME -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Username" name="userName" id="userName" required>
+                                </div>
+
+
+                                <!-- PASSWORD -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Password" id="userPass" name="userPass" required>
+                                </div>
+
+                                <!-- CONFIRM PASSWORD
+                                  -- Note: we only submit elements with a name tag. "confirmPassword" has
+                                  -- no name tag and will not be submitted, it's just for validation.
+                                  -->
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="ConfirmPassword" id="confirmPassword" required>
+                                </div>
+
                                 <br />
-                                <div class="col-4">
-                                    <h2>Address Details</h2>
-                                    <input type="text" class="form-control" placeholder="Address Line 1" id="addressLine1" name="addressLine1" required>
-                                    <input type="text" class="form-control" placeholder="Address Line 2" id="addressLine2" name="addressLine2" required>
-                                    <input type="text" class="form-control" placeholder="City" id="city" name="city" required>
-                                    <input type="text" class="form-control" placeholder="County" id="county" name="district" required>
-                                    <input type="text" class="form-control" placeholder="Eircode" id="postcode" name="postcode" required>
+                            </div>
 
-                                    <div hidden="true">
-                                        <input class="form-check-input" type="radio" name="country" id="country" value="Ireland" checked> 
-                                        <label class="form-check-label" for="flexRadioDefault4">
-                                        Ireland
+
+
+                            <!-- ADDRESS -->
+                            <div class="col">
+                                <h2>Address Details</h2>
+                                <input type="text" class="form-control" placeholder="Address Line 1" id="addressLine1" name="addressLine1" required>
+                                <input type="text" class="form-control" placeholder="Address Line 2" id="addressLine2" name="addressLine2" required>
+                                <input type="text" class="form-control" placeholder="City" id="city" name="city" required>
+                                <input type="text" class="form-control" placeholder="County" id="county" name="district" required>
+                                <input type="text" class="form-control" placeholder="Eircode" id="postcode" name="postcode" required>
+
+                                <div hidden="true">
+                                    <input class="form-check-input" type="radio" name="country" id="country" value="Ireland" checked> 
+                                    <label class="form-check-label" for="flexRadioDefault4">
+                                    Ireland
+                                    </label>
+                                </div>
+
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col" id="register-select-location">
+                                <h2>Select Location</h2>
+                                <div class="form-check">
+                                    <div th:each="location : ${locations}">
+                                        <input class="form-check-input" type="radio" name="location" th:id="'location'+${locationStat.index+1}" th:value="${locationStat.index+1}" required>
+                                        <label class="form-check-label" for="flexRadioDefault">
+                                            [[${location.getLocationName()}]]
                                         </label>
                                     </div>
                                 </div>
-                                <br />
-                                
-                                
-                                <p>SELECT LOCATION</p>
-                                <div>
-                                    <h3>Location</h3>
-                                    <div class="form-check">
-                                        <div th:each="location : ${locations}">
-                                            <input class="form-check-input" type="radio" name="location" th:id="'location'+${locationStat.index+1}" th:value="${locationStat.index+1}" required>
-                                            <label class="form-check-label" for="flexRadioDefault">
-                                                [[${location.getLocationName()}]]
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
                                 <!-- SUBMIT OR BACK TO LOGIN -->
                                 <br />
-                                <div class="row">
-                                    <button class="btn btn-info btn-lg" type="submit">Register</button>
-                                </div>
-                            </form>
+                                <button class="btn btn-lg btn-danger btn-block" type="submit">Register</button>
+                                <br />
+                                <br />
+                                <a th:href="@{/login}" class="btn btn-lg btn-primary btn-block">Login Instead</a>
+                            </div>
                         </div>
-                    </div>
-                
-                
-                <!-- COLUMN -->
-                <div class="col-2" id="rightside"></div>
-             
-            </div> <!-- /row -->
-         </div> <!-- /container -->
+                    </form>
+                </div> <!-- /forms col -->
+                <div class="col"></div> <!-- spacer -->
+
+                <!-- RIGHT COLUMN -->
+                <div th:replace="fragments :: rightcolumn"></div>
+            </div>  <!-- /OUTER ROW -->
+        </div> <!-- /CONTAINER -->
         
-        
+        <!-- javascript -->
         
         <div th:insert="fragments :: footer"></div>
-        <script src="js/register.js"> </script>
+        <script src="/js/register.js"></script>
     </body>
 </html>

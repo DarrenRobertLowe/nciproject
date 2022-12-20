@@ -61,6 +61,10 @@ public class DeliveriesController {
             mav.addObject("driver", driver);
             mav.addObject("driverName", driver.getFirstName() + " " + driver.getSurname());
             
+            String driverAddress = driver.getAddress().getFullAddress();
+            mav.addObject("driverAddress", driverAddress);
+            
+            
             if ((user.getDriver().getId()) == driverID) {
                 System.out.println("***** ACCESS GRANTED *****");
                 // get a list deliveries for the specific driver

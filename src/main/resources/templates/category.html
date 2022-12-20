@@ -12,7 +12,7 @@
             <div th:replace="navbar :: navbar"></div>
             
             
-            <div class="row">
+            <div class="row"> <!-- OUTER ROW -->
                 <!-- LEFT COLUMN -->
                 <div th:replace="fragments :: leftcolumn"></div>
                 
@@ -68,8 +68,8 @@
                 
                 <!-- RIGHT COLUMN -->
                 <div th:replace="fragments :: rightcolumn"></div>
-            </div>
-        </div>
+            </div>  <!-- /OUTER ROW -->
+        </div> <!-- /CONTAINER -->
         
         <!-- javascript -->
         <script src="/js/processing.js"></script>

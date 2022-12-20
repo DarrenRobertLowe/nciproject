@@ -29,6 +29,14 @@ public class Driver {
     private String surname;
     
     
+    // FOREIGN KEY
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address", referencedColumnName = "id")
+    private Address address; // this is just a hub from where the driver originates, used for Google Maps.
+    
+    
+    
+    
     public int getId() {
         return id;
     }
@@ -52,4 +60,14 @@ public class Driver {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    
 }

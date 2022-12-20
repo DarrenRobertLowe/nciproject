@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:insert="fragments :: headers">
+        <title>Products</title>
+    </head>
+    
+    
+    <body>
+        <div class="container">
+            <!-- NAVBAR -->
+            <div th:replace="navbar :: navbar"></div>
+            
+            
+            <div class="row">
+                <!-- LEFT COLUMN -->
+                <div th:replace="fragments :: leftcolumn"></div>
+                
+                
+                <!-- CONTENT -->
+                <div class="col">
+                    <div class="row">
+                        <div class="col"></div> <!-- spacer -->
+                        <div class="col-8 col-sm-9 col-md-7 col-lg-6 col-xl-5" id="login-form"> <!-- forms col -->
+                            <br />
+                            <h2 class="form-signin-heading">Welcome to Storeii</h2>
+
+                            <div th:if="${param.error}" class="alert alert-danger">    
+                                 Invalid username and password.
+                            </div>
+
+                            <div th:if="${param.logout}" class="alert alert-success">
+                                You have been logged out.
+                            </div>
+
+                            <form class="form-signin" method="POST" th:action="@{~/processLogin}">
+                                <p>
+                                    <label for="username" class="col-form-label-lg">Username</label>
+                                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+                                </p>
+                                <p>
+                                    <label for="password" class="col-form-label-lg">Password</label>
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                                </p>
+                                <button class="btn btn-lg btn-primary btn-block" type="submit">LOGIN</button>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <p>Don't have an account yet? <p>
+                                <a th:href="@{/register}" class="btn btn-danger">REGISTER NOW</a>
+                            </form>
+                        </div>
+                        <div class="col"></div> <!-- spacer -->
+                    </div>
+                </div> <!-- / CONTENT -->
+                
+                
+               
+                <!-- RIGHT COLUMN -->
+                <div th:replace="fragments :: rightcolumn"></div>
+            </div>  <!-- /OUTER ROW -->
+        </div> <!-- /CONTAINER -->
+        
+        <!-- javascript -->
+        <div th:insert="fragments :: footer"></div>
+        
+    </body>
+</html>

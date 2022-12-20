@@ -1,16 +1,5 @@
 
 safety
--- DROP DATABASE IF EXISTS webstoredb;
--- DROP TABLE IF EXISTS Customer;
--- DROP TABLE IF EXISTS Address;
--- DROP TABLE IF EXISTS Driver;
--- DROP TABLE IF EXISTS Location;
--- DROP TABLE IF EXISTS Supplier;
--- DROP TABLE IF EXISTS Orders;
--- DROP TABLE IF EXISTS SubOrder;
--- DROP TABLE IF EXISTS Product;
--- DROP TABLE IF EXISTS SubOrder_Items;
--- DROP TABLE IF EXISTS OrderItems;
 
 CREATE DATABASE IF NOT EXISTS webstoredb;
 USE webstoredb;
@@ -44,7 +33,9 @@ CREATE TABLE Driver (
     firstName varchar(50),
     surname varchar(50),
     userName varchar(50),
-    userPass varchar(512)
+    userPass varchar(512),
+    address int UNSIGNED,
+    FOREIGN KEY (address) REFERENCES Address(id)
 );
 
 CREATE TABLE Location (
@@ -188,6 +179,9 @@ drop table SupplierOrders;
 /*
 delete from Orders
 where customer_ID IS NULL;
+
+alter table Driver
+rename column hub to address;
 */
 
 

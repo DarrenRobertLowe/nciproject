@@ -8,15 +8,28 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 */
 
 
-form {
-    min-width: 50%;
-    max-width: 50%;
+form{
     margin: auto;
     border-style: solid;
     border-width: 1px;
-    background: gainsboro;
     text-align: center;
 }
+
+
+#register {
+    background-color: linen;
+}
+
+#register .col{
+    min-width: 200px;
+}
+
+#register-select-location {
+    margin: auto;
+    max-width: 60%;
+    min-width: 200px;
+}
+
 
 
 
@@ -79,9 +92,8 @@ input[type='number']{
 }
 
 
-form {
-    background-color: floralwhite;
-}
+
+
 
 .nav-link {
     align-items: center;
@@ -236,12 +248,16 @@ span border {
 }
 
 
-#suborder-container {
+#infocard-container {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 5px;
 }
 
+.card {
+    width: 18rem;
+    background-color: #F8F8F8;
+}
 
 .button-wrapper .btn {
     margin-bottom:5px;
@@ -311,5 +327,18 @@ div {
     border:1px solid black;
 }
 
+form {
+    border:1px dashed red;
+}
+
+
+#leftcolumn{
+    background-color: green;
+}
+
+
+#rightcolumn{
+    background-color: yellow;
+}
 
 */
