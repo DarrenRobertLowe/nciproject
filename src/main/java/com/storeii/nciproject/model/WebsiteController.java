@@ -32,12 +32,67 @@ public class WebsiteController {
     @Autowired
     CartItemRepository cartItemRepository;
     
+    @Autowired
+    LocationRepository locationRepository;
     
     
-    @GetMapping("/accessories")
-    public String getAccessories(Model model) {
-        getNavbar(model);
-        return "accessories";
+    @GetMapping("/")
+    public String home(Model model){
+        getNavbar(model);   // get correct navbar
+        
+        return getIndex(model);
+    }
+    
+    @GetMapping("/index")
+    public String getIndex(Model model) {
+        System.out.println("*** RUNNING INDEX ****");
+        // setup
+        getNavbar(model);   // get correct navbar
+        String userRole = getUserRole();
+        User user = getUser();
+        Location location = null;
+        
+        
+        if (user != null) {
+            if (user.getCustomer() != null) {
+                location = locationRepository.getById(user.getCustomer().getLocation().getId());
+                model.addAttribute("location", location);
+            } else {
+            }
+        }
+        model.addAttribute("userRole", userRole);
+        
+        
+        // setup
+        List<Product> products;
+        
+        if (location != null) {
+            System.out.println("****** LOCATION is " + location.getLocationName());
+        }
+        // get a list of shoes
+        products = productRepository.getProductsByCategory("Shoes");
+        List<Product> shoes = filterProductsByLocation(products, location);
+        model.addAttribute("shoes", shoes);
+        
+        // get a list of coats
+        products = productRepository.getProductsByCategory("Coats");
+        List<Product> coats = filterProductsByLocation(products, location);
+        model.addAttribute("coats", coats);
+        
+        // get a list of clothing
+        products = productRepository.getProductsByCategory("Clothing");
+        List<Product> clothing = filterProductsByLocation(products, location);
+        model.addAttribute("clothing", clothing);
+        
+        // get a list of accessories
+        products = productRepository.getProductsByCategory("Accessories");
+        List<Product> accessories = filterProductsByLocation(products, location);
+        model.addAttribute("accessories", accessories);
+
+        model.addAttribute("image_directory","../assets/img/products/");
+        
+        
+        return "index";
     }
     
     
@@ -83,7 +138,7 @@ public class WebsiteController {
     @GetMapping("/navbar")
     public Model getNavbar(Model model) {
         String userRole = getUserRole();
-        model.addAttribute("userRole", userRole);
+        model.addAttribute("navbarRole", userRole);
         
         System.out.println("STARTING NAVBAR AS " + userRole);
         return model;//"navbar";
@@ -92,11 +147,13 @@ public class WebsiteController {
     @GetMapping("/navbarAlt")
     public ModelAndView getNavbar(ModelAndView model) {
         String userRole = getUserRole();
-        model.addObject("userRole", userRole);
+        model.addObject("navbarRole", userRole);
         
         System.out.println("STARTING NAVBAR AS " + userRole);
         return model;//"navbar";
     }
+    
+    
     
     
     // show products by category
@@ -104,8 +161,8 @@ public class WebsiteController {
     public String getProducts(Model model, @RequestParam String category) {
         // we need to handle anonymous users differently
         String status   = "ANONYMOUS";
-        String location = "none";
-        List<Product> results = new ArrayList(); // list to be added to model
+        String locationName = "none";
+        //List<Product> results = new ArrayList(); // list to be added to model
         Customer customer = null;
         
         // get the user role for the navbar
@@ -120,85 +177,58 @@ public class WebsiteController {
         
         
         // get the customer so we can determine Location
+        Location location = null;
         if (user != null) {
-            customer = user.getCustomer();
-            
-            // get the location
-            if (customer != null) {
-                status = "valid";
-                Location locationObj = customer.getLocation();
-                
-                
-                if (locationObj != null) {
-                    // RETURN ONLY THE ITEMS FROM THE USER'S LOCATION
-                    // get the location name so we can print it, etc
-                    location = locationObj.getLocationName();   
-                    
-                    // we want to return a list of products that belong to the location.
-                    
-                    // get all products
-                    List<Product> products = productRepository.findAll();
-                    System.out.println("********* Size of products list is " + products.size());
-                    for(Product p : products) {
-                        System.out.println("******** Iterating... *********");
-                        
-                        // get all the prodcuts
-                        String categoryMatch = p.getCategory();
-                        
-                        if (categoryMatch.equalsIgnoreCase(category)) {
-                            // results.add(p);
-                            // System.out.println("******** Adding a " +category +" to the list! *********");
-                            
-                            // filter by location
-                            if (p.getSupplier().getLocation().getId() == locationObj.getId()){
-                                results.add(p);
-                                System.out.println("******** Adding a " +category +" to the list! *********");
-                            }
-                        }
-                    }
-                }
+            if (user.getCustomer() != null) {
+                location = locationRepository.getById(user.getCustomer().getLocation().getId());
+                locationName = location.getLocationName();
+                model.addAttribute("locationName", locationName);
+            } else {
+                userRole = "ANONYMOUS";
             }
         }
-        
-        
-        if (customer == null) {
-            // RETURN ALL PRODUCTS FROM ALL LOCATIONS
-            // get all products
-            List<Product> products = productRepository.findAll();
-            System.out.println("********* Size of products list is " + products.size());
-            for(Product p : products) {
-                System.out.println("******** Iterating... *********");
+        model.addAttribute("userRole", userRole);
 
-                // get all the prodcuts
-                String categoryMatch = p.getCategory();
+        
+        List<Product> products;
+        products = productRepository.getProductsByCategory(category);
+        List<Product> results = filterProductsByLocation(products, location);
+        model.addAttribute("products", products);
 
-                if (categoryMatch.equalsIgnoreCase(category)) {
-                    results.add(p);
-                }
-            }
-        }
-        
-        
-        
         
         model.addAttribute("image_directory","../assets/img/products/");
         model.addAttribute("category", category);
         model.addAttribute("results", results);
-        model.addAttribute("location", location);
+        model.addAttribute("locationName", locationName);
         model.addAttribute("status", status);
         return "category";
     }
     
     
-    @GetMapping("/index")
-    public String getAll(Model model) {
+    
+    
+    
+    // FILTER PRODUCTS BY LOCATION
+    public List filterProductsByLocation(List<Product> products, Location location) {
         
-        String userRole = getUserRole();
+        List<Product> returnList = new ArrayList<>();
         
-        getNavbar(model);
-        model.addAttribute("userType", userRole);
-        return "index";
+        for(Product product : products) {
+            if ( location != null ) {
+                if (product.getSupplier().getLocation().getId() == location.getId()) {
+                    // add the product
+                    returnList.add(product);
+                }
+            } else {
+                // not filtered by location so add the product
+                returnList.add(product);
+            }
+        }
+        
+        return returnList;
     }
+    
+    
     
     
     
@@ -265,6 +295,13 @@ public class WebsiteController {
         
         return "productpage"; //return model
     }
+    
+    /*
+    @GetMapping("/accessories")
+    public String getAccessories(Model model) {
+        getNavbar(model);
+        return "accessories";
+    }*/
     
     
     @GetMapping(path = "/orderplaced")

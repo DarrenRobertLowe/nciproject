@@ -39,15 +39,6 @@
         
     <body>
         
-        <!-- SEARCH 
-        <form th:fragment="search"
-            class="d-flex" role="search" action="/search?"
-                                  +"&searchTerm="+searchTerms
-                                  method="GET">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit" id="searchTerms" name="searchTerms">Search</button>
-        </form>
-        -->
         
         
         
@@ -55,11 +46,11 @@
         <!-- NAV BAR -->
         <nav class="navbar navbar-expand-lg bg-light" th:fragment="navbar">
             
-            <div th:switch="${userRole}">
+            <div th:switch="${navbarRole}">
                 <!--/* CUSTOMER */-->
                 <th:block th:case = "CUSTOMER">
                     <div class="container-fluid">
-                      <a class="navbar-brand" href="#">Storeii</a>
+                      <a class="navbar-brand" href="/">Storeii</a>
                       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                       </button>
@@ -68,7 +59,7 @@
                             
                           <!-- HOME -->
                           <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index">Home</a>
+                            <a class="nav-link" aria-current="page" href="index">Home</a>
                           </li>
                           
                           
@@ -108,7 +99,7 @@
                 <!--/* SUPPLIER */-->
                 <th:block th:case = "SUPPLIER">
                     <div class="container-fluid">
-                      <a class="navbar-brand" href="#">Storeii</a>
+                      <a class="navbar-brand" href="/">Storeii</a>
                       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                       </button>
@@ -116,7 +107,7 @@
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                           <!-- HOME -->
                           <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index">Home</a>
+                            <a class="nav-link" aria-current="page" href="index">Home</a>
                           </li>
                           
                           <!-- CATEGRORES -->
@@ -152,14 +143,14 @@
                 <!--/* DRIVER */-->
                 <th:block th:case = "DRIVER">
                     <div class="container-fluid">
-                      <a class="navbar-brand" href="#">Storeii</a>
+                      <a class="navbar-brand" href="/">Storeii</a>
                       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                       </button>
                       <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                           <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index">Home</a>
+                            <a class="nav-link" aria-current="page" href="index">Home</a>
                           </li>
                           
                           
@@ -182,14 +173,14 @@
                 <!--/* DEFAULT (LOGGED OUT) */-->
                 <th:block th:case = "*">
                     <div class="container-fluid">
-                      <a class="navbar-brand" href="#">Storeii</a>
+                      <a class="navbar-brand" href="/">Storeii</a>
                       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                       </button>
                       <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                           <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="index">Home</a>
+                            <a class="nav-link" aria-current="page" href="index">Home</a>
                           </li>
                           <li class="nav-item">
                             <a class="nav-link" href="category?category=Coats">Coats</a>
@@ -203,13 +194,6 @@
                           <li class="nav-item">
                             <a class="nav-link"  href="category?category=Accessories">Accessories</a>
                           </li>
-                          
-                          
-                          <!-- CART -->
-                          <li class="nav-item">
-                              <a class="nav-link" href="cart"><i class="bi bi-cart4"></i>Cart</a>
-                          </li>
-                          
                           
                           <!-- LOGIN / LOGOUT -->
                           <li class="nav-item">

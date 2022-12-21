@@ -22,6 +22,11 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 //import security.services.UserDetailsService;
 
 
@@ -36,6 +41,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @ComponentScan({"com.delivery.request"})
 @EnableWebSecurity
 public class ApplicationSecurityConfig {
+    
     
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -70,10 +76,8 @@ public class ApplicationSecurityConfig {
             .and()
         .formLogin()
             .loginPage("/login")
-            .loginProcessingUrl("/processLogin")
             .defaultSuccessUrl("/index", true)
             .failureUrl("/login.html?error=true")
-            //.failureHandler(authenticationFailureHandler())
             .and()
         .logout()
             .invalidateHttpSession(true)
@@ -105,4 +109,8 @@ public class ApplicationSecurityConfig {
             provider.setPasswordEncoder(passwordEncoder);
             return provider;
     }
+    
+    
+    
+    
 }

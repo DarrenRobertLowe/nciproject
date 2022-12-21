@@ -20,11 +20,11 @@
                 <!-- CONTENT -->
                 <div class="col">
                     
-                    <th:block th:with="location=${location}, category=${category}">
+                    <th:block th:with="locationName=${locationName}, category=${category}">
 
                         <h1 th:text="${category}"></h1>
-                        <div th:unless="${location} == none">
-                            <h3 th:text="'in ' +${location}"></h3>
+                        <div th:unless="${locationName} == none">
+                            <h3 th:text="'in ' +${locationName}"></h3>
                         </div>
 
                         <div th:switch="${status}">

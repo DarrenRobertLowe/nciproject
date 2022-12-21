@@ -254,10 +254,37 @@ span border {
     padding: 5px;
 }
 
+
+
+
 .card {
     width: 18rem;
     background-color: #F8F8F8;
 }
+
+.img-card-top {
+    vertical-align: middle;
+    border-style: none;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+
+.index-card {
+    width: 11rem;
+    background-color: #F8F8F8;
+    margin: 2vh;
+}
+
+.index-card .img-card-top{
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+}
+
+
+
 
 .button-wrapper .btn {
     margin-bottom:5px;
@@ -276,13 +303,7 @@ span border {
     text-align: center;
 }
 
-.img-card-top {
-    vertical-align: middle;
-    border-style: none;
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
+
 
 #removeCartRow {
     float: right;
