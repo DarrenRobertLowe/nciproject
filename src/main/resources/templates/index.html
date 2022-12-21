@@ -17,7 +17,7 @@
 
                 <!-- CONTENT -->
                 <div class="col">
-                    <!-- <div th:replace="fragments :: carousel"></div> -->
+                    <div th:replace="fragments :: carousel"></div>
                     
                     <!-- COATS -->
                     <br/>
@@ -26,8 +26,10 @@
                     <div class="container-fluid">
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${coats}">
-                                <div class="card index-card">
-                                    <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
+                                    <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <!--/* <div th:replace="fragments :: productInfoFragment"></div> */-->
+                                    <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
                             </th:block>
                         </div>
@@ -42,7 +44,8 @@
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${clothing}">
                                 <div class="card index-card">
-                                    <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
                             </th:block>
                         </div>
@@ -57,7 +60,8 @@
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${shoes}">
                                 <div class="card index-card">
-                                    <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
                             </th:block>
                         </div>
@@ -73,7 +77,8 @@
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${accessories}">
                                 <div class="card index-card">
-                                    <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
                             </th:block>
                         </div>
@@ -90,8 +95,15 @@
         </div> <!-- CONTAINER -->
                 
         
-
+        <!-- MODAL -->
+        <div id="product-lightbox" class="modal">
+            <span class="close">&times;</span>
+            <!--/* <div id="modal-content" th:replace="fragments :: productInfoFragment"></div> */-->
+            <div id="caption"></div>
+        </div>
+        
         <div th:replace="fragments :: footer"></div>
         <!-- javascript -->
+        <script src="/js/tooltips.js"></script>
     </body>
 </html>

@@ -295,4 +295,19 @@ public class OrderController {
        return "";
     }
     
+    
+    // MARK ORDER AS CANCELLED / RETURNED
+    @PostMapping(path="/markOrderAsReturned")
+    public String markOrderAsReturned(
+        @RequestParam String orderID
+    ){
+        System.out.println("RUNNING markOrderAsReturned()");
+       Order order = entityManager.find(Order.class, Integer.parseInt(orderID));
+       
+       order.setOrderStatus(Enums.OrderStatus.CANCELLED.ordinal());
+       
+       orderRepository.save(order);
+       
+       return "";
+    }
 }

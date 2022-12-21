@@ -18,6 +18,9 @@
                     <!-- CONTENTS -->
                     <div class="col">
                     <div th:switch="${valid}">
+                        <th:block th:case="false">
+                            <h1>Access Denied!</h1>
+                        </th:block>
                         <th:block th:case="true">
                             <h3 th:with="driverName = ${driverName}"> [[${driverName}]] </h3>
                             <h1> Your Deliveries </h1>
@@ -35,9 +38,6 @@
                             <div th:if="${#lists.isEmpty(orders)}">
                                 <h3>Your cart is currently empty.</h3>
                             </div>
-                        </th:block>
-                        <th:block th:case="false">
-                            <h1>Access Denied!</h1>
                         </th:block>
                     </div>
                 </div>

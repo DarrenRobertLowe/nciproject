@@ -40,50 +40,51 @@ public class DeliveriesController {
     
     @GetMapping("/deliveries")
     public ModelAndView showDeliveries() {
+        boolean valid;
         int readyStatus = Enums.OrderStatus.READY.ordinal();        // get the status value as an int
+        
+        // set the correct navbar
         ModelAndView mav = new ModelAndView("deliveries");
-        
-        // get the user role for the navbar
-        String userRole = webController.getUserRole();
         webController.getNavbar(mav);
-        mav.addObject("userType", userRole);
         
-        // now we have the supplier object we can check if the User id corresponds.
+        // get the user principal
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserPrincipal userPrincipal = (UserPrincipal)principal;         // make sure you're logged in or you'll get an error!
-        boolean valid = false;
         
-        if (principal instanceof UserDetails) {
-            User user = userPrincipal.getUser();
+        // verify the user
+        if (principal == "anonymousUser") {
+            System.out.println("Attempted access of secure location by anonymous user!");
+            valid = false;
+        } else {
+            // we're logged in
+            UserPrincipal userPrincipal = (UserPrincipal)principal;     // get the logged in user's details
+            User user = userPrincipal.getUser();                        // get the logged in user
+            Driver driverObj = user.getDriver();                        // get the driver belonging to the user
             
-            int driverID = user.getDriver().getId();
-            Driver driver = entityManager.find(Driver.class, driverID); // get the entity
-            mav.addObject("driver", driver);
-            mav.addObject("driverName", driver.getFirstName() + " " + driver.getSurname());
-            
-            String driverAddress = driver.getAddress().getFullAddress();
-            mav.addObject("driverAddress", driverAddress);
-            
-            
-            if ((user.getDriver().getId()) == driverID) {
+            if (driverObj == null) {
+                System.out.println("No driver found for logged in User!");
+                valid = false;
+            } else {
                 System.out.println("***** ACCESS GRANTED *****");
-                // get a list deliveries for the specific driver
+                valid = true;
+            
+                int driverID = user.getDriver().getId();
+                Driver driver = entityManager.find(Driver.class, driverID); // get the entity
+                mav.addObject("driver", driver);
+                mav.addObject("driverName", driver.getFirstName() + " " + driver.getSurname());
+
+                String driverAddress = driver.getAddress().getFullAddress();
+                mav.addObject("driverAddress", driverAddress);
+
                 List<Order> orders = orderRepository.findOrdersByDriverAndOrderStatus(driver, readyStatus);
-                
-                
+
                 mav.addObject("orders", orders);
                 valid = true;
             }
-            else {
-                System.out.println("***** ACCESS DENIED *****");
-                valid = false;
-            }
-        } else {
-            System.out.println("***** ACCESS DENIED *****");
-            valid = false;
         }
         
         mav.addObject("valid", valid);
         return mav;
     }
-}
+    
+    
+} // end of class

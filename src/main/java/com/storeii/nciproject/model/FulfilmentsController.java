@@ -35,7 +35,6 @@ public class FulfilmentsController {
     @Autowired
     private SubOrderItemRepository subOrderItemRepository;
     
-
     @Autowired
     private EntityManager entityManager;
     
@@ -45,21 +44,16 @@ public class FulfilmentsController {
     
     @GetMapping("/fulfilments")
     public ModelAndView showFulfilments() {
-        String status = "ANONYMOUS";
-        boolean valid = false;
-        int supplierID = -1;
+        // set the correct navbar
         ModelAndView mav = new ModelAndView("fulfilments");
+        webController.getNavbar(mav);
         
-        // now we have the supplier object we can check if the User id corresponds.
+        boolean valid;
+        
+        // get the user principal
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
-        
-        
-        // get the user role for the navbar
-        String userRole = webController.getUserRole();
-        webController.getNavbar(mav);
-        mav.addObject("userType", userRole);
-        
+        // verify the user
         if (principal == "anonymousUser") {
             System.out.println("Attempted access of secure location by anonymous user!");
             valid = false;
@@ -72,7 +66,6 @@ public class FulfilmentsController {
             
             if (supplierObj == null) {
                 System.out.println("No supplier found for logged in User!");
-                status = "INVALID";
                 valid = false;
             } else {
                 System.out.println("***** ACCESS GRANTED *****");
@@ -81,7 +74,6 @@ public class FulfilmentsController {
                 
                 // EntityManager will return a different object to our supplierObj, so we need
                 // to explicitely return that using the id, which is the same for both.
-                System.out.println("supplierID: " + supplierObj.getId());
                 Supplier supplier = entityManager.find(Supplier.class, supplierObj.getId());    // get the supplier entity. this might be redundant)
                 
                 String storeName = supplier.getStoreName();

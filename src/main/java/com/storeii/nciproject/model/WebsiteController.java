@@ -160,15 +160,15 @@ public class WebsiteController {
     @GetMapping("/category")
     public String getProducts(Model model, @RequestParam String category) {
         // we need to handle anonymous users differently
-        String status   = "ANONYMOUS";
+        String status = "invalid";
         String locationName = "none";
         //List<Product> results = new ArrayList(); // list to be added to model
         Customer customer = null;
         
         // get the user role for the navbar
-        String userRole = getUserRole();
+        //String userRole = getUserRole();
         getNavbar(model);
-        model.addAttribute("userType", userRole);
+        //model.addAttribute("userType", userRole);
         
         
         // get the user so we can determine Customer
@@ -183,12 +183,13 @@ public class WebsiteController {
                 location = locationRepository.getById(user.getCustomer().getLocation().getId());
                 locationName = location.getLocationName();
                 model.addAttribute("locationName", locationName);
+                status = "valid";
             } else {
-                userRole = "ANONYMOUS";
+                //userRole = "ANONYMOUS";
             }
         }
-        model.addAttribute("userRole", userRole);
-
+        //model.addAttribute("userRole", userRole);
+        
         
         List<Product> products;
         products = productRepository.getProductsByCategory(category);

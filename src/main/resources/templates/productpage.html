@@ -15,94 +15,11 @@
                 <!-- COLUMN -->
                 <div th:replace="fragments :: leftcolumn"></div>
                 
+                
                 <!-- CONTENT -->
-                    <div th:with="myProduct = ${product}">
-
-                        <!-- PRODUCT NAME -->
-                        <div class="row">
-                            <h2 th:text="${myProduct.getProductName()}"></h2>
-                            <!-- SUPPLIED BY... -->
-                            <h3 class="supplier-name" th:text="'supplied by ' + ${myProduct.getSupplier().getStoreName()}"></h3>
-                        </div>
-                        
-                        
-                        <div class="row">
-                            <!-- PRODUCT IMAGE -->
-                            <div class="col">
-                                    <img id="product-image" th:alt="${myProduct.getProductName()}" class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
-                            </div>
-                            
-                            
-                            <!-- PRODUCT DESCRIPTION -->
-                            <div class="col">
-                                <div class="row">
-                                    <p th:text="${myProduct.getProductDescription()}"></p>
-                                </div>
-                                <div class="row">
-                                    <h4>Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</h4> <!-- the price here is formatted for 2 decimal places -->
-                                </div>
-                                
-                                <div th:switch="${status}">
-                                    <th:block th:case = "ANONYMOUS">
-                                        <p class="warning-text">You must be logged in as a customer to add items to your cart!</p>
-                                        <div class="centered">
-                                            <br/>
-                                            <a class="btn btn-primary btn-lg" href="/login">Login</a>
-                                        </div>
-                                    </th:block>
-                                    
-                                    <th:block th:case = "AUTHORIZED">
-                                        <div th:switch="${isProductInCart}">
-                                            <div th:case="true">
-                                                <p>This item is already in your cart.</p>
-                                                <div class="centered">
-                                                    <br/>
-                                                    <a class="btn btn-primary btn-lg" href="/cart">Go To Cart</a>
-                                                </div>
-                                            </div> <!--/* /case for isProductInCart = true */-->
-
-                                            <!--/* Ensure the product is in stock */-->
-                                            <p th:text="'In Stock: ' + ${myProduct.getStock()} "> </p>
-                                            <div th:unless="${myProduct.getStock()} == 0">
-                                                <th:block th:case="false">
-                                                    <!-- ADD TO CART FORM -->
-                                                    <form id="purchase-form" action="/webstoredb/addCartItem?"
-                                                    +"&customerID="+customerID
-                                                    +"&productID=" +productID
-                                                    +"&quantity=" +quantity
-                                                    method="post"}>
-                                                          <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
-                                                          <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
-                                                          <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
-                                                          <label for="fname"><h5>Quantity:</h5></label>
-                                                          <input type="number" id="quantity" min="1" th:max="${myProduct.getStock()}" value="1" name="quantity" onchange="calculate()"><br/>
-                                                          
-
-
-                                                            <!-- SUBTOTAL -->
-                                                            <div class="sub-total">
-                                                                <span>Total: €</span><span id="subtotal"></span>
-                                                            </div>
-
-
-                                                          <input type="submit" value="Add to Cart">
-                                                    </form>
-                                                </th:block> <!--/* /case for isProductInCart = false */-->
-                                            </div> <!--/* / is in stock */-->
-                                            
-                                            <div th:if="${myProduct.getStock()} == 0">
-                                                <p class="warning-text"> This product is currently out of stock. </p>
-                                            </div>
-                                        </div> <!--/* /switch for isProductInCart */-->
-                                    </th:block> <!--/* /case = "AUTHORIZED" */-->
-                                </div> <!--/* /switch for status */-->
-
-                            </div>
-                        </div>
-                    </div>
-                    
-
+                <div th:insert="fragments :: productInfoFragment"></div>
                 <!--/* /CONTENT  */-->
+                
                 
                 <!-- COLUMN -->
                 <div th:replace="fragments :: rightcolumn"></div>

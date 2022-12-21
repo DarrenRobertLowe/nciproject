@@ -26,18 +26,16 @@
                         <div th:unless="${locationName} == none">
                             <h3 th:text="'in ' +${locationName}"></h3>
                         </div>
-
-                        <div th:switch="${status}">
-                            <th:block th:case = "ANONYMOUS">
-                                <div th:unless="${#lists.isEmpty(results)}">
-                                    <div class="border border-danger" id="products-page-warning">
-                                        <b class="warning-text"> You are not logged in as a customer. You will not be able to purchase any products!</b>
-                                        <br/>
-                                        <a class="btn btn-primary btn-lg" href="/login">Login</a>
-                                        <br/>
-                                    </div>
+                        
+                        <div th:if="${status} == 'invalid'">
+                            <div th:unless="${#lists.isEmpty(results)}">
+                                <div class="border border-danger" id="products-page-warning">
+                                    <b class="warning-text"> You are not logged in as a customer. You will not be able to purchase any products!</b>
+                                    <br/>
+                                    <a class="btn btn-primary btn-lg" href="/login">Login</a>
+                                    <br/>
                                 </div>
-                            </th:block>
+                            </div>
                         </div>
 
 
