@@ -78,7 +78,23 @@
         
         
         
-        
+        <th:block th:fragment="categories">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <th:block th:each="product : ${results}">
+                    <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                        <div class="card mx-auto">
+                            <img th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}">   
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${product.getProductName()}"></h5>
+                                <h6 class="card-subtitle mb-2 text-muted" th:text="'From ' +${product.getSupplier().getStoreName()}"></h6>
+                                <p class="card-text" th:text="${product.getProductDescription()}"></p>
+                                <a class="btn btn-primary" th:href="'productpage?identifier='+${product.getIdentifier()}">See Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </th:block>
         
         
         

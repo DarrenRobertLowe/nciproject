@@ -109,6 +109,7 @@ public class SearchController {
         mav.addObject("userRole", userRole);
         mav.addObject("location", locationString);
         mav.addObject("searchTerms", searchTerms);
+        mav.addObject("image_directory", "../assets/img/products/");
         return mav;
     }
     
@@ -156,8 +157,12 @@ public class SearchController {
             // DIRECTLY MATCHING ITEM
             String productName = product.getProductName().toLowerCase();
             productName = cleanString(productName);
+            String category = product.getCategory();
+            String supplier = product.getSupplier().getStoreName();
+            String searchString = (productName + category + supplier);
+            searchString = searchString.toLowerCase();
             
-            if (productName.contains(searchTerms)) {
+            if (searchString.contains(searchTerms)) {
                 System.out.println(product.getProductName() + " is a direct match!");
                 
                 // now we'll prevent added products that contain the wrong location.

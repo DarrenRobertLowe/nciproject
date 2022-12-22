@@ -24,6 +24,8 @@ form{
     min-width: 200px;
 }
 
+
+
 #register-select-location {
     margin: auto;
     max-width: 60%;
@@ -240,8 +242,9 @@ span border {
 #grandTotal {
     text-align:right;
     padding:1rem;
-    float:right;
+    /*float:right;*/
 }
+
 
 #leftcolumn, #rightcolumn {
     background-color: #F8F8F8;
@@ -338,7 +341,13 @@ span border {
 
 
 
-
+#sticky-cart {
+    align-self: flex-start;
+    padding: 0em 0em 0.5em 0em;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+}
 
 /* DEBUG STUFF AFTER THIS POINT */
 /*

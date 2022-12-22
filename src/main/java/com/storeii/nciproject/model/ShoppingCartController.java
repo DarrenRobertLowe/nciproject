@@ -84,12 +84,7 @@ public class ShoppingCartController {
         
         
         // we'll need the User to check if the id corresponds to the cart
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("AUTH IS " + auth);
-        
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("Prinicpal is " + principal);
-        
         
         if (principal == "anonymousUser") {
             System.out.println("USER IS NOT LOGGED IN!");
@@ -159,15 +154,19 @@ public class ShoppingCartController {
     
     @PostMapping("/cart/quantityDown")
     public void quantityDown(String cartItemId){
-        System.out.println("Reducing quantity...");
-        // get the entity
+        // get the cartItem
         CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
         
-        int qty = cartItem.getQuantity();
-        
-        if (qty > 1) {
-            cartItem.setQuantity(qty-1);
-            cartItemRepository.save(cartItem);
+        if (verifyCartItem(cartItem)) {
+            System.out.println("Reducing quantity...");
+
+
+            int qty = cartItem.getQuantity();
+
+            if (qty > 1) {
+                cartItem.setQuantity(qty-1);
+                cartItemRepository.save(cartItem);
+            }
         }
     }
     
@@ -175,34 +174,59 @@ public class ShoppingCartController {
 
     @PostMapping("/cart/quantityUp")
     public void quantityUp(String cartItemId){
-        System.out.println("Increasing quantity...");
-        
-        // get the entity
+        // get the cartItem
         CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
-        
-        int qty = cartItem.getQuantity();
-        cartItem.setQuantity(qty+1);
-        cartItemRepository.save(cartItem);
+
+        if (verifyCartItem(cartItem)) {
+            System.out.println("Increasing quantity...");
+
+            int qty = cartItem.getQuantity();
+            cartItem.setQuantity(qty+1);
+            cartItemRepository.save(cartItem);
+        }
     }
     
     
     @PostMapping("/cart/removeItem")
     public void removeCartItem(String cartItemId){
-        System.out.println("Deleting item from cart...");
-        
-        // get the entity
+        // get the cartItem
         CartItem cartItem = entityManager.find(CartItem.class, Integer.parseInt(cartItemId));
         
-        cartItemRepository.deleteById(cartItem.getId());
-        //cartItemRepository.save();
-        
-        //System.out.println("The deleted cartItem was : " + cartItemId);
+        if (verifyCartItem(cartItem)) {
+            System.out.println("Deleting item from cart...");
+            cartItemRepository.deleteById(cartItem.getId());
+        }
     }
+   
+    
+        
+        
+    // VERIFY CARTITEM
+    // Verifies a CartItem belongs to the logged in user.
+    public boolean verifyCartItem(CartItem cartItem){    
+        // we'll need the User to check if the id corresponds to the cart
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        if (principal == "anonymousUser") {
+            System.out.println("USER IS NOT LOGGED IN!");
+            return false;
+        } else {
+            User user = webController.getUser();
+            int userCustomerId = user.getCustomer().getId();
+            
+            // get the cartItem
+            if (userCustomerId != cartItem.getCustomer().getId()) {
+                System.out.println("CartItem did not match user customer id! Access denied!");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+        
     
     
     
-    
-    //@CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/quantity-fragment")
     public ModelAndView getQuantity(int cartItemId) {
         CartItem cartItem = entityManager.find(CartItem.class, cartItemId);
@@ -217,68 +241,83 @@ public class ShoppingCartController {
     @Transactional
     @PostMapping(path="/checkout")
     public ResponseEntity checkout(String customerId){
-        ModelAndView mav = new ModelAndView();
-        String message = "";
+        // we'll need the User to check if the id corresponds to the cart
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
-        // get the entity
-        Customer customer = entityManager.find(Customer.class, Integer.parseInt(customerId));
-        
-        List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);
-        
-        
-        // Create a new Order object, the details are added later with addOrder();
-        Order order = new Order();
-        orderRepository.save(order);
-        
-        
-        // create a list for the orderItems
-        List<OrderItem> oList = new ArrayList<>();
-        
-        // Create an OrderItem for each CartItem
-        for(CartItem cItem : cartItems){
-            int quantity     = cItem.getQuantity();
-            double unitPrice = cItem.getProduct().getPrice();
-            Product product  = cItem.getProduct();
-            
-            
-            OrderItem oItem  = new OrderItem(order, product, quantity, unitPrice);
-            
-            // Update the product's stock
-            int stock = product.getStock();
-            
-            if (stock < quantity) {
-                System.out.println("STOCK < QUANTITY!");
-                message = "Oops! Looks like someone got there before you! The quantity of your order exceeds the number of items in stock. Please try again with a smaller quantity.";
-                mav.addObject("message", message);
-                //return mav;//
-                //orderproblem(mav);
-                return new ResponseEntity<String>(message, HttpStatus.BAD_REQUEST);
-            } else {
-                System.out.println("stock is fine.");
-                product.setStock(stock - quantity);
-                productRepository.save(product);
-                
-                // save the item
-                orderItemRepository.save(oItem);
-                oList.add(oItem); // add the orderItem to the list
+        if (principal == "anonymousUser") {
+            System.out.println("USER IS NOT LOGGED IN!");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            User user = webController.getUser();
+            int userCustomer = user.getCustomer().getId();
+            if (userCustomer != Integer.parseInt(customerId)) {
+                System.out.println("Customer did not match user! Access denied!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            
+            ModelAndView mav = new ModelAndView();
+            String message = "";
+            
+            // get the entity
+            Customer customer = entityManager.find(Customer.class, Integer.parseInt(customerId));
+
+            List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);
+
+
+            // Create a new Order object, the details are added later with addOrder();
+            Order order = new Order();
+            orderRepository.save(order);
+
+
+            // create a list for the orderItems
+            List<OrderItem> oList = new ArrayList<>();
+
+            // Create an OrderItem for each CartItem
+            for(CartItem cItem : cartItems){
+                int quantity     = cItem.getQuantity();
+                double unitPrice = cItem.getProduct().getPrice();
+                Product product  = cItem.getProduct();
+
+
+                OrderItem oItem  = new OrderItem(order, product, quantity, unitPrice);
+
+                // Update the product's stock
+                int stock = product.getStock();
+
+                if (stock < quantity) {
+                    System.out.println("STOCK < QUANTITY!");
+                    message = "Oops! Looks like someone got there before you! The quantity of your order exceeds the number of items in stock. Please try again with a smaller quantity.";
+                    mav.addObject("message", message);
+                    //return mav;//
+                    //orderproblem(mav);
+                    return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+                } else {
+                    System.out.println("stock is fine.");
+                    product.setStock(stock - quantity);
+                    productRepository.save(product);
+
+                    // save the item
+                    orderItemRepository.save(oItem);
+                    oList.add(oItem); // add the orderItem to the list
+                }
+            }
+
+            System.out.println("_____orderItems_____\n"+ oList.toString());
+
+
+            // Run the addOrder() method
+            OrderController controller = new OrderController();
+            controller.addOrder(order, customer, oList, subOrderItemRepository, orderRepo);
+
+            // EMPTY THE CART CONTENTS
+            cartItemRepository.deleteAllByCustomer(customer);
+
+            // REDIRECT
+            mav.addObject("message", message);
+            //return mav;//
+            return new ResponseEntity<>(HttpStatus.OK);
+            //return "/checkout";
         }
-        
-        System.out.println("_____orderItems_____\n"+ oList.toString());
-        
-        
-        // Run the addOrder() method
-        OrderController controller = new OrderController();
-        controller.addOrder(order, customer, oList, subOrderItemRepository, orderRepo);
-        
-        // EMPTY THE CART CONTENTS
-        cartItemRepository.deleteAllByCustomer(customer);
-        
-        // REDIRECT
-        mav.addObject("message", message);
-        //return mav;//
-        return new ResponseEntity<>(HttpStatus.OK);
-        //return "/checkout";
     }
     
     

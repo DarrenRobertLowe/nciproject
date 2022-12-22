@@ -4,10 +4,12 @@
  */
 package com.storeii.nciproject.model;
 
+import com.storeii.nciproject.User;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,39 +40,59 @@ public class CartItemController {
     // this allows us to refer to the objects easily
     private EntityManager entityManager;
     
+    @Autowired
+    private WebsiteController webController;
     
     
     // Add new
-    // Note: try catch wrapping here will break the server
     @GetMapping(path="/addCartItem")
     public ModelAndView addCartItem (
         @RequestParam int customerID,
         @RequestParam int productID,
         @RequestParam int quantity
     ) {
-      CartItem cartItem = new CartItem();
-      
-      // get the entities
-      Customer customer = entityManager.find(Customer.class, customerID);
-      Product product   = entityManager.find(Product.class, productID);
-      
-      // set the fields
-      cartItem.setCustomer(customer);
-      cartItem.setProduct(product);
-      cartItem.setQuantity(quantity);
-      
-      // save the repo
-      cartItemRepository.save(cartItem);
-      
-      String redirectURL = "redirect:/cart?customerID=" + customerID;
-      
-      return new ModelAndView(redirectURL);
-      //return "redirect:/cart?customerID=" + customerID;
+        // check the user is logged in.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal == "anonymousUser") {
+            System.out.println("USER IS NOT LOGGED IN!");
+        } else {
+            CartItem cartItem = new CartItem();
+
+            // get the entities
+            Customer customer = entityManager.find(Customer.class, customerID);
+            
+            User user = webController.getUser();
+            int userCustomer = user.getCustomer().getId();
+            if (userCustomer != customerID) {
+                System.out.println("Customer did not match user! Access denied!");
+                String redirectURL = "/login";
+                return new ModelAndView(redirectURL);
+            }
+            
+            
+            Product product   = entityManager.find(Product.class, productID);
+            
+            // set the fields
+            cartItem.setCustomer(customer);
+            cartItem.setProduct(product);
+            cartItem.setQuantity(quantity);
+
+            // save the repo
+            cartItemRepository.save(cartItem);
+            
+            String redirectURL = "redirect:/cart?customerID=" + customerID;
+            return new ModelAndView(redirectURL);
+        }
+        
+        // in the event of a problem
+        String redirectURL = "/login";
+        return new ModelAndView(redirectURL);
     }
     
     
     
-     // find all
+    // find all
     @GetMapping(path="/getCartItems")
     public Iterable<CartItem> getCartItems() {
       return cartItemRepository.findAll();  // This returns a JSON or XML with the users

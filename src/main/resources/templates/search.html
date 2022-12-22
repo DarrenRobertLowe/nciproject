@@ -60,9 +60,23 @@
                         <div class="col" th:with="results = ${results}, location=${location}">
                             <h3 th:unless="${location} == none"> belonging to [[${location}]] </h3>
                             
-                            <div th:each="result : ${results}">
-                                <span> Name: [[${result.getProductName()}]] </span>
-                                <span th:with="id = ${result.getIdentifier()}"> URL: <a th:href="@{/productpage?identifier=__${id}__}">view product</a> </span>
+                            <div class="row row-cols-1 row-cols-md-2 g-4">
+                                <th:block th:each="result : ${results}">
+                                    <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                                        <div class="card mx-auto">
+                                            <span> Name: [[${result.getProductName()}]] </span>
+                                            <div th:with="id = ${result.getIdentifier()}">
+                                                <img th:alt="${result.getProductName()}" class="img-card-top" th:src="${image_directory + result.getImage()}">  
+                                                <br/>
+                                                <br/>
+                                                <h6 class="card-subtitle mb-2 text-muted" th:text="'From ' +${result.getSupplier().getStoreName()}"></h6>
+                                                <p class="card-text" th:text="${result.getProductDescription()}"></p>
+                                                <p><a class="btn btn-primary" th:href="'productpage?identifier='+${result.getIdentifier()}">See Details</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
                             </div>
                         </div> 
                     </div>
