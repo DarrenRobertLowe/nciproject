@@ -17,18 +17,21 @@
 
                 <!-- CONTENT -->
                 <div class="col">
-                    <div th:replace="fragments :: carousel"></div>
+                    <!--/*<div th:replace="fragments :: carousel"></div> */-->
                     
                     <!-- COATS -->
                     <br/>
                     <br/>
-                    <h2>Coats</h2>
+                    <h2><a href="/category?category=Coats">Coats</a></h2>
                     <div class="container-fluid">
-                        <div class="row flex-nowrap overflow-auto">
+                        <div class="row">
                             <th:block th:each="product : ${coats}">
                                 <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
+                                    
+                                    <!--/* we could call the model on-click here and in the model have the fragment */-->
                                     <!--/* <div th:replace="fragments :: productInfoFragment"></div> */-->
+                                    
                                     <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
                             </th:block>
@@ -39,11 +42,11 @@
                     <!-- Clothing -->
                     <br/>
                     <br/>
-                    <h2>Clothing</h2>
+                    <h2><a href="/category?category=Clothing">Clothes</a></h2>
                     <div class="container-fluid">
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${clothing}">
-                                <div class="card index-card">
+                                <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
                                     <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
@@ -55,11 +58,11 @@
                     <!-- Shoes -->
                     <br/>
                     <br/>
-                    <h2>Shoes</h2>
+                    <h2><a href="/category?category=Shoes">Shoes</a></h2>
                     <div class="container-fluid">
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${shoes}">
-                                <div class="card index-card">
+                                <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
                                     <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>
@@ -72,11 +75,11 @@
                     <!-- Accessories -->
                     <br/>
                     <br/>
-                    <h2>Accessories</h2>
+                    <h2><a href="/category?category=Accessories">Accessories</a></h2>
                     <div class="container-fluid">
                         <div class="row flex-nowrap overflow-auto">
                             <th:block th:each="product : ${accessories}">
-                                <div class="card index-card">
+                                <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
                                     <a th:href="'productpage?identifier='+${product.getIdentifier()}" class="stretched-link"></a>
                                 </div>

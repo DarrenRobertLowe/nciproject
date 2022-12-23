@@ -376,8 +376,12 @@
                                                   <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
                                                   <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
                                                   <label for="fname"><h5>Quantity:</h5></label>
-                                                  <input type="number" id="quantity" min="1" th:max="${myProduct.getStock()}" value="1" name="quantity" onchange="calculate()"><br/>
-
+                                                  <!-- <input type="number" id="quantity" min="1" th:max="${myProduct.getStock()}" value="1" name="quantity" onchange="calculate()"> --><br/>
+                                                  <div class="number-input">
+                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(); event.preventDefault(); calculate()" ></button>
+                                                    <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
+                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(); event.preventDefault(); calculate()" class="plus"></button>
+                                                  </div>
 
 
                                                     <!-- SUBTOTAL -->
@@ -386,7 +390,7 @@
                                                     </div>
 
 
-                                                  <input type="submit" value="Add to Cart">
+                                                  <input type="submit" class="btn btn-warning" value="Add to Cart">
                                             </form>
                                         </th:block> <!--/* /case for isProductInCart = false */-->
                                     </div> <!--/* / is in stock */-->

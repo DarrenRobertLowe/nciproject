@@ -7,6 +7,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     Author     : Main
 */
 
+a {
+    color: #777;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ff6666
+}
+
+
+#header-image {
+    margin:auto;
+    width:100%;
+}
 
 form{
     margin: auto;
@@ -100,10 +114,33 @@ input[type='number']{
 }
 
 
+.navbar-header{
+    text-align:center;
+}
+
+.navbar-toggle {
+    text-align:center;
+    float: none;
+    margin-right:0;
+}
+
+
+
+#search-container{
+    margin-top: auto;
+    margin-bottom: 0px;
+    text-align:right;
+    clear:both;
+    margin-right:0;
+}
+
+
+
+
 .nav-link {
     align-items: center;
     display: flex;
-}
+} 
 
 
 #product-image-container {
@@ -349,6 +386,70 @@ span border {
     top: 0px;
 }
 
+
+
+input[type="number"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.number-input {
+  border: 2px solid #ddd;
+  display: inline-flex;
+}
+
+.number-input,
+.number-input * {
+  box-sizing: border-box;
+}
+
+.number-input button {
+  outline:none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+}
+
+.number-input button:before,
+.number-input button:after {
+  display: inline-block;
+  position: absolute;
+  content: '';
+  width: 1rem;
+  height: 2px;
+  background-color: #212121;
+  transform: translate(-50%, -50%);
+}
+.number-input button.plus:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.number-input input[type=number] {
+  font-family: sans-serif;
+  max-width: 5rem;
+  padding: .5rem;
+  border: solid #ddd;
+  border-width: 0 2px;
+  font-size: 1.5rem;
+  height: 3rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+
 /* DEBUG STUFF AFTER THIS POINT */
 /*
 .row {
@@ -372,6 +473,13 @@ form {
     border:1px dashed red;
 }
 
+#navbar {
+    background-color: lavender;
+}
+.container{
+    border: 1px dashed yellow;
+    width:100%;
+}
 
 #leftcolumn{
     background-color: green;
@@ -381,5 +489,7 @@ form {
 #rightcolumn{
     background-color: yellow;
 }
+
+
 
 */

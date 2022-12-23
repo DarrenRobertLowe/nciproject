@@ -23,7 +23,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication // this is for convenience and adds @Configuration, @EnableAutoConfiguration, @ComponentScan so we don't have to.
 @EntityScan
-public class NciprojectApplication implements CommandLineRunner { //  { //is part of the mysql connection tutorial, not sure if needed
+public class NciprojectApplication implements CommandLineRunner { // is part of the mysql connection tutorial, not sure if needed
 
         // for jdbc
         @Autowired

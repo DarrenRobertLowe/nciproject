@@ -7,6 +7,7 @@ package com.storeii.nciproject.model;
 import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -51,7 +52,7 @@ public class WebsiteController {
         String userRole = getUserRole();
         User user = getUser();
         Location location = null;
-        
+        int itemsPerCategory = 5;   // how many of each category to display on the front page
         
         if (user != null) {
             if (user.getCustomer() != null) {
@@ -63,7 +64,7 @@ public class WebsiteController {
         model.addAttribute("userRole", userRole);
         
         
-        // setup
+        // Show a randomized list of items per category
         List<Product> products;
         
         if (location != null) {
@@ -71,22 +72,35 @@ public class WebsiteController {
         }
         // get a list of shoes
         products = productRepository.getProductsByCategory("Shoes");
-        List<Product> shoes = filterProductsByLocation(products, location);
-        model.addAttribute("shoes", shoes);
+        List<Product> shoes = filterProductsByLocation(products, location);         // get the products
+        Collections.shuffle(shoes);                                                 // suffle the list
+        itemsPerCategory = Integer.min(itemsPerCategory, shoes.size());             // limit the list to the number of items
+        shoes = shoes.subList(0, itemsPerCategory);                                 // create a subList of the list
+        model.addAttribute("shoes", shoes);                                         // add that to the model
+        
         
         // get a list of coats
         products = productRepository.getProductsByCategory("Coats");
         List<Product> coats = filterProductsByLocation(products, location);
+        Collections.shuffle(coats);                                                 // suffle the list
+        itemsPerCategory = Integer.min(itemsPerCategory, coats.size());             // limit the list to the number of items
+        coats = coats.subList(0, itemsPerCategory);                                 // create a subList of the list
         model.addAttribute("coats", coats);
         
         // get a list of clothing
         products = productRepository.getProductsByCategory("Clothing");
         List<Product> clothing = filterProductsByLocation(products, location);
+        Collections.shuffle(clothing);                                              // suffle the list
+        itemsPerCategory = Integer.min(itemsPerCategory, clothing.size());          // limit the list to the number of items
+        clothing = clothing.subList(0, itemsPerCategory);                           // create a subList of the list
         model.addAttribute("clothing", clothing);
         
         // get a list of accessories
         products = productRepository.getProductsByCategory("Accessories");
         List<Product> accessories = filterProductsByLocation(products, location);
+        Collections.shuffle(accessories);                                           // suffle the list
+        itemsPerCategory = Integer.min(itemsPerCategory, accessories.size());       // limit the list to the number of items
+        accessories = accessories.subList(0, itemsPerCategory);                     // create a subList of the list
         model.addAttribute("accessories", accessories);
 
         model.addAttribute("image_directory","../assets/img/products/");
