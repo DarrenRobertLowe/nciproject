@@ -4,9 +4,9 @@
  */
 package com.storeii.nciproject;
 
-import com.storeii.nciproject.model.Customer;
-import com.storeii.nciproject.model.Driver;
-import com.storeii.nciproject.model.Supplier;
+import com.storeii.nciproject.model.Customer.Customer;
+import com.storeii.nciproject.model.deliveries.Driver;
+import com.storeii.nciproject.model.fulfilments.Supplier;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
