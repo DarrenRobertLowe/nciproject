@@ -23,12 +23,15 @@ import org.springframework.web.servlet.ModelAndView;
 public class RegistrationController {
     
     @Autowired
-    LocationRepository locationRepo;
-
+    CountyRepository countyRepository;
+    
     @GetMapping("/register")
-    public String getAll(Model model) {
-        List<Location> locations = locationRepo.findAll();
-        model.addAttribute("locations", locations);
+    public String getCountiesForRegistration(Model model) {
+        //List<Location> locations = locationRepo.findAll();
+        //model.addAttribute("locations", locations);
+        
+        List<County> counties = countyRepository.findAll();
+        model.addAttribute("counties", counties);
         
         return "register";
     }

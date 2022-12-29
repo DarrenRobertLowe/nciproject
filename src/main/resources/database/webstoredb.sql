@@ -66,12 +66,10 @@ CREATE TABLE Orders (
     location_ID int UNSIGNED,
     date varchar(10),
     time varchar(8),
-    -- OrderItems int UNSIGNED,
     FOREIGN KEY (customer_ID) REFERENCES Customer(id),
     FOREIGN KEY (address_ID) REFERENCES Address(id),
     FOREIGN KEY (driver_ID) REFERENCES Driver(id),
     FOREIGN KEY (location_ID) REFERENCES Location(id)
-    -- FOREIGN KEY (OrderItems_ID) REFERENCES OrderItems(id)
 );
 
 -- SET FOREIGN_KEY_CHECKS=1;
@@ -157,6 +155,22 @@ CREATE TABLE User (
 );
 
 
+CREATE TABLE Counties (
+	id int UNSIGNED auto_increment PRIMARY KEY,
+    county varchar(10),
+    location int UNSIGNED,
+    FOREIGN KEY (location) REFERENCES Location(id)
+);
+
+/*
+CREATE TABLE LocationCounties (
+	county int UNSIGNED,
+    location int UNSIGNED,
+    PRIMARY KEY (county, location)
+);
+*/
+
+
 /* REFRESH TABLES - don't forget to re-create them after
 SET FOREIGN_KEY_CHECKS = 0;
 drop table Orders;
@@ -177,11 +191,10 @@ drop table SupplierOrders;
 */
 
 /*
-delete from Orders
-where customer_ID IS NULL;
 
-alter table Driver
-rename column hub to address;
+update Driver
+set address = 68
+where id = 3;
 */
 
 

@@ -26,7 +26,6 @@
                           +"&surname=" +surname
                           +"&userName=" +userName
                           +"&userPass=" +userPass
-                          +"&location=" +location
                           +"&addressLine1="+addressLine1
                           +"&addressLine2="+addressLine2
                           +"&city="+city
@@ -58,7 +57,7 @@
 
                                 <!-- PASSWORD -->
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Password" id="userPass" name="userPass" required>
+                                    <input type="password" class="form-control" placeholder="Password" id="userPass" name="userPass" required>
                                 </div>
 
                                 <!-- CONFIRM PASSWORD
@@ -66,7 +65,7 @@
                                   -- no name tag and will not be submitted, it's just for validation.
                                   -->
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="ConfirmPassword" id="confirmPassword" required>
+                                    <input type="password" class="form-control" placeholder="ConfirmPassword" id="confirmPassword" required>
                                 </div>
 
                                 <br />
@@ -80,7 +79,14 @@
                                 <input type="text" class="form-control" placeholder="Address Line 1" id="addressLine1" name="addressLine1" required>
                                 <input type="text" class="form-control" placeholder="Address Line 2" id="addressLine2" name="addressLine2" required>
                                 <input type="text" class="form-control" placeholder="City" id="city" name="city" required>
-                                <input type="text" class="form-control" placeholder="County" id="county" name="district" required>
+                                
+                                <!-- COUNTY DROPDOWN MENU -->
+                                <span> County:
+                                    <select id="county" name="district">
+                                        <option th:each="county : ${counties}" th:value=${county.getCounty()} th:text=${county.getCounty()}></option>
+                                    </select>
+                                    <!-- <input type="text" class="form-control" placeholder="County" id="county" name="district" required> -->
+                                    <span></span>
                                 <input type="text" class="form-control" placeholder="Eircode" id="postcode" name="postcode" required>
 
                                 <div hidden="true">
@@ -93,7 +99,8 @@
                                 <br />
                             </div>
                         </div>
-
+                        
+                        <!--/*
                         <div class="row">
                             <div class="col" id="register-select-location">
                                 <h2>Select Location</h2>
@@ -107,7 +114,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        */-->
+                        
                         <div class="row">
                             <div class="col">
                                 <!-- SUBMIT OR BACK TO LOGIN -->

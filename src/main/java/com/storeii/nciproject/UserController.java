@@ -7,11 +7,15 @@ package com.storeii.nciproject;
 import com.storeii.nciproject.UserRepository;
 import com.storeii.nciproject.model.Address;
 import com.storeii.nciproject.model.AddressController;
+import com.storeii.nciproject.model.County;
+import com.storeii.nciproject.model.CountyRepository;
 import com.storeii.nciproject.model.Customer;
 import com.storeii.nciproject.model.CustomerController;
 import com.storeii.nciproject.model.CustomerRepository;
 import com.storeii.nciproject.model.Driver;
 import com.storeii.nciproject.model.DriverController;
+import com.storeii.nciproject.model.Location;
+import com.storeii.nciproject.model.LocationRepository;
 import com.storeii.nciproject.model.Supplier;
 import com.storeii.nciproject.model.SupplierController;
 import javax.persistence.EntityManager;
@@ -59,8 +63,13 @@ public class UserController {
     DriverController driverController;
     
     @Autowired
+    LocationRepository locationRepository;
+    
+    @Autowired
     PasswordEncoder passwordEncoder;    // this loads bCryptEncoder via the CustomSecurityConfig class
     
+    @Autowired
+    CountyRepository countyRepository;
     
     @RequestMapping("/perform_login")
     public String loginPage() { 
@@ -119,8 +128,7 @@ public class UserController {
         @RequestParam String surname,
         @RequestParam String userName,
         @RequestParam String userPass,
-        //@RequestParam String role,
-        @RequestParam String location,
+        //@RequestParam String location,
         @RequestParam String addressLine1,
         @RequestParam String addressLine2,
         @RequestParam String city,
@@ -156,7 +164,12 @@ public class UserController {
         // CREATE CUSTOMER
         //CustomerController cc = new CustomerController();
         System.out.println("********* encryptedPass is " + encryptedPass);
-        Customer newCustomer = customerController.addCustomer(firstName, surname, userName, encryptedPass, addressId, location);
+        
+        County county = countyRepository.getByCounty(district);
+        Location location = county.getLocation();//locationRepository.getByCounties(county);
+        String locationId = Integer.toString(location.getId());
+        //
+        Customer newCustomer = customerController.addCustomer(firstName, surname, userName, encryptedPass, addressId, locationId);
         
         // SET THE CUSTOMER
         user.setCustomer(newCustomer);

@@ -10,6 +10,7 @@ package com.storeii.nciproject.model;
  */
 
 import com.storeii.nciproject.Enums;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,23 @@ public class LocationController {
     }
     
     
-    
-    
-    @Autowired
-    private EntityManager entityManager;
-    
-    
-    
+    @GetMapping(path="/getLocationCounties")
+    public String getLocationCounties(@RequestParam int locationId) {
+        Location location = locationRepository.getById(locationId);
+        String header = ("COUNTIES IN " + location.getLocationName() + ": ");
+        
+        String countiesString = header;
+        
+        List<County> counties = location.getCounties();
+        
+        for(County c :counties) {
+            countiesString += " ";
+            countiesString += c.getCounty();
+        }
+        countiesString += ".";
+        
+        System.out.println(countiesString);
+        return countiesString;
+    }
     
 }

@@ -36,6 +36,9 @@ public class WebsiteController {
     @Autowired
     LocationRepository locationRepository;
     
+    @Autowired
+    CustomerRepository customerRepository;
+    
     
     @GetMapping("/")
     public String home(Model model){
@@ -56,7 +59,9 @@ public class WebsiteController {
         
         if (user != null) {
             if (user.getCustomer() != null) {
+                Customer customer = customerRepository.getById(user.getCustomer().getId());
                 location = locationRepository.getById(user.getCustomer().getLocation().getId());
+                model.addAttribute("customer", customer);
                 model.addAttribute("location", location);
             } else {
             }
