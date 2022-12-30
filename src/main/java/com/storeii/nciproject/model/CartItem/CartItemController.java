@@ -30,7 +30,7 @@ import org.springframework.web.servlet.view.RedirectView;
  */
 
 @RestController // This means that this class is a Controller and @Rest means we don't need to include @ResponseBody
-@RequestMapping(path="/webstoredb") // This means URL's start with /webstoredb (after Application path)
+//@RequestMapping(path="/webstoredb") // This means URL's start with /webstoredb (after Application path)
 public class CartItemController {
     @Autowired
     private CartItemRepository cartItemRepository;

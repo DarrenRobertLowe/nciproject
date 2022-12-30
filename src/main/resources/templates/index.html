@@ -12,7 +12,7 @@
             
             <div class="row">
                 <!-- COLUMN -->
-                <div class="col-2" id="leftside"></div>
+                <div th:replace="fragments :: leftcolumn"></div>
                 
                 <!-- CONTENT -->
                 <div class="col">
@@ -47,7 +47,7 @@
                     <br/>
                     <h2><a href="/category?category=Clothing">Clothes</a></h2>
                     <div class="container-fluid">
-                        <div class="row flex-nowrap overflow-auto">
+                        <div class="row">
                             <th:block th:each="product : ${clothing}">
                                 <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
@@ -63,7 +63,7 @@
                     <br/>
                     <h2><a href="/category?category=Shoes">Shoes</a></h2>
                     <div class="container-fluid">
-                        <div class="row flex-nowrap overflow-auto">
+                        <div class="row">
                             <th:block th:each="product : ${shoes}">
                                 <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
@@ -80,7 +80,7 @@
                     <br/>
                     <h2><a href="/category?category=Accessories">Accessories</a></h2>
                     <div class="container-fluid">
-                        <div class="row flex-nowrap overflow-auto">
+                        <div class="row">
                             <th:block th:each="product : ${accessories}">
                                 <div class="card index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}">
                                     <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}"> 
@@ -94,7 +94,7 @@
                 </div> <!-- CONTENT -->
                 
                 <!-- COLUMN -->
-                <div class="col-2"id="rightside"></div>
+                <div th:replace="fragments :: rightcolumn"></div>
             </div> <!-- OUTER ROW) -->
             
             

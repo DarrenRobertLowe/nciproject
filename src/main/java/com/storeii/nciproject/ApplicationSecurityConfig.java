@@ -62,16 +62,16 @@ public class ApplicationSecurityConfig {
         /* .antMatchers must be ordered from most
          *  specific to least specific (more general)
          */
-        http.csrf()
-            .disable()
+        
+        http
         .authorizeRequests()
-                /*
-            .antMatchers("/cart").hasAuthority("USER")
-            .antMatchers("/fulfilments").hasAuthority("SUPPLIER")
-            .antMatchers("/deliveries").hasAuthority("DRIVER")
+            .antMatchers("/cart").hasAuthority("CUSTOMER")
+            .antMatchers("/cart/*").hasAuthority("CUSTOMER")
+            //.antMatchers("/fulfilments").hasAuthority("SUPPLIER")
+            //.antMatchers("/deliveries").hasAuthority("DRIVER")
             .antMatchers("/addUser","/js/*","/css/*","/assets/**","/*").permitAll()
-            .antMatchers("/**").hasAuthority("ADMIN")
-            .anyRequest().denyAll()*/
+            //.antMatchers("/webstoredb/*").hasAuthority("ADMIN")
+            //.anyRequest().denyAll()
             .antMatchers("/**").permitAll()
             .and()
         .formLogin()
@@ -85,7 +85,10 @@ public class ApplicationSecurityConfig {
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .logoutSuccessUrl("/loggedout.html")
             .permitAll();
-            return http.build();
+            
+        http.csrf().disable(); // This is temporary and should be enabled for security reasons
+        
+        return http.build();
     }
     
     

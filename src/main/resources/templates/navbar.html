@@ -228,16 +228,16 @@
                     
                 </div>
         </th:block>
-    
+        
         <!-- SEARCH -->
         <div id="search-container" class="col-xs-12 col-sm" th:fragment="navsearch">
-            <div class="d-flex" action="/search?searchTerms="+&searchTerms method="GET">
-                    <input class="form-control me-2" placeholder="Search" aria-label="Search" id="searchTerms" name="searchTerms"  />
+            <form class="d-flex" action="/search?searchTerms="+&searchTerms method="GET">
+                <input class="form-control me-2" placeholder="Search" aria-label="Search" id="searchTerms" name="searchTerms"  />
 
-                    <button type="submit" class="btn btn-outline-success">
-                        <i class="bi bi-search"></i>
-                    </button>
-            </div>
+                <button type="submit" class="btn btn-outline-success">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
         </div>
     
     

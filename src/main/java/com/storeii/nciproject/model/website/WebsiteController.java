@@ -63,7 +63,8 @@ public class WebsiteController {
         String userRole = getUserRole();
         User user = getUser();
         Location location = null;
-        int itemsPerCategory = 5;   // how many of each category to display on the front page
+        int maxItemsPerCategory = 5;                // how many of each category to display on the front page
+        int itemsPerCategory = maxItemsPerCategory;
         
         if (user != null) {
             if (user.getCustomer() != null) {
@@ -79,43 +80,45 @@ public class WebsiteController {
         
         // Show a randomized list of items per category
         List<Product> products;
-        
+
         if (location != null) {
             System.out.println("****** LOCATION is " + location.getLocationName());
         }
         // get a list of shoes
-        products = productRepository.getProductsByCategory("Shoes");
-        List<Product> shoes = filterProductsByLocation(products, location);         // get the products
-        Collections.shuffle(shoes);                                                 // suffle the list
+        products = productRepository.getProductsByCategory("Shoes");                // get all shoes
+        List<Product> shoes = filterProductsByLocation(products, location);         // filter by location
+        Collections.shuffle(shoes);                                                 // shuffle the list
         itemsPerCategory = Integer.min(itemsPerCategory, shoes.size());             // limit the list to the number of items
         shoes = shoes.subList(0, itemsPerCategory);                                 // create a subList of the list
         model.addAttribute("shoes", shoes);                                         // add that to the model
-        
+        itemsPerCategory = maxItemsPerCategory;                                     // reset the itemsPerCategory value
         
         // get a list of coats
-        products = productRepository.getProductsByCategory("Coats");
-        List<Product> coats = filterProductsByLocation(products, location);
-        Collections.shuffle(coats);                                                 // suffle the list
+        products = productRepository.getProductsByCategory("Coats");                // get all coats
+        List<Product> coats = filterProductsByLocation(products, location);         // filter by location
+        Collections.shuffle(coats);                                                 // shuffle the list
         itemsPerCategory = Integer.min(itemsPerCategory, coats.size());             // limit the list to the number of items
         coats = coats.subList(0, itemsPerCategory);                                 // create a subList of the list
         model.addAttribute("coats", coats);
+        itemsPerCategory = maxItemsPerCategory;                                     // reset the itemsPerCategory value
         
         // get a list of clothing
-        products = productRepository.getProductsByCategory("Clothing");
-        List<Product> clothing = filterProductsByLocation(products, location);
-        Collections.shuffle(clothing);                                              // suffle the list
+        products = productRepository.getProductsByCategory("Clothing");             // get all clothing
+        List<Product> clothing = filterProductsByLocation(products, location);      // filter by location
+        Collections.shuffle(clothing);                                              // shuffle the list
         itemsPerCategory = Integer.min(itemsPerCategory, clothing.size());          // limit the list to the number of items
         clothing = clothing.subList(0, itemsPerCategory);                           // create a subList of the list
         model.addAttribute("clothing", clothing);
+        itemsPerCategory = maxItemsPerCategory;                                     // reset the itemsPerCategory value
         
         // get a list of accessories
-        products = productRepository.getProductsByCategory("Accessories");
-        List<Product> accessories = filterProductsByLocation(products, location);
-        Collections.shuffle(accessories);                                           // suffle the list
+        products = productRepository.getProductsByCategory("Accessories");          // get all accessories
+        List<Product> accessories = filterProductsByLocation(products, location);   // filter by location
+        Collections.shuffle(accessories);                                           // shuffle the list
         itemsPerCategory = Integer.min(itemsPerCategory, accessories.size());       // limit the list to the number of items
         accessories = accessories.subList(0, itemsPerCategory);                     // create a subList of the list
         model.addAttribute("accessories", accessories);
-
+        
         model.addAttribute("image_directory","../assets/img/products/");
         
         

@@ -13,7 +13,8 @@
         <!-- COLUMN -->
         <div th:fragment="leftcolumn" class="col-1 d-none d-sm-block" id="leftcolumn"></div>
         
-        
+        <!-- COLUMN -->
+        <div th:fragment="rightcolumn" class="col-1 d-none d-sm-block" id="rightcolumn"></div>
         
         <!-- HEADER INFO -->
         <div th:fragment="headers">
@@ -101,8 +102,7 @@
         
         
         
-        <!-- COLUMN -->
-        <div th:fragment="rightcolumn" class="col-1 d-none d-sm-block" id="rightcolumn"></div>
+        
         
         
         <!-- SUPPLIER FULFILMENT CARD -->
@@ -340,7 +340,7 @@
                             <p th:text="${myProduct.getProductDescription()}"></p>
                         </div>
                         <div class="row">
-                            <h4>Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</h4> <!-- the price here is formatted for 2 decimal places -->
+                            <h4>Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</h4> <!--/* the price here is formatted for 2 decimal places */-->
                         </div>
 
                         <div th:switch="${status}">
@@ -367,7 +367,7 @@
                                     <div th:unless="${myProduct.getStock()} == 0">
                                         <th:block th:case="false">
                                             <!-- ADD TO CART FORM -->
-                                            <form id="purchase-form" action="/webstoredb/addCartItem?"
+                                            <form id="purchase-form" action="/addCartItem?"
                                             +"&customerID="+customerID
                                             +"&productID=" +productID
                                             +"&quantity=" +quantity

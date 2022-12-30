@@ -65,14 +65,19 @@ public class SearchController {
     @Autowired
     SubOrderRepository subOrderRepository;
     
+    @Autowired
+    WebsiteController websiteController;
     
     @GetMapping(value = "/search")
     public @ResponseBody ModelAndView search (
         @RequestParam String searchTerms
     ){
+        
+        
         // create a Model And View to return
         String locationString = "none";
         ModelAndView mav = new ModelAndView();
+        websiteController.getNavbar(mav);   // get correct navbar
         Queue results = new LinkedList();
         
         // get rid of punctuation and make the search terms lowercase
