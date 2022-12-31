@@ -22,6 +22,7 @@ import com.storeii.nciproject.model.Customer.Customer;
 import com.storeii.nciproject.model.Address.Address;
 import com.storeii.nciproject.Enums;
 import com.storeii.nciproject.User;
+import com.storeii.nciproject.UserService;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,6 +69,9 @@ public class SearchController {
     @Autowired
     WebsiteController websiteController;
     
+    @Autowired
+    UserService userService;
+    
     @GetMapping(value = "/search")
     public @ResponseBody ModelAndView search (
         @RequestParam String searchTerms
@@ -85,14 +89,14 @@ public class SearchController {
         searchTerms = searchTerms.toLowerCase();
         
         // we need to get the user context so we know how to filter the results
-        String userRole = webController.getUserRole();
+        String userRole = userService.getUserRole();
         
         // ANONYMOUS USERS
         if (userRole.equalsIgnoreCase("ANONYMOUS")) {
             results = searchProducts(searchTerms, null);
         } else {
             // Signed in
-            User user = webController.getUser();
+            User user = userService.getUser();
             
             // if it's a customer
             if (user.getCustomer() != null) {

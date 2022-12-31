@@ -6,8 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     
+    
     <body>
-        
         <div class="row">
                 
         <!-- COLUMN -->
@@ -16,10 +16,13 @@
         <!-- COLUMN -->
         <div th:fragment="rightcolumn" class="col-1 d-none d-sm-block" id="rightcolumn"></div>
         
+        
+        
         <!-- HEADER INFO -->
         <div th:fragment="headers">
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!--/* <title th:text="${page-title}"></title>  // to use this we would need to make page-title an object on each page */-->
             
             <!-- Favicon-->
             <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
@@ -99,7 +102,186 @@
         
         
         
+        <!-- INDEX CARDS -->
+        <div class="card index-card" th:fragment="index-card" data-toggle="tooltip" data-placement="top" th:title="${product.getProductName() + '&#10; from ' + product.getSupplier().getStoreName()}" th:with="preString = ${'calcIndex('}, uid = ${ 'indexSubtotal' + product.id}">
+            
+            <!--/* the th:attr below runs calcIndex(id, price, 1) as soon as you click the item */-->
+            <img id="index-image" th:alt="${product.getProductName()}" class="img-card-top" th:src="${image_directory + product.getImage()}" data-bs-toggle="modal" th:data-bs-target="'#quick-look' + ${product.id}" th:attr="onclick=|${preString}| + '\'' + |${uid}| + '\'' + ',' +${product.price} +', 1)'">
+            
+            <!-- Modal -->
+            <div class="modal fade" th:id="'quick-look' + ${product.id}" tabindex="-1" th:aria-labelledby="${product.getProductName()}" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                    
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel" th:text="${product.getProductName()}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                    
+                  <div class="modal-body">
+                    <!-- PRODUCT IMAGE -->
+                    <div class="row">
+                        <div class="col" id="product-image-container">
+                            <img id="product-image" th:alt="${product.getProductName()}" class="img-fluid" th:src="${image_directory + product.getImage()}">
+                        </div>
+                        <div class="col">
+                            <h2 th:text="'from ' + ${product.getSupplier().getStoreName()}"></h2>
+                            
+                            <div class="row">
+                                <div th:insert="fragments :: add-to-cart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p th:text="${product.productDescription}"></p>
+                        </div>
+                    </div>
+                  </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" th:with="productPage = 'location.href=\'productpage?identifier=' + ${product.getIdentifier()} + '\''" th:attr="onclick=|${productPage}|">View Product</button> 
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
         
+        
+        
+        
+        <!-- PRODUCT PAGE -->
+        <th:block th:fragment="productInfoFragment">
+            <div th:with="product = ${product}">
+                
+                <!-- PRODUCT NAME -->
+                <div class="row">
+                    <h2 th:text="${product.getProductName()}"></h2>
+                    <!-- SUPPLIED BY... -->
+                    <h3 class="supplier-name" th:text="'supplied by ' + ${product.getSupplier().getStoreName()}"></h3>
+                </div>
+                
+                
+                <div class="row">
+                    <!-- PRODUCT IMAGE -->
+                    <div class="col" id="product-image-container">
+                        <img id="product-image" th:alt="${product.getProductName()}" class="img-fluid" th:src="${image_directory + product.getImage()}">
+                    </div>
+                    
+                    
+                    <!-- PRODUCT DESCRIPTION -->
+                    <div class="col">
+                        <div class="row">
+                            <p th:text="${product.getProductDescription()}"></p>
+                        </div>
+                        <div th:insert="fragments :: add-to-cart"></div>
+                    </div>
+                </div>
+            </div> <!-- END OF PRODUCT PAGE -->
+        </th:block>
+        
+        
+        
+        
+        <!-- ADD TO CART FRAGMENT -->
+        <div th:fragment="add-to-cart">
+            <div class="row">
+                <h4>Price: €[[${#numbers.formatDecimal(product.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</h4> <!--/* the price here is formatted for 2 decimal places */-->
+            </div>
+            
+            <!--/* if we are NOT A CUSTOMER... */-->
+            <div th:unless="${userRole == 'CUSTOMER'}">
+                <p class="warning-text">You must be logged in as a customer to add items to your cart!</p>
+                <div class="centered">
+                    <br/>
+                    <a class="btn btn-primary btn-lg" href="/login">Login</a>
+                </div>
+            </div>
+            
+            <!--/* if we ARE a CUSTOMER... */-->
+            <div th:if="${userRole} == 'CUSTOMER'">
+                
+                 <!--/* IF THE PRODUCT IS ALREADY IN OUR CART */-->
+                <div th:if="${isProductInCart}">
+                    <p>This item is already in your cart.</p>
+                    <div class="centered">
+                        <br/>
+                        <a class="btn btn-primary btn-lg" href="/cart">Go To Cart</a>
+                    </div>
+                </div> <!--/* /case for isProductInCart = true */-->
+                
+                
+                <!--/* IF THE PRODUCT IS __NOT__ ALREADY IN OUR CART */-->
+                <div th:unless="${isProductInCart}">
+                    <p th:text="'In Stock: ' + ${product.getStock()} "> </p>
+                    
+                    <!--/* IF THE PRODUCT IS OUT OF STOCK */-->
+                    <div th:if="${product.getStock()} == 0">
+                        <p class="warning-text"> This product is currently out of stock. </p>
+                    </div>
+                    
+                    
+                    <!--/* IF THE PRODUCT IS IN STOCK */-->
+                    <div th:if="${product.getStock()} > 0" th:with="uid = ${ 'indexSubtotal' + product}">
+                        <!-- ADD TO CART FORM -->
+                        <form id="purchase-form" action="/addCartItem?"
+                        +"&customerID="+customerID
+                        +"&productID=" +productID
+                        +"&quantity=" +quantity
+                        method="post"}>
+                                <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
+                                <input type="hidden" id="product" name="productID" th:value="${product.getId()}">
+                                <input type="hidden" id="price" th:value="${product.getPrice()}">
+                                <label for="fname"><h5>Quantity:</h5></label>
+                                
+                                
+                                <!--/* here we need different behaviors depending on the page we're on */-->
+                                <!--/* Not on the index page */-->
+                                <div th:if="${isIndex} == null">
+                                    <div class="number-input">
+                                        <button this.parentNode.querySelector(''input[type=number]'').stepDown(); event.preventDefault(); calculate(); class="minus"></button>
+                                        <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
+                                        <button this.parentNode.querySelector(''input[type=number]'').stepUp(); event.preventDefault(); calculate(); class="plus"></button>
+                                    </div>
+                                </div>
+                                
+                                <!--/* On the index page */-->
+                                <!--/* The following th:with concatenates a lot of arguments together in order to pass a javascript method the uid (unique id for this item) */-->
+                                <div th:if="${isIndex} == true"
+                                     th:with="
+                                     stepDownString = ${'this.parentNode.querySelector(''input[type=number]'').stepDown(); event.preventDefault(); calcIndex('}
+                                     ,stepUpString = ${'this.parentNode.querySelector(''input[type=number]'').stepUp(); event.preventDefault(); calcIndex('}
+                                     ">
+                                    
+                                    <div class="number-input">
+                                        <button th:attr="onclick=|${stepDownString}| + '\'' + |${uid}| + '\'' + ', price.value, quantity.value)'" class="minus"></button>
+                                        <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
+                                        <button th:attr="onclick=|${stepUpString}| + '\'' + |${uid}| + '\'' + ', price.value, quantity.value)'" class="plus"></button>
+                                    </div>
+                                </div>
+                                
+                                
+                                <!-- SUBTOTAL -->
+                                <div class="sub-total">
+                                    
+                                    <div th:if="${isIndex} == null">
+                                        <span >Total: €</span><span id="subtotal"></span>
+                                    </div>
+                                    
+                                    <div th:if="${isIndex} == true">
+                                        <span th:id="${uid}" >Total: €</span>
+                                        <p th:text="'is index: ' + ${isIndex} "> </p>
+                                    </div>
+                                </div>
+                                
+
+                              <input type="submit" class="btn btn-warning" value="Add to Cart">
+                        </form>
+                    </div> <!--/* / is in stock */-->
+                </div>
+            </div> <!--/* /case = "CUSTOMER" */-->
+        </div>
         
         
         
@@ -315,97 +497,6 @@
         
         
         
-        <!-- PRODUCT PAGE -->
-        <th:block th:fragment="productInfoFragment">
-            <div th:with="myProduct = ${product}">
-                
-                <!-- PRODUCT NAME -->
-                <div class="row">
-                    <h2 th:text="${myProduct.getProductName()}"></h2>
-                    <!-- SUPPLIED BY... -->
-                    <h3 class="supplier-name" th:text="'supplied by ' + ${myProduct.getSupplier().getStoreName()}"></h3>
-                </div>
-
-
-                <div class="row">
-                    <!-- PRODUCT IMAGE -->
-                    <div class="col" id="product-image-container">
-                        <img id="product-image" th:alt="${myProduct.getProductName()}" class="img-fluid" th:src="${image_directory + myProduct.getImage()}">
-                    </div>
-
-
-                    <!-- PRODUCT DESCRIPTION -->
-                    <div class="col">
-                        <div class="row">
-                            <p th:text="${myProduct.getProductDescription()}"></p>
-                        </div>
-                        <div class="row">
-                            <h4>Price: €[[${#numbers.formatDecimal(myProduct.getPrice(), 0, 'COMMA', 2, 'POINT')}]]</h4> <!--/* the price here is formatted for 2 decimal places */-->
-                        </div>
-
-                        <div th:switch="${status}">
-                            <th:block th:case = "ANONYMOUS">
-                                <p class="warning-text">You must be logged in as a customer to add items to your cart!</p>
-                                <div class="centered">
-                                    <br/>
-                                    <a class="btn btn-primary btn-lg" href="/login">Login</a>
-                                </div>
-                            </th:block>
-
-                            <th:block th:case = "AUTHORIZED">
-                                <div th:switch="${isProductInCart}">
-                                    <div th:case="true">
-                                        <p>This item is already in your cart.</p>
-                                        <div class="centered">
-                                            <br/>
-                                            <a class="btn btn-primary btn-lg" href="/cart">Go To Cart</a>
-                                        </div>
-                                    </div> <!--/* /case for isProductInCart = true */-->
-
-                                    <!--/* Ensure the product is in stock */-->
-                                    <p th:text="'In Stock: ' + ${myProduct.getStock()} "> </p>
-                                    <div th:unless="${myProduct.getStock()} == 0">
-                                        <th:block th:case="false">
-                                            <!-- ADD TO CART FORM -->
-                                            <form id="purchase-form" action="/addCartItem?"
-                                            +"&customerID="+customerID
-                                            +"&productID=" +productID
-                                            +"&quantity=" +quantity
-                                            method="post"}>
-                                                  <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
-                                                  <input type="hidden" id="product" name="productID" th:value="${myProduct.getId()}">
-                                                  <input type="hidden" id="price" th:value="${myProduct.getPrice()}">
-                                                  <label for="fname"><h5>Quantity:</h5></label>
-                                                  <!-- <input type="number" id="quantity" min="1" th:max="${myProduct.getStock()}" value="1" name="quantity" onchange="calculate()"> --><br/>
-                                                  <div class="number-input">
-                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(); event.preventDefault(); calculate()" ></button>
-                                                    <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
-                                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(); event.preventDefault(); calculate()" class="plus"></button>
-                                                  </div>
-
-
-                                                    <!-- SUBTOTAL -->
-                                                    <div class="sub-total">
-                                                        <span>Total: €</span><span id="subtotal"></span>
-                                                    </div>
-
-
-                                                  <input type="submit" class="btn btn-warning" value="Add to Cart">
-                                            </form>
-                                        </th:block> <!--/* /case for isProductInCart = false */-->
-                                    </div> <!--/* / is in stock */-->
-
-                                    <div th:if="${myProduct.getStock()} == 0">
-                                        <p class="warning-text"> This product is currently out of stock. </p>
-                                    </div>
-                                </div> <!--/* /switch for isProductInCart */-->
-                            </th:block> <!--/* /case = "AUTHORIZED" */-->
-                        </div> <!--/* /switch for status */-->
-
-                    </div>
-                </div>
-            </div> <!-- END OF PRODUCT PAGE -->
-        </th:block>
         
         
         

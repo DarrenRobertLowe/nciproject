@@ -17,6 +17,7 @@ import com.storeii.nciproject.model.CartItem.CartItemRepository;
 import com.storeii.nciproject.model.CartItem.CartItem;
 import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
+import com.storeii.nciproject.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -68,7 +69,8 @@ public class ShoppingCartController {
     @Autowired
     private ProductRepository productRepository;
     
-    
+    @Autowired
+    private UserService userService;
     
     @Autowired
     private WebsiteController webController;
@@ -89,7 +91,7 @@ public class ShoppingCartController {
         double deliveryCost = 6.0;
         
         // get the user role for the navbar
-        String userRole = webController.getUserRole();
+        String userRole = userService.getUserRole();
         webController.getNavbar(mav);
         mav.addObject("userType", userRole);
         
@@ -221,7 +223,7 @@ public class ShoppingCartController {
             System.out.println("USER IS NOT LOGGED IN!");
             return false;
         } else {
-            User user = webController.getUser();
+            User user = userService.getUser();
             int userCustomerId = user.getCustomer().getId();
             
             // get the cartItem
@@ -258,7 +260,7 @@ public class ShoppingCartController {
             System.out.println("USER IS NOT LOGGED IN!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            User user = webController.getUser();
+            User user = userService.getUser();
             int userCustomer = user.getCustomer().getId();
             if (userCustomer != Integer.parseInt(customerId)) {
                 System.out.println("Customer did not match user! Access denied!");
@@ -368,7 +370,7 @@ public class ShoppingCartController {
             System.out.println("CANNOT EMPTY CART - USER IS NOT LOGGED IN!");
             valid = false;
         } else {
-            User user = webController.getUser();
+            User user = userService.getUser();
             int userCustomerId = user.getCustomer().getId();
             customer = entityManager.find(Customer.class, customerId);
                     

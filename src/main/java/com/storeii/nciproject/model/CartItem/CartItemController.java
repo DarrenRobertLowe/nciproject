@@ -5,10 +5,12 @@
 package com.storeii.nciproject.model.CartItem;
 
 import com.storeii.nciproject.User;
+import com.storeii.nciproject.UserService;
 import com.storeii.nciproject.model.Customer.Customer;
 import com.storeii.nciproject.model.Customer.CustomerRepository;
 import com.storeii.nciproject.model.products.Product;
 import com.storeii.nciproject.model.products.ProductRepository;
+import com.storeii.nciproject.model.website.CartService;
 import com.storeii.nciproject.model.website.WebsiteController;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +48,13 @@ public class CartItemController {
     private EntityManager entityManager;
     
     @Autowired
+    private CartService cartService;
+    
+    @Autowired
     private WebsiteController webController;
     
+    @Autowired
+    private UserService userService;
     
     // Add new
     @GetMapping(path="/addCartItem")
@@ -62,12 +69,12 @@ public class CartItemController {
         if (principal == "anonymousUser") {
             System.out.println("USER IS NOT LOGGED IN!");
         } else {
-            CartItem cartItem = new CartItem();
-
             // get the entities
             Customer customer = entityManager.find(Customer.class, customerID);
+            Product product   = entityManager.find(Product.class, productID);
             
-            User user = webController.getUser();
+            // make sure customer is allowed to add to this cart
+            User user = userService.getUser();
             int userCustomer = user.getCustomer().getId();
             if (userCustomer != customerID) {
                 System.out.println("Customer did not match user! Access denied!");
@@ -75,14 +82,26 @@ public class CartItemController {
                 return new ModelAndView(redirectURL);
             }
             
+            // declare a CartItem
+            CartItem cartItem;
             
-            Product product   = entityManager.find(Product.class, productID);
+            // before we create a new cartItem, check if the product is already in the cart
+            // this way we can avoid duplicate products in the cart and set the quantity correctly
+            cartItem = cartService.checkForProductInCart(customer, product);    // this returns the CartItem if the product already exists
+            if (cartItem == null) {
+                cartItem = new CartItem();      // if it doesn't already exist, create a new cartItem.
+                cartItem.setQuantity(quantity); // we can just set the quantity to the provided amount
+            } else {
+                int existingQty = cartItem.getQuantity();       // get the existing quantity
+                cartItem.setQuantity(quantity + existingQty);   // add the given quantity to the existing quantity
+            }
             
-            // set the fields
+            
+            // set the other fields
             cartItem.setCustomer(customer);
             cartItem.setProduct(product);
-            cartItem.setQuantity(quantity);
-
+            
+            
             // save the repo
             cartItemRepository.save(cartItem);
             

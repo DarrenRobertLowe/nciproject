@@ -14,6 +14,7 @@ import com.storeii.nciproject.model.CartItem.CartItemRepository;
 import com.storeii.nciproject.model.CartItem.CartItem;
 import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
+import com.storeii.nciproject.UserService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,17 +37,25 @@ import org.springframework.web.servlet.ModelAndView;
 public class WebsiteController {
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
     
     @Autowired
-    CartItemRepository cartItemRepository;
+    private CartItemRepository cartItemRepository;
     
     @Autowired
-    LocationRepository locationRepository;
+    private LocationRepository locationRepository;
     
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     
+    @Autowired
+    private CartService cartService;
+    
+    @Autowired
+    private WebsiteResourcesService resources;
+    
+    @Autowired
+    private UserService userService;
     
     @GetMapping("/")
     public String home(Model model){
@@ -60,30 +69,36 @@ public class WebsiteController {
         System.out.println("*** RUNNING INDEX ****");
         // setup
         getNavbar(model);   // get correct navbar
-        String userRole = getUserRole();
-        User user = getUser();
+        
+        //  get the user and userRole
+        String userRole = userService.getUserRole();
+        model.addAttribute("userRole", userRole);
+        
+        
         Location location = null;
+        Customer customer = null;
         int maxItemsPerCategory = 5;                // how many of each category to display on the front page
         int itemsPerCategory = maxItemsPerCategory;
         
+        User user = userService.getUser();
         if (user != null) {
             if (user.getCustomer() != null) {
-                Customer customer = customerRepository.getById(user.getCustomer().getId());
-                location = locationRepository.getById(user.getCustomer().getLocation().getId());
+                customer = customerRepository.getById(user.getCustomer().getId());
                 model.addAttribute("customer", customer);
+                
+                //customerId = Integer.toString(customer.getId());
+                int customerId = customer.getId();
+                model.addAttribute("customerId", customerId);
+                
+                location = locationRepository.getById(user.getCustomer().getLocation().getId());
                 model.addAttribute("location", location);
-            } else {
             }
         }
-        model.addAttribute("userRole", userRole);
         
         
         // Show a randomized list of items per category
         List<Product> products;
-
-        if (location != null) {
-            System.out.println("****** LOCATION is " + location.getLocationName());
-        }
+        
         // get a list of shoes
         products = productRepository.getProductsByCategory("Shoes");                // get all shoes
         List<Product> shoes = filterProductsByLocation(products, location);         // filter by location
@@ -119,46 +134,15 @@ public class WebsiteController {
         accessories = accessories.subList(0, itemsPerCategory);                     // create a subList of the list
         model.addAttribute("accessories", accessories);
         
-        model.addAttribute("image_directory","../assets/img/products/");
+        model.addAttribute("image_directory", resources.getImageDirectory());
         
+        model.addAttribute("isIndex", true); // needed for thymeleaf template to understand path
         
         return "index";
     }
     
     
-    public User getUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = auth.getPrincipal();
-        User user = null;
-        
-        if (principal != "anonymousUser") {
-            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
-            
-            if (principal instanceof UserDetails) {
-                user = userPrincipal.getUser();
-            }
-        }
-        
-        return user;
-    }
     
-    
-    // GET USER ROLE
-    // returns the role value from the given User
-    public String getUserRole() {
-        String userRole = "ANONYMOUS";
-        
-        User user = getUser();
-        
-        if (user != null) {
-            System.out.println("USER = " +user);
-            userRole = user.getRole();
-        } else {
-            userRole = "ANONYMOUS";
-        }
-        
-        return userRole;
-    }
     
     
     // get navbar
@@ -167,7 +151,7 @@ public class WebsiteController {
     // and is used by FulfilmentsController.
     @GetMapping("/navbar")
     public Model getNavbar(Model model) {
-        String userRole = getUserRole();
+        String userRole = userService.getUserRole();
         model.addAttribute("navbarRole", userRole);
         
         System.out.println("STARTING NAVBAR AS " + userRole);
@@ -176,7 +160,7 @@ public class WebsiteController {
     
     @GetMapping("/navbarAlt")
     public ModelAndView getNavbar(ModelAndView model) {
-        String userRole = getUserRole();
+        String userRole = userService.getUserRole();
         model.addObject("navbarRole", userRole);
         
         System.out.println("STARTING NAVBAR AS " + userRole);
@@ -189,20 +173,14 @@ public class WebsiteController {
     // show products by category
     @GetMapping("/category")
     public String getProducts(Model model, @RequestParam String category) {
-        // we need to handle anonymous users differently
         String status = "invalid";
         String locationName = "none";
-        //List<Product> results = new ArrayList(); // list to be added to model
-        Customer customer = null;
         
-        // get the user role for the navbar
-        //String userRole = getUserRole();
+        // get the correct navbar
         getNavbar(model);
-        //model.addAttribute("userType", userRole);
-        
         
         // get the user so we can determine Customer
-        User user = getUser();
+        User user = userService.getUser();
         System.out.println("***** USER is : " + user);
         
         
@@ -214,12 +192,8 @@ public class WebsiteController {
                 locationName = location.getLocationName();
                 model.addAttribute("locationName", locationName);
                 status = "valid";
-            } else {
-                //userRole = "ANONYMOUS";
             }
         }
-        //model.addAttribute("userRole", userRole);
-        
         
         List<Product> products;
         products = productRepository.getProductsByCategory(category);
@@ -227,7 +201,7 @@ public class WebsiteController {
         model.addAttribute("products", products);
 
         
-        model.addAttribute("image_directory","../assets/img/products/");
+        model.addAttribute("image_directory", resources.getImageDirectory());
         model.addAttribute("category", category);
         model.addAttribute("results", results);
         model.addAttribute("locationName", locationName);
@@ -273,66 +247,33 @@ public class WebsiteController {
         boolean isProductInCart = false;
         
         //CHECK IF USER IS LOGGED IN
-        String status = "ANONYMOUS";
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userRole = userService.getUserRole();
+        User user = userService.getUser();
         
         
-        if (principal == "anonymousUser") {
-            System.out.println("USER IS NOT LOGGED IN!");
-            status = "ANONYMOUS";
-        } else {
-            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
-            
-            
-            if (principal instanceof UserDetails) {
-                User user = userPrincipal.getUser();
-                System.out.println("USER = " +user);
-                
-                Customer customer = user.getCustomer();
-                
-                if (customer == null) {
-                    status = "ANONYMOUS"; // drivers and suppliers are treated as ANONYMOUS
-                } else {
-                    System.out.println("CUSTOMER = " + customer);
-                    System.out.println("customer.id = " + customer.getId());
+        if (user != null) {
+            Customer customer = user.getCustomer();
 
-                    Integer customerId = customer.getId();
-                    status = "AUTHORIZED";
-                    model.addAttribute("customerId", customerId.toString());
-
-                    // GET THE CUSTOMER'S CART ITEMS
-                    List<CartItem> cartItemList = cartItemRepository.findByCustomer(customer);
-                   
-                    for(CartItem item: cartItemList) {
-                        if (item.getProduct() == product) {
-                           System.out.println("***** PRODUCT WAS ALREADY IN CUSTOMER CART *****");
-                           isProductInCart = true;
-                        }
-                    }
-                   
-                }
-            } else {
-                status = "ANONYMOUS";
+            if (customer != null) { // Note: drivers and suppliers are treated as ANONYMOUS
+                Integer customerId = customer.getId();
+                model.addAttribute("customerId", customerId.toString());
+                
+                // check if the product already exists in the user's cart
+                CartItem cartItem = cartService.checkForProductInCart(customer, product);
+                if (cartItem != null) isProductInCart = true;
             }
         }
         
         
         model.addAttribute("isProductInCart", isProductInCart);
-        model.addAttribute("status", status);
+        model.addAttribute("userRole", userRole);
         model.addAttribute("product", product);
-        model.addAttribute("image_directory","../assets/img/products/");
+        model.addAttribute("image_directory", resources.getImageDirectory());
         getNavbar(model);
         
         return "productpage"; //return model
     }
     
-    /*
-    @GetMapping("/accessories")
-    public String getAccessories(Model model) {
-        getNavbar(model);
-        return "accessories";
-    }*/
     
     
     @GetMapping(path = "/orderplaced")
