@@ -38,7 +38,7 @@ public class UserService {
         String userRole = "ANONYMOUS";
         
         User user = getUser();
-        
+            
         if (user != null) {
             userRole = user.getRole();
         }

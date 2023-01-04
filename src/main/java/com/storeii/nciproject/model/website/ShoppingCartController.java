@@ -75,7 +75,11 @@ public class ShoppingCartController {
     @Autowired
     private WebsiteController webController;
     
+    @Autowired
+    private WebsiteResourcesService resourcesService;
     
+    @Autowired
+    private OrderController orderController;
     
     
     @GetMapping("/cart")
@@ -88,64 +92,46 @@ public class ShoppingCartController {
         List<CartItem> cartItems = new ArrayList();
         List<Double> cartItemTotals = new ArrayList(); // price * quantity for each item
         double totalPrice = 0;
-        double deliveryCost = 6.0;
+        double deliveryCost = resourcesService.getDeliveryCost();
+        
         
         // get the user role for the navbar
         String userRole = userService.getUserRole();
         webController.getNavbar(mav);
-        mav.addObject("userType", userRole);
+        
+        System.out.println("userRole is : " + userRole);
         
         
-        // we'll need the User to check if the id corresponds to the cart
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        if (principal == "anonymousUser") {
-            System.out.println("USER IS NOT LOGGED IN!");
-            status = "ANONYMOUS";
-        } else {
-            // we're logged in
-            UserPrincipal userPrincipal = (UserPrincipal)principal; // make sure you're logged in or you'll get an error!
+        if (userRole.equalsIgnoreCase("CUSTOMER")) {
+            System.out.println("****** ACCESS GRANTED ******");
+            status = "AUTHORIZED";
             
             
-            if ((principal instanceof UserDetails) == false){
-                // I'm not sure this can happen, but just in case
-                status = "INVALID";
-            } else {
-                // get the User
-                User user = userPrincipal.getUser();
-                
-                // Check if valid
-                if (user.getCustomer() == null) {
-                    // prevent Suppliers and Drivers placing orders
-                    status = "INVALID";
-                } else {
-                    // get the Customer entity
-                    customerID = user.getCustomer().getId();
-                    Customer customer = entityManager.find(Customer.class, customerID);
-                    cartItems = cartItemRepository.findByCustomer(customer);
-                    
-                    // get the totalPrice of the cart items
-                    for (CartItem item : cartItems) {
-                        double subTotal = ( item.getProduct().getPrice() * item.getQuantity() );
-                        
-                        if (item.getQuantity() > item.getProduct().getStock() ){
-                            somethingOverStock = true;
-                        }
-                        
-                        cartItemTotals.add(subTotal);
-                        totalPrice += subTotal;
-                    }
-                    
-                    // prevent customers accessing other carts
-                    if ((user.getCustomer().getId()) != customerID) {
-                        status = "INVALID";
-                    } else {
-                        System.out.println("****** ACCESS GRANTED ******");
-                        status = "AUTHORIZED";
-                    }
+            // get the Customer entity
+            User user = userService.getUser();
+            customerID = user.getCustomer().getId();
+            Customer customer = entityManager.find(Customer.class, customerID);
+            
+            // get the cart items
+            cartItems = cartItemRepository.findByCustomer(customer);
+            
+            
+            // get the totalPrice of the cart items
+            for (CartItem item : cartItems) {
+                double subTotal = ( item.getProduct().getPrice() * item.getQuantity() );
+
+                if (item.getQuantity() > item.getProduct().getStock() ){
+                    somethingOverStock = true;
                 }
+
+                cartItemTotals.add(subTotal);
+                totalPrice += subTotal;
             }
+        } else {
+            System.out.println("USER IS NOT LOGGED IN!");
         }
+            
+        
         
         mav.addObject("somethingOverStock", somethingOverStock);
         mav.addObject("customerId", customerID);
@@ -154,7 +140,7 @@ public class ShoppingCartController {
         mav.addObject("totalPrice", totalPrice);
         mav.addObject("deliveryCost", deliveryCost);
         mav.addObject("status", status);
-        mav.addObject("image_directory","../assets/img/products/");
+        mav.addObject("image_directory", resourcesService.getImageDirectory() );
         return mav;
     }
     
@@ -266,45 +252,41 @@ public class ShoppingCartController {
                 System.out.println("Customer did not match user! Access denied!");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            
+            // Setup 
             ModelAndView mav = new ModelAndView();
             String message = "";
-            
+
             // get the entity
             Customer customer = entityManager.find(Customer.class, Integer.parseInt(customerId));
-
             List<CartItem> cartItems = cartItemRepository.findByCustomer(customer);
-
-
+            
             // Create a new Order object, the details are added later with addOrder();
             Order order = new Order();
             orderRepository.save(order);
-
-
+            
+            
             // create a list for the orderItems
             List<OrderItem> oList = new ArrayList<>();
-
+            
             // Create an OrderItem for each CartItem
             for(CartItem cItem : cartItems){
                 int quantity     = cItem.getQuantity();
                 double unitPrice = cItem.getProduct().getPrice();
                 Product product  = cItem.getProduct();
-
-
+                
                 OrderItem oItem  = new OrderItem(order, product, quantity, unitPrice);
-
+                
                 // Update the product's stock
                 int stock = product.getStock();
-
+                
                 if (stock < quantity) {
                     System.out.println("STOCK < QUANTITY!");
                     message = "Oops! Looks like someone got there before you! The quantity of your order exceeds the number of items in stock. Please try again with a smaller quantity.";
                     mav.addObject("message", message);
-                    //return mav;//
-                    //orderproblem(mav);
+
                     return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
                 } else {
-                    System.out.println("stock is fine.");
+                    // stock is fine
                     product.setStock(stock - quantity);
                     productRepository.save(product);
 
@@ -314,21 +296,15 @@ public class ShoppingCartController {
                 }
             }
 
-            System.out.println("_____orderItems_____\n"+ oList.toString());
-
-
             // Run the addOrder() method
-            OrderController controller = new OrderController();
-            controller.addOrder(order, customer, oList, subOrderItemRepository, orderRepo);
-
+            orderController.addOrder(order, customer, oList);
+            
             // EMPTY THE CART CONTENTS
             cartItemRepository.deleteAllByCustomer(customer);
-
+            
             // REDIRECT
             mav.addObject("message", message);
-            //return mav;//
             return new ResponseEntity<>(HttpStatus.OK);
-            //return "/checkout";
         }
     }
     

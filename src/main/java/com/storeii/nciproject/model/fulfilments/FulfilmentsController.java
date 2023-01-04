@@ -12,6 +12,7 @@ import com.storeii.nciproject.Enums;
 import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
 import com.storeii.nciproject.model.website.WebsiteController;
+import com.storeii.nciproject.model.website.WebsiteResourcesService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,7 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 
 @RestController
@@ -45,6 +46,9 @@ public class FulfilmentsController {
     
     @Autowired
     private WebsiteController webController;
+    
+    @Autowired
+    private WebsiteResourcesService resourcesService;
     
     
     @GetMapping("/fulfilments")
@@ -85,24 +89,18 @@ public class FulfilmentsController {
                 mav.addObject("supplier", supplier);
                 mav.addObject("storeName", storeName);
                 
-                int orderStatus = Enums.OrderStatus.CONFIRMED.ordinal();                        // suppliers should only see suborders that haven't yet been fulfilled
+                int orderStatus = Enums.OrderStatus.CONFIRMED.ordinal();    // suppliers should only see suborders that haven't yet been fulfilled
                 
                 // get a list deliveries for the specific driver
                 List<SubOrder> subOrders = subOrderRepository.findSubOrdersBySupplierAndOrderStatus(supplier, orderStatus);
                 mav.addObject("subOrders", subOrders);
-                
-                // suborder items
-                for (SubOrder s : subOrders) {
-                    List<SubOrderItem> subOrderItems = s.getItems();
-                    mav.addObject("subOrderItems", subOrderItems);
-                }
             }
         }
         
         
         // CREATE THE MODEL AND GO TO PAGE
         mav.addObject("valid", valid);
-        mav.addObject("image_directory","../assets/img/products/");
+        mav.addObject("image_directory",resourcesService.getImageDirectory());
         return mav;
     }
 }

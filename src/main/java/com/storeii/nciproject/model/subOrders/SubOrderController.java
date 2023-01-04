@@ -99,26 +99,23 @@ public class SubOrderController {
     }
     
     
-    // MARK A SUBORDER AS READY FOR COLLECTION
+    /** MARK A SUBORDER AS READY FOR COLLECTION
+     * @param subOrderId
+     * @return String - status of suborder
+     */
     @PostMapping(path="/markSubOrderAsReady")
     public String markSubOrderAsReady(
         @RequestParam String subOrderId
     ){
         SubOrder subOrder = subOrderRepository.findById(Integer.parseInt(subOrderId)).get();
-        
         int i = OrderStatus.READY.ordinal();  // set the status as READY, see the "Enums" class
-        
         subOrder.setOrderStatus(i);
-        
         subOrderRepository.save(subOrder);
         
-        
-        /// CHECK IF ALL SUBORDERS OR ORDER ARE READY
-        // Note the following is done in a Unidirectional fashion
+        // CHECK IF ALL SUBORDERS OR ORDER ARE READY //
         // first we get the parent Order
         Order order = subOrder.getOrder();
-        System.out.println("******* SubOrder.Order points to " + order.getId());
-        /// Uni-Directional
+        
         // get a list of all the sub orders
         List<SubOrder> subOrders = subOrderRepository.findAll();
         
@@ -126,9 +123,7 @@ public class SubOrderController {
         // compile a list of all the SubOrders that point to our parent order
         List<SubOrder> relevantSubOrders = new ArrayList<>(); // we will store each one in this list
         for (SubOrder s : subOrders) {
-            System.out.println("looking at subOrder: " + s.getId());
             if (s.getOrder() == order) {
-                System.out.println("***** SUBORDER POINTS TO ORDER *****");
                 relevantSubOrders.add(s);
             }
         }
@@ -140,7 +135,7 @@ public class SubOrderController {
             if (s.getOrderStatus() != OrderStatus.READY.ordinal()) {
                 failed = true;
                 System.out.println("Some items remain unfulfilled.");
-                break;          // exit the loop early as we know the Order isn't complete yet
+                break; // exit the loop early as we know the Order isn't complete yet
             }
         }
         
@@ -149,8 +144,8 @@ public class SubOrderController {
         // the parent Order as ready for collection. Drivers need
         // to update their request to see the new delivery.
         if (!failed) {
-            System.out.println("****** SUCCESS!! ALL PARTS OF ORDER ARE READY! ******* ");
-            System.out.println("Driver " + order.getDriver().getId() + " : " +order.getDriver().getFirstName() + " " + order.getDriver().getSurname() + " will be notified.");
+            System.out.println("****** ALL PARTS OF ORDER ARE READY! ******* ");
+            System.out.println("Driver " + order.getDriver().getFirstName() + " " + order.getDriver().getSurname() + " will be notified.");
             order.setOrderStatus(OrderStatus.READY.ordinal());
             orderRepository.save(order);
         }

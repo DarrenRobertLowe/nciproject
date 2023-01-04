@@ -20,7 +20,7 @@ async function markAsReady(subOrderId) {
     
     if (response.status === 200) { // success
         // refresh page to refresh the list
-        window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
+        window.location.reload();
     } else {
     }
 }
@@ -44,14 +44,12 @@ async function markAsDelivered(orderID) {
     
     if (response.status === 200) { // success
         // refresh page to refresh the list
-        window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
+        window.location.reload();
     } else {
     }
 }
 
-
-
-/// mARK AS RETURNED/CANCELLED ///
+/// MARK AS RETURNED/CANCELLED ///
 function confirmReturnedByCustomer(orderId) {
   if (confirm("Are you sure you want to return order id: " + orderId + " and remove it from your queue?")) {
       markAsReturned(orderId);
@@ -67,7 +65,7 @@ async function markAsReturned(orderID) {
     
     if (response.status === 200) { // success
         // refresh page to refresh the list
-        window.location.reload();   // Note this is supposedly a bad way of doing things. Instead we should be updating using the DOM.
+        window.location.reload();
     } else {
     }
 }

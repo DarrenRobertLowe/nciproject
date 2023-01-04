@@ -5,20 +5,17 @@
 package com.storeii.nciproject;
 
 import com.storeii.nciproject.UserRepository;
-import com.storeii.nciproject.model.Address.Address;
 import com.storeii.nciproject.model.Address.AddressController;
 import com.storeii.nciproject.model.County.County;
 import com.storeii.nciproject.model.County.CountyRepository;
 import com.storeii.nciproject.model.Customer.Customer;
 import com.storeii.nciproject.model.Customer.CustomerController;
-import com.storeii.nciproject.model.Customer.CustomerRepository;
 import com.storeii.nciproject.model.deliveries.Driver;
 import com.storeii.nciproject.model.deliveries.DriverController;
 import com.storeii.nciproject.model.locations.Location;
 import com.storeii.nciproject.model.locations.LocationRepository;
 import com.storeii.nciproject.model.fulfilments.Supplier;
 import com.storeii.nciproject.model.fulfilments.SupplierController;
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,11 +25,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
 
 /**
  *
- * @author Main
+ * @author Darren Rober Lowe
  */
 
 @EnableWebSecurity
@@ -44,14 +41,10 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     
-    @Autowired
-    private EntityManager entityManager;
     
     @Autowired
     private CustomerController customerController;
     
-    @Autowired
-    private CustomerRepository customerRepository;
     
     @Autowired
     AddressController addressController;
@@ -70,28 +63,6 @@ public class UserController {
     
     @Autowired
     CountyRepository countyRepository;
-    
-    @RequestMapping("/perform_login")
-    public String loginPage() { 
-        System.out.println("*********** Going to LOGIN page ***********");
-        return "/login";
-    }
-    
-    @RequestMapping("/perform_logout")
-    public String logout() { 
-        return "/logout"; 
-    }
-    
-    @GetMapping("/perform_register")
-    public String register() { 
-        System.out.println("*********** Going to REGISTER page ***********");
-        return "/register"; 
-    }
-    
-    @RequestMapping("/index")
-    public String homePage() { 
-        return "/index"; 
-    }
     
     
     
@@ -128,7 +99,6 @@ public class UserController {
         @RequestParam String surname,
         @RequestParam String userName,
         @RequestParam String userPass,
-        //@RequestParam String location,
         @RequestParam String addressLine1,
         @RequestParam String addressLine2,
         @RequestParam String city,
@@ -137,38 +107,30 @@ public class UserController {
         @RequestParam String country
     ){
         User user = new User();
-        //user.setFirstName(firstName);
-        //user.setSurname(surname);
         user.setUserName(userName);
         user.setRole("CUSTOMER");
         
         // encrypt password
         String encryptedPass = passwordEncoder.encode(userPass);
         user.setUserPass(encryptedPass);
-        
-        
-        /********
-        * At this point we need to create a new Customer object.
-        * Before we can do that we need to create the address.
-        * After that we can assign customerId to the User.
-        ********/
-        
-        // CREATE ADDRESS
-        
-                
-       // AddressController ac = new AddressController();
-        Integer addressInt = addressController.addAddress(addressLine1, addressLine2, city, district, postcode, country);
-        System.out.println("******* RETURNED ADDRESS ID IS : " + addressInt);
-        String addressId = addressInt.toString();// = ((Integer)address.getId()).toString(); // get the addressId as a String for creating the Customer
-        
-        // CREATE CUSTOMER
-        //CustomerController cc = new CustomerController();
         System.out.println("********* encryptedPass is " + encryptedPass);
         
+        // CREATE ADDRESS
+        /* At this point we need to create a new Customer object.
+        * Before we can do that we need to create the address.
+        * After that we can assign new Customer to the User.
+        */
+        // AddressController ac = new AddressController();
+        Integer addressInt = addressController.addAddress(addressLine1, addressLine2, city, district, postcode, country);
+        System.out.println("******* RETURNED ADDRESS ID IS : " + addressInt);
+        String addressId = addressInt.toString(); // get the addressId as a String for creating the Customer
+        
+        // DERIVE LOCATION FROM COUNTY
         County county = countyRepository.getByCounty(district);
-        Location location = county.getLocation();//locationRepository.getByCounties(county);
+        Location location = county.getLocation();
         String locationId = Integer.toString(location.getId());
-        //
+        
+        // CREATE CUSTOMER
         Customer newCustomer = customerController.addCustomer(firstName, surname, userName, encryptedPass, addressId, locationId);
         
         // SET THE CUSTOMER

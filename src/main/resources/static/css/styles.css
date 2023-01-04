@@ -165,7 +165,6 @@ span border {
 #grandTotal {
     text-align:right;
     padding:1rem;
-    /*float:right;*/
 }
 
 
@@ -212,9 +211,8 @@ span border {
     background-color: #F8F8F8;
     margin: 2vh;
     cursor: pointer;
-    /*transition: .3s;*/
 }
-/*.index-card:hover {opacity: 0.7;}*/
+
 
 .index-card .img-card-top{
     width: 100%;

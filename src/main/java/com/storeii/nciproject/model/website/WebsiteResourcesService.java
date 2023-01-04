@@ -14,9 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class WebsiteResourcesService {
     String imageDirectory = "../assets/img/products/";
+    Double deliveryCost = 6.0;
     
     
     public String getImageDirectory() {
         return imageDirectory;
     }
-}
+    
+    public Double getDeliveryCost() {
+        return deliveryCost;
+    }
+}   

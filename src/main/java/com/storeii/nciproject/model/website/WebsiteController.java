@@ -57,13 +57,16 @@ public class WebsiteController {
     @Autowired
     private UserService userService;
     
+    
+    // ROOT
     @GetMapping("/")
     public String home(Model model){
         getNavbar(model);   // get correct navbar
-        
         return getIndex(model);
     }
     
+    
+    // INDEX
     @GetMapping("/index")
     public String getIndex(Model model) {
         System.out.println("*** RUNNING INDEX ****");
@@ -75,29 +78,30 @@ public class WebsiteController {
         model.addAttribute("userRole", userRole);
         
         
+        // Get Customer and Location info for Model
         Location location = null;
-        Customer customer = null;
-        int maxItemsPerCategory = 5;                // how many of each category to display on the front page
-        int itemsPerCategory = maxItemsPerCategory;
-        
+        Customer customer;
         User user = userService.getUser();
         if (user != null) {
             if (user.getCustomer() != null) {
                 customer = customerRepository.getById(user.getCustomer().getId());
                 model.addAttribute("customer", customer);
                 
-                //customerId = Integer.toString(customer.getId());
                 int customerId = customer.getId();
                 model.addAttribute("customerId", customerId);
                 
-                location = locationRepository.getById(user.getCustomer().getLocation().getId());
+                location = locationRepository.getById(customer.getLocation().getId());
                 model.addAttribute("location", location);
             }
         }
         
         
-        // Show a randomized list of items per category
+        // SHOW RANDOM PRODUCTS (per category)
         List<Product> products;
+        
+        // how many of each category to display on the front page
+        int maxItemsPerCategory = 5;                
+        int itemsPerCategory = maxItemsPerCategory;
         
         // get a list of shoes
         products = productRepository.getProductsByCategory("Shoes");                // get all shoes
@@ -181,8 +185,6 @@ public class WebsiteController {
         
         // get the user so we can determine Customer
         User user = userService.getUser();
-        System.out.println("***** USER is : " + user);
-        
         
         // get the customer so we can determine Location
         Location location = null;
@@ -200,7 +202,6 @@ public class WebsiteController {
         List<Product> results = filterProductsByLocation(products, location);
         model.addAttribute("products", products);
 
-        
         model.addAttribute("image_directory", resources.getImageDirectory());
         model.addAttribute("category", category);
         model.addAttribute("results", results);

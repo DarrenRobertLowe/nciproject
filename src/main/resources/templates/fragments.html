@@ -175,6 +175,8 @@
                         <div class="row">
                             <p th:text="${product.getProductDescription()}"></p>
                         </div>
+                        
+                        <!-- PRODUCT QUANTITY / ADD TO CART -->
                         <div th:insert="fragments :: add-to-cart"></div>
                     </div>
                 </div>
@@ -236,13 +238,13 @@
                                 <label for="fname"><h5>Quantity:</h5></label>
                                 
                                 
-                                <!--/* here we need different behaviors depending on the page we're on */-->
+                                <!--/* here we need different behaviours depending on the page we're on */-->
                                 <!--/* Not on the index page */-->
                                 <div th:if="${isIndex} == null">
                                     <div class="number-input">
-                                        <button this.parentNode.querySelector(''input[type=number]'').stepDown(); event.preventDefault(); calculate(); class="minus"></button>
+                                        <button type="number" class="minus" data-type="minus" field=""></button>
                                         <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
-                                        <button this.parentNode.querySelector(''input[type=number]'').stepUp(); event.preventDefault(); calculate(); class="plus"></button>
+                                        <button type="number" class="plus" data-type="plus" field=""></button>
                                     </div>
                                 </div>
                                 
@@ -271,7 +273,6 @@
                                     
                                     <div th:if="${isIndex} == true">
                                         <span th:id="${uid}" >Total: €</span>
-                                        <p th:text="'is index: ' + ${isIndex} "> </p>
                                     </div>
                                 </div>
                                 
@@ -508,10 +509,7 @@
         
         <!-- FOOTER -->
         <div th:fragment="footer">
-            <div class="row" id="footer">
-                
-            </div>
-            
+            <div class="row" id="footer"></div>
             
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
             <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

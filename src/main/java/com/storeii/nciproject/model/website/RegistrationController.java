@@ -29,8 +29,6 @@ public class RegistrationController {
     
     @GetMapping("/register")
     public String getCountiesForRegistration(Model model) {
-        //List<Location> locations = locationRepo.findAll();
-        //model.addAttribute("locations", locations);
         
         List<County> counties = countyRepository.findAll();
         model.addAttribute("counties", counties);

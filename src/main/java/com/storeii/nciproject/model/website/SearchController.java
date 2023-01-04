@@ -72,12 +72,13 @@ public class SearchController {
     @Autowired
     UserService userService;
     
+    @Autowired
+    private WebsiteResourcesService resourcesService;
+    
     @GetMapping(value = "/search")
     public @ResponseBody ModelAndView search (
         @RequestParam String searchTerms
     ){
-        
-        
         // create a Model And View to return
         String locationString = "none";
         ModelAndView mav = new ModelAndView();
@@ -90,6 +91,8 @@ public class SearchController {
         
         // we need to get the user context so we know how to filter the results
         String userRole = userService.getUserRole();
+        
+        
         
         // ANONYMOUS USERS
         if (userRole.equalsIgnoreCase("ANONYMOUS")) {
@@ -134,7 +137,7 @@ public class SearchController {
         mav.addObject("userRole", userRole);
         mav.addObject("location", locationString);
         mav.addObject("searchTerms", searchTerms);
-        mav.addObject("image_directory", "../assets/img/products/");
+        mav.addObject("image_directory", resourcesService.getImageDirectory() );
         return mav;
     }
     
@@ -149,7 +152,7 @@ public class SearchController {
         str = str.replaceAll("[^a-zA-Z0-9]", "");
         return str;
     }
-
+    
     
     
     
@@ -160,13 +163,6 @@ public class SearchController {
     
     // SEARCH PRODUCTS
     public Queue searchProducts(String searchTerms, Location location) {
-        // create Queues for our results
-        if (location != null) {
-            System.out.println("SEARCHING FOR PRODUCTS IN LOCATION : " + location.getLocationName() );
-        } else {
-            System.out.println("SEARCHING FOR PRODUCTS GLOBALLY.");
-        }
-        
         Queue results = new LinkedList();                       // used to store direct matches. We could use ArrayList either.
         PriorityQueue extraResults = new PriorityQueue();       // used to sort other results based on compareTo()
         
@@ -174,8 +170,7 @@ public class SearchController {
         List<Product> products = productRepository.findAll();
         
         
-        // this is where we need to compare our string to the
-        // product name (and maybe the suppler store name)
+        // COMPARE
         for(Product product : products) {
             System.out.println("checking: " + product.getProductName());
             
@@ -210,8 +205,7 @@ public class SearchController {
                 // we could now iterate through the results here and
                 // add them to a priorityqueue of their own.
             } else {
-            // NOT A DIRECTLY MATCHING ITEM
-            
+                // NOT A DIRECTLY MATCHING ITEM //
                 // all locations
                 if (location == null) { 
                     System.out.println("adding as extra: " + product.getProductName());
@@ -261,8 +255,7 @@ public class SearchController {
         List<SubOrder> subOrders = subOrderRepository.findAll();
         
         
-        // this is where we need to compare our string to the
-        // product name (and maybe the suppler store name)
+        // COMPARE
         for(SubOrder subOrder : subOrders) {
             System.out.println("checking: " + subOrder.getId());
             
@@ -326,8 +319,6 @@ public class SearchController {
             if (subOrderString.contains(searchTerms)) {
                 System.out.println(subOrder.getId() + " is a direct match!");
                 
-
-                
                 if ( (subOrder.getSupplier().getId() == supplier.getId())                   // show only subOrders belonging to this supplier
                 && (subOrder.getOrderStatus() == Enums.OrderStatus.CONFIRMED.ordinal()) )   // show only pending subOrders. Remove this if we want to allow historical items
                 {
@@ -361,8 +352,8 @@ public class SearchController {
     
     // SEARCH DELIVERIES
     // Note: the priorityqueue here is meaningless as
-    // the comparable method compares Supplier and we're
-    // filtering orders by this supplier anyway.
+    // the comparable method compares Drivers and we're
+    // filtering orders by this driver anyway.
     public Queue searchDeliveries(String searchTerms, Driver driver) {
         // create Queues for our results
         System.out.println("SEARCHING FOR DELIVERIES BELONGING TO : " + driver.getFirstName() + " " + driver.getSurname() );
