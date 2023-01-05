@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.storeii.nciproject.model.subOrders.subOrderItems;
 
 import com.storeii.nciproject.model.subOrders.SubOrder;
@@ -20,7 +16,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="SubOrder_Items")

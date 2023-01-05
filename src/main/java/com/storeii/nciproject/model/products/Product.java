@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.storeii.nciproject.model.products;
 
 import com.storeii.nciproject.model.fulfilments.Supplier;
@@ -14,28 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 @Entity // This tells Hibernate to make a table out of this class
 public class Product implements Comparable<Product> {
-    /*
-    id int UNSIGNED auto_increment PRIMARY KEY,
-    
-    productName varchar(50) NOT NULL,
-    productDescription varchar(250) NOT NULL,
-    image varchar(250),
-    price decimal(10,2) NOT NULL, -- UNSIGNED to avoid having negative values
-    stock int UNSIGNED,
-    category varchar(30),
-    
-    supplier_ID smallint UNSIGNED,
-    FOREIGN KEY (supplier_ID) REFERENCES Supplier(id)
-    */
-    
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int     id;
@@ -133,6 +115,7 @@ public class Product implements Comparable<Product> {
     
     
     /// Comparator
+    @Override
     public int compareTo(Product otherProduct){
         return (productName.compareTo(otherProduct.getProductName()));
     }

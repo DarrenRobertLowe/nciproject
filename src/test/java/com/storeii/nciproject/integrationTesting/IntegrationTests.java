@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.storeii.nciproject.integrationTesting;
 
 import com.storeii.nciproject.User;
@@ -15,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class checkoutToDeliveryTest {
+class IntegrationTests {
     /*
         @Autowired
         UserRepository userRepository;
@@ -28,8 +25,8 @@ class checkoutToDeliveryTest {
         
         
 	@Test
-        @DisplayName("Delivery Driver should receive the new order")
-	void checkoutToDelivery() {
+        @DisplayName("Supplier should receive the new order")
+	void checkout() {
             User user = userRepository.getByUserName("testuser");
             Customer customer = user.getCustomer();
             int userId = customer.getId();

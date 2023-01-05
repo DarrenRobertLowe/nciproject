@@ -205,6 +205,10 @@ span border {
     object-fit: cover;
 }
 
+#index-cards{
+    background-color:brown;
+    margin: auto;
+}
 
 .index-card {
     width: 11rem;
@@ -253,8 +257,11 @@ span border {
 }
 
 #products-page-warning{
+    text-align:center;
     margin: 2vh;
 }
+
+
     
 #footer {
     height: 4vh;

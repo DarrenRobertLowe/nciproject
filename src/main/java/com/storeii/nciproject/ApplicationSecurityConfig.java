@@ -7,37 +7,24 @@ package com.storeii.nciproject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-//import security.services.UserDetailsService;
 
 
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 
 
-//@Configuration
+
 @ComponentScan({"com.delivery.request"})
 @EnableWebSecurity
 public class ApplicationSecurityConfig {
@@ -50,19 +37,6 @@ public class ApplicationSecurityConfig {
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        /*
-        http
-            .authorizeHttpRequests((authz) -> authz
-                .anyRequest().authenticated()
-            )
-            .httpBasic(withDefaults());
-        return http.build();
-        */
-        
-        /* .antMatchers must be ordered from most
-         *  specific to least specific (more general)
-         */
-        
         http
         .authorizeRequests()
             .antMatchers("/cart").hasAuthority("CUSTOMER")

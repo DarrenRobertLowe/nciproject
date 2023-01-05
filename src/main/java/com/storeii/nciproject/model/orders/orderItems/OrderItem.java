@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.storeii.nciproject.model.orders.orderItems;
 
 import com.storeii.nciproject.model.orders.Order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.storeii.nciproject.model.products.Product;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,13 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="OrderItems")

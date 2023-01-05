@@ -17,10 +17,10 @@
                 <!-- CONTENT -->
                 <div class="col">
                     <!-- subheading -->
-                    <span th:unless="${customer == null}">
+                    <div th:unless="${customer == null}">
                         <p class='subheading' th:text="'Welcome ' + ${customer.getFirstName()}"></p>
                         <p class='subheading' th:text="'Showing products for ' + ${customer.getLocation().getLocationName()}"></p>
-                    </span>
+                    </div>
                     
                     <!-- COATS -->
                     <br/>

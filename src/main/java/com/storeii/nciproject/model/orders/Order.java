@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.storeii.nciproject.model.orders;
 
 
@@ -9,8 +5,6 @@ import com.storeii.nciproject.model.locations.Location;
 import com.storeii.nciproject.model.deliveries.Driver;
 import com.storeii.nciproject.model.Customer.Customer;
 import com.storeii.nciproject.model.Address.Address;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.storeii.nciproject.model.orders.orderItems.OrderItem;
 import com.storeii.nciproject.model.fulfilments.Supplier;
@@ -29,12 +23,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "Orders") // the table name differs to this object name so we need to tell JPA that.

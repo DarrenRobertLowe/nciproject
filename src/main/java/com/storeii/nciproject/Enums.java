@@ -6,7 +6,7 @@ package com.storeii.nciproject;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 public class Enums {
     public static enum OrderStatus {

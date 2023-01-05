@@ -5,16 +5,16 @@
 package com.storeii.nciproject.model.Address;
 
 
-import com.storeii.nciproject.model.Address.Address;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 
 // Spring automatically implements this repository interface in 
 // a bean of the same name (lowecase first letter)
-public interface AddressRepository extends CrudRepository<Address, Integer> {
+public interface AddressRepository extends JpaRepository<Address, Integer> {
     Address getById(int id);
 }

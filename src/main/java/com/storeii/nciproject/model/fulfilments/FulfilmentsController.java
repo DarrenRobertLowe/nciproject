@@ -1,27 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.storeii.nciproject.model.fulfilments;
 
 import com.storeii.nciproject.model.subOrders.SubOrderRepository;
-import com.storeii.nciproject.model.subOrders.subOrderItems.SubOrderItemRepository;
-import com.storeii.nciproject.model.subOrders.subOrderItems.SubOrderItem;
 import com.storeii.nciproject.model.subOrders.SubOrder;
 import com.storeii.nciproject.Enums;
 import com.storeii.nciproject.User;
 import com.storeii.nciproject.UserPrincipal;
 import com.storeii.nciproject.model.website.WebsiteController;
 import com.storeii.nciproject.model.website.WebsiteResourcesService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,9 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class FulfilmentsController {
     @Autowired
     private SubOrderRepository subOrderRepository;
-    
-    @Autowired
-    private SubOrderItemRepository subOrderItemRepository;
     
     @Autowired
     private EntityManager entityManager;

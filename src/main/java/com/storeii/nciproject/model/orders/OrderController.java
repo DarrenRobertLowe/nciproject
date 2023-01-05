@@ -1,35 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.storeii.nciproject.model.orders;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 
 
-import com.storeii.nciproject.model.locations.LocationRepository;
 import com.storeii.nciproject.model.locations.Location;
 import com.storeii.nciproject.model.deliveries.DriverRepository;
 import com.storeii.nciproject.model.deliveries.Driver;
-import com.storeii.nciproject.model.Customer.CustomerRepository;
 import com.storeii.nciproject.model.Customer.Customer;
-import com.storeii.nciproject.model.CartItem.CartItemRepository;
-import com.storeii.nciproject.model.Address.AddressRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.storeii.nciproject.Enums;
 import com.storeii.nciproject.model.orders.orderItems.OrderItem;
-import com.storeii.nciproject.model.orders.orderItems.OrderItemRepository;
 import com.storeii.nciproject.model.products.Product;
-import com.storeii.nciproject.model.products.ProductRepository;
 import com.storeii.nciproject.model.subOrders.SubOrder;
 import com.storeii.nciproject.model.subOrders.subOrderItems.SubOrderItem;
 import com.storeii.nciproject.model.subOrders.subOrderItems.SubOrderItemRepository;
 import com.storeii.nciproject.model.fulfilments.Supplier;
-import com.storeii.nciproject.model.fulfilments.SupplierRepository;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;

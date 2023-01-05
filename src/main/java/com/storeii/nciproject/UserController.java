@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.storeii.nciproject;
 
-import com.storeii.nciproject.UserRepository;
 import com.storeii.nciproject.model.Address.AddressController;
 import com.storeii.nciproject.model.County.County;
 import com.storeii.nciproject.model.County.CountyRepository;
@@ -29,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
- * @author Darren Rober Lowe
+ * @author Darren Robert Lowe
  */
 
 @EnableWebSecurity

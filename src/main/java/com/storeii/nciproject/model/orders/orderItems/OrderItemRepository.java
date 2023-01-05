@@ -9,12 +9,11 @@ package com.storeii.nciproject.model.orders.orderItems;
 import com.storeii.nciproject.model.orders.Order;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.storeii.nciproject.model.orders.orderItems.OrderItem;
 import java.util.ArrayList;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 
 

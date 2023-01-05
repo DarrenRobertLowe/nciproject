@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.storeii.nciproject.model.website;
 
 import com.storeii.nciproject.model.products.Product;
@@ -13,25 +10,20 @@ import com.storeii.nciproject.model.Customer.Customer;
 import com.storeii.nciproject.model.CartItem.CartItemRepository;
 import com.storeii.nciproject.model.CartItem.CartItem;
 import com.storeii.nciproject.User;
-import com.storeii.nciproject.UserPrincipal;
 import com.storeii.nciproject.UserService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 @Controller
 public class WebsiteController {
@@ -69,7 +61,6 @@ public class WebsiteController {
     // INDEX
     @GetMapping("/index")
     public String getIndex(Model model) {
-        System.out.println("*** RUNNING INDEX ****");
         // setup
         getNavbar(model);   // get correct navbar
         
@@ -159,7 +150,7 @@ public class WebsiteController {
         model.addAttribute("navbarRole", userRole);
         
         System.out.println("STARTING NAVBAR AS " + userRole);
-        return model;//"navbar";
+        return model;
     }
     
     @GetMapping("/navbarAlt")
@@ -168,7 +159,7 @@ public class WebsiteController {
         model.addObject("navbarRole", userRole);
         
         System.out.println("STARTING NAVBAR AS " + userRole);
-        return model;//"navbar";
+        return model;
     }
     
     
@@ -215,7 +206,7 @@ public class WebsiteController {
     
     
     // FILTER PRODUCTS BY LOCATION
-    public List filterProductsByLocation(List<Product> products, Location location) {
+    public List<Product> filterProductsByLocation(List<Product> products, Location location) {
         
         List<Product> returnList = new ArrayList<>();
         
@@ -250,10 +241,10 @@ public class WebsiteController {
         //CHECK IF USER IS LOGGED IN
         String userRole = userService.getUserRole();
         User user = userService.getUser();
-        
+        Customer customer = null;
         
         if (user != null) {
-            Customer customer = user.getCustomer();
+            customer = user.getCustomer();
 
             if (customer != null) { // Note: drivers and suppliers are treated as ANONYMOUS
                 Integer customerId = customer.getId();
@@ -265,11 +256,12 @@ public class WebsiteController {
             }
         }
         
-        
         model.addAttribute("isProductInCart", isProductInCart);
         model.addAttribute("userRole", userRole);
         model.addAttribute("product", product);
         model.addAttribute("image_directory", resources.getImageDirectory());
+        model.addAttribute("customer", customer);
+
         getNavbar(model);
         
         return "productpage"; //return model

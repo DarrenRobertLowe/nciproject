@@ -6,14 +6,12 @@ package com.storeii.nciproject.model.fulfilments;
 
 
 import com.storeii.nciproject.model.orders.Order;
-import com.storeii.nciproject.model.fulfilments.Supplier;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 
 // Spring automatically implements this repository interface in 

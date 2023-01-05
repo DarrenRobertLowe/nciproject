@@ -216,6 +216,9 @@
                 
                 <!--/* IF THE PRODUCT IS __NOT__ ALREADY IN OUR CART */-->
                 <div th:unless="${isProductInCart}">
+                    
+                    
+                    
                     <p th:text="'In Stock: ' + ${product.getStock()} "> </p>
                     
                     <!--/* IF THE PRODUCT IS OUT OF STOCK */-->
@@ -223,63 +226,72 @@
                         <p class="warning-text"> This product is currently out of stock. </p>
                     </div>
                     
-                    
-                    <!--/* IF THE PRODUCT IS IN STOCK */-->
-                    <div th:if="${product.getStock()} > 0" th:with="uid = ${ 'indexSubtotal' + product}">
-                        <!-- ADD TO CART FORM -->
-                        <form id="purchase-form" action="/addCartItem?"
-                        +"&customerID="+customerID
-                        +"&productID=" +productID
-                        +"&quantity=" +quantity
-                        method="post"}>
-                                <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
-                                <input type="hidden" id="product" name="productID" th:value="${product.getId()}">
-                                <input type="hidden" id="price" th:value="${product.getPrice()}">
-                                <label for="fname"><h5>Quantity:</h5></label>
-                                
-                                
-                                <!--/* here we need different behaviours depending on the page we're on */-->
-                                <!--/* Not on the index page */-->
-                                <div th:if="${isIndex} == null">
-                                    <div class="number-input">
-                                        <button type="number" class="minus" data-type="minus" field=""></button>
-                                        <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
-                                        <button type="number" class="plus" data-type="plus" field=""></button>
-                                    </div>
-                                </div>
-                                
-                                <!--/* On the index page */-->
-                                <!--/* The following th:with concatenates a lot of arguments together in order to pass a javascript method the uid (unique id for this item) */-->
-                                <div th:if="${isIndex} == true"
-                                     th:with="
-                                     stepDownString = ${'this.parentNode.querySelector(''input[type=number]'').stepDown(); event.preventDefault(); calcIndex('}
-                                     ,stepUpString = ${'this.parentNode.querySelector(''input[type=number]'').stepUp(); event.preventDefault(); calcIndex('}
-                                     ">
-                                    
-                                    <div class="number-input">
-                                        <button th:attr="onclick=|${stepDownString}| + '\'' + |${uid}| + '\'' + ', price.value, quantity.value)'" class="minus"></button>
-                                        <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
-                                        <button th:attr="onclick=|${stepUpString}| + '\'' + |${uid}| + '\'' + ', price.value, quantity.value)'" class="plus"></button>
-                                    </div>
-                                </div>
-                                
-                                
-                                <!-- SUBTOTAL -->
-                                <div class="sub-total">
-                                    
-                                    <div th:if="${isIndex} == null">
-                                        <span >Total: €</span><span id="subtotal"></span>
-                                    </div>
-                                    
-                                    <div th:if="${isIndex} == true">
-                                        <span th:id="${uid}" >Total: €</span>
-                                    </div>
-                                </div>
-                                
 
-                              <input type="submit" class="btn btn-warning" value="Add to Cart">
-                        </form>
-                    </div> <!--/* / is in stock */-->
+                    <div th:unless="${product.getSupplier().getLocation().getId()} == ${customer.getLocation().getId()}">
+                        <p class="warning-text">Sorry! This product is not available in your region.</p>
+                    </div>
+                     
+                     
+                    <div th:if="${product.getSupplier().getLocation().getId()} == ${customer.getLocation().getId()}">
+                        <!--/* IF THE PRODUCT IS IN STOCK */-->
+                        <div th:if="${product.getStock()} > 0" th:with="uid = ${ 'indexSubtotal' + product}">
+                            <!-- ADD TO CART FORM -->
+                            <form id="purchase-form" action="/addCartItem?"
+                            +"&customerID="+customerID
+                            +"&productID=" +productID
+                            +"&quantity=" +quantity
+                            method="post"}>
+                                    <input type="hidden" id="customer" name="customerID" th:value="${customerId}" >
+                                    <input type="hidden" id="product" name="productID" th:value="${product.getId()}">
+                                    <input type="hidden" id="price" th:value="${product.getPrice()}">
+                                    <label for="fname"><h5>Quantity:</h5></label>
+                                    
+                                    
+                                    <!--/* here we need different behaviours depending on the page we're on */-->
+                                    <!--/* Not on the index page */-->
+                                    <div th:if="${isIndex} == null">
+                                        <div class="number-input">
+                                            <button type="number" class="minus" data-type="minus"></button>
+                                            <input type="number" id="quantity" min="1" name="quantity" value="1" onchange="calculate()">
+                                            <button type="number" class="plus" data-type="plus" ></button>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <!--/* The following th:with concatenates a lot of arguments together in order to pass a javascript method the uid (unique id for this item) */-->
+                                    <!--/* On the index page */-->
+                                    <div th:if="${isIndex} == true"
+                                         th:with="
+                                         stepDownString = ${'this.parentNode.querySelector(''input[type=number]'').stepDown(); event.preventDefault(); calcIndex('}
+                                         ,stepUpString = ${'this.parentNode.querySelector(''input[type=number]'').stepUp(); event.preventDefault(); calcIndex('}
+                                         ">
+                                        
+                                        <div class="number-input">
+                                            <button th:attr="onclick=|${stepDownString}| + '\'' + |${uid}| + '\'' + ', price.value, quantity.value)'" ></button>
+                                            <input class="quantity" id="quantity" min="1" name="quantity" value="1" type="number" >
+                                            <button class="btn plus" type="button" th:attr="onclick=|${stepUpString}| + '\'' + |${uid}| + '\'' + ', price.value, quantity.value)'" ></button>
+                                        </div>
+                                    </div>
+                                     
+                                    
+                                    <!-- SUBTOTAL -->
+                                    <div class="sub-total">
+                                        
+                                        <div th:if="${isIndex} == null">
+                                            <span >Total: €</span><span id="subtotal"></span>
+                                        </div>
+                                        
+                                        <div th:if="${isIndex} == true">
+                                            <span th:id="${uid}" ></span>
+                                        </div>
+                                    </div>
+
+
+                                  <input type="submit" class="btn btn-warning" value="Add to Cart">
+                            </form>
+                        </div> <!--/* / is in stock */-->
+                        
+                    </div> <!---/* location */-->
                 </div>
             </div> <!--/* /case = "CUSTOMER" */-->
         </div>
