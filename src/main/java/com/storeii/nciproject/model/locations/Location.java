@@ -17,15 +17,11 @@ import javax.persistence.OneToMany;
 
 /**
  *
- * @author Main
+ * @author Darren Robert Lowe
  */
 @Entity // This tells Hibernate to make a table out of this class
 public class Location {
-    /*
-    id smallint UNSIGNED auto_increment PRIMARY KEY,
-    driver_ID smallint UNSIGNED,
-    FOREIGN KEY (driver_ID) REFERENCES Driver(id)
-    */
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;

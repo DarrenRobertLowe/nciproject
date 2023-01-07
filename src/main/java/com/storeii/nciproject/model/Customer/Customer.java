@@ -62,25 +62,6 @@ public class Customer implements Serializable {
         this.surname = surname;
     }
 
-    /*
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserPass() {
-        return userPass;
-    }
-
-    public void setUserPass(String userPass) {
-        this.userPass = userPass;
-    }
-    */
-    
-    
     public Address getAddress() {
         return address;
     }
@@ -98,13 +79,4 @@ public class Customer implements Serializable {
         this.location = location;
     }
     
-    /*
-    public String getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
-    }
-    */
 }

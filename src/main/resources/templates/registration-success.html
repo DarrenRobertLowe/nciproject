@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head th:insert="fragments :: headers">
-        <title>Registration Successful</title>
-    </head>
+    <head th:insert="fragments :: headers (pageTitle='Registration Successful', pageDescription='Congratulations! Your registration with Storeii was successful!')"></head>
     <body>
         <div class="container">
             <div class="col">
@@ -17,7 +15,7 @@
                 
                 <!-- CONTENT -->   
                 <div class="column">
-                    <h1>Registration Successful!</h1>
+                    <h1>Congratulations! Your registration with Storeii was successful!</h1>
                     <br />
                     <p>You can now login:</p>
                     <a class="btn btn-primary btn-lg" href="/login">Go to Login Page</a>

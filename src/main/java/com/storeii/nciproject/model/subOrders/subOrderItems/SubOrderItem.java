@@ -21,21 +21,12 @@ import javax.persistence.Table;
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name="SubOrder_Items")
 public class SubOrderItem {
-    /*
-    id int UNSIGNED auto_increment PRIMARY KEY,
-    subOrder_ID int UNSIGNED,
-    product_ID int UNSIGNED,
-    quantity tinyint UNSIGNED,	-- 255 is probably enough for any 1 item in an order
-    FOREIGN KEY (subOrder_ID) REFERENCES SubOrder(id),
-    FOREIGN KEY (product_ID) REFERENCES Product(id)
-    */
-    
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int    id;
-    private int     quantity;
+    private int id;
+    private int quantity;
 
-    
     
     // FOREIGN KEYS
     @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
@@ -47,9 +38,7 @@ public class SubOrderItem {
     @JoinColumn(name = "product_ID", referencedColumnName = "id")
     private Product product;
     
-    
-    
-    
+
     // GETTERS and SETTERS
     public int getId() {
         return id;

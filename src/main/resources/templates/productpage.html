@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:insert="fragments :: headers (pageTitle='Product Details', pageDescription='Details for selected product')"></head>
     <link th:href="@{/css/product-page.css}" rel="stylesheet" />
-    <head th:insert="fragments :: headers">
-        
-        <title>Product</title>
-    </head>
+
     
     <body onload="calculate()">
          <div class="container">

@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head th:insert="fragments :: headers">
-        <title>Search Results</title>
-    </head>
+    <head th:insert="fragments :: headers (pageTitle='Search Results', pageDescription='Here are the results for your search...')"></head>
     
     
     <body>

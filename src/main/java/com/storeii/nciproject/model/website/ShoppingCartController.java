@@ -3,7 +3,6 @@ package com.storeii.nciproject.model.website;
 import com.storeii.nciproject.model.products.Product;
 import com.storeii.nciproject.model.products.ProductRepository;
 import com.storeii.nciproject.model.orders.OrderRepository;
-import com.storeii.nciproject.model.subOrders.subOrderItems.SubOrderItemRepository;
 import com.storeii.nciproject.model.orders.orderItems.OrderItem;
 import com.storeii.nciproject.model.orders.orderItems.OrderItemRepository;
 import com.storeii.nciproject.model.orders.Order;
@@ -47,13 +46,7 @@ public class ShoppingCartController {
     
     @Autowired
     private OrderItemRepository orderItemRepository;
-    
-    @Autowired
-    private SubOrderItemRepository subOrderItemRepository;
-    
-    @Autowired
-    private OrderRepository orderRepo;
-    
+
     @Autowired
     private ProductRepository productRepository;
     
@@ -184,13 +177,10 @@ public class ShoppingCartController {
             cartItemRepository.deleteById(cartItem.getId());
         }
     }
-    
-    
         
     // VERIFY CARTITEM
     // Verifies a CartItem belongs to the logged in user.
     public boolean verifyCartItem(CartItem cartItem){    
-        // we'll need the User to check if the id corresponds to the cart
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         if (principal == "anonymousUser") {

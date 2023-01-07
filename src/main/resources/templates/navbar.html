@@ -49,7 +49,7 @@
             <!-- HERO BANNER -->
             <div class="row">
                 <div class="col">
-                    <img src="../assets/img/site/hero.png" id="header-image">
+                    <img src="../assets/img/site/hero.png" id="header-image" alt="Storeii- Your local e-commerce giant.">
                 </div>
             </div>
             
@@ -61,7 +61,7 @@
                             <!--/* CUSTOMER */-->
                             <th:block th:case = "CUSTOMER">
                                 <div class="container-fluid">
-                                  <a class="navbar-brand" href="/"></a>
+                                  <a class="navbar-brand" aria-label="Home" href="/"></a>
                                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                   </button>
@@ -227,14 +227,14 @@
                     <div th:replace=":: navsearch"></div>
                     
                 </div>
-        </th:block>
+        </th:block>f
         
         <!-- SEARCH -->
         <div id="search-container" class="col-xs-12 col-sm" th:fragment="navsearch">
             <form class="d-flex" action="/search?searchTerms="+&searchTerms method="GET">
-                <input class="form-control me-2" placeholder="Search" aria-label="Search" id="searchTerms" name="searchTerms"  />
+                <input class="form-control me-2" placeholder="Search" aria-label="Search Input Field" id="searchTerms" name="searchTerms"  />
 
-                <button type="submit" class="btn btn-outline-success">
+                <button type="submit" class="btn btn-outline-success" aria-label="Perform Search" >
                     <i class="bi bi-search"></i>
                 </button>
             </form>

@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head th:insert="fragments :: headers">
-        <title>Your Shopping Cart</title>
-    </head>
+    <head th:insert="fragments :: headers (pageTitle='Your Shopping Cart', pageDescription='Here are the contents of your Storeii shopping cart...')"></head>
     <body>
         <div class="container">
             <div th:replace="navbar :: navbar"></div>

@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head th:insert="fragments :: headers">
-        <title>Order Placed Successfully</title>
-    </head>
+    <head th:insert="fragments :: headers (pageTitle='Order Placed', pageDescription='Your Order with Storeii has been placed successfully!')"></head>
     
     
     <body>

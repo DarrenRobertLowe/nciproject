@@ -28,21 +28,12 @@ public class CartItemController {
     private CartItemRepository cartItemRepository;
     
     @Autowired
-    private CustomerRepository cutomerRepository;
-    
-    @Autowired
-    private ProductRepository productRepository;
-    
-    @Autowired
     // this allows us to refer to the objects easily
     private EntityManager entityManager;
     
     @Autowired
     private CartService cartService;
-    
-    @Autowired
-    private WebsiteController webController;
-    
+
     @Autowired
     private UserService userService;
     

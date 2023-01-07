@@ -48,15 +48,7 @@ public class SubOrder implements Comparable<SubOrder>{
     // this will be used to store the list of items
     private List<SubOrderItem> items = new ArrayList<>();
 
-    public void setItems(List<SubOrderItem> items) {
-        this.items = items;
-    }
     
-    
-    
-    public List<SubOrderItem> getItems(){
-        return items;
-    }
     
     
     
@@ -92,6 +84,15 @@ public class SubOrder implements Comparable<SubOrder>{
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
+    
+    public void setItems(List<SubOrderItem> items) {
+        this.items = items;
+    }
+
+    public List<SubOrderItem> getItems(){
+        return items;
+    }
+    
     
     
     // bidirectionality with SubOrderItem

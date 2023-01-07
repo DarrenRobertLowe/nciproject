@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head th:insert="fragments :: headers">
-        <title>Out of Stock!</title>
-    </head>
+    <head th:insert="fragments :: headers (pageTitle='Out of Stock', pageDescription='Sorry! One or more items were out of stock!')"></head>
     
     
     <body>

@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head th:insert="fragments :: headers">
-        <title>Index</title>
-    </head>
+    <head th:insert="fragments :: headers (pageTitle='Order Problem', pageDescription='Sorry! There was a problem placing your order.')"></head>
     
     
     <body>
@@ -14,7 +12,7 @@
                     <br/>
                     <p th:text="${message}"></p>
                     <br/>
-                    <h1 class = "centered"> There was a problem! </h1>
+                    <h1 class = "centered"> Sorry! There was a problem placing your order. </h1>
                     <br/>
                     <br/>
                     <p class = "centered"> <a class="btn btn-primary btn-lg" href="/index">Return to Home</a> </p>

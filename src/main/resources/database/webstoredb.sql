@@ -1,6 +1,5 @@
 
-safety
-
+/*
 CREATE DATABASE IF NOT EXISTS webstoredb;
 USE webstoredb;
 -- SET GLOBAL read_only=0;
@@ -209,8 +208,9 @@ select * from SupplierOrders;
 select * from Customer;
 select * from Orders;
 select * from SubOrder;
+select * from SubOrder_Items;
 select * from CartItem;
 select * from Address;
 select * from orderItems;
-
+select * from Counties;
 select * from User;
